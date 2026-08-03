@@ -2,174 +2,224 @@
 <html lang="sw">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Hostel Food Express">
+  
   <title>Hostel Food Express</title>
   <style>
-    :root {
-      --bg: #ffffff;
-      --text: #000000;
-      --primary-yellow: #facc15;
-      --card-bg: #ffffff;
-      --border-color: #000000;
+    /* Force body to be full screen matching Appearich design */
+    html, body { 
+      margin: 0; 
+      padding: 0; 
+      width: 100%; 
+      height: 100%; 
+      overflow: hidden; 
+      background: #000000; 
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    * { 
+      box-sizing: border-box; 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
     }
 
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      padding: 16px;
-      max-width: 480px;
-      margin: 0 auto;
+    /* App container */
+    .app { 
+      width: 100vw; 
+      height: 100vh; 
+      background: #ffffff; 
+      position: relative; 
+      overflow: hidden; 
     }
 
-    header {
-      text-align: center;
-      padding: 12px 0 20px;
-      border-bottom: 2px solid var(--border-color);
-      margin-bottom: 20px;
+    .screen { 
+      position: absolute; 
+      width: 100%; 
+      height: 100%; 
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 25px; 
+      overflow-y: auto; 
     }
 
-    header h1 {
-      font-size: 22px;
-      font-weight: 900;
-      text-transform: uppercase;
+    .card { 
+      background: #ffffff; 
+      padding: 15px 5px; 
+      width: 100%; 
+      margin-bottom: 20px; 
     }
 
-    .card {
-      background: var(--card-bg);
-      border: 2px solid var(--border-color);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 16px;
-      box-shadow: 4px 4px 0px #000000;
+    .card h1 { 
+      font-size: 26px; 
+      text-align: center; 
+      color: #111111; 
+      font-weight: 800; 
+      margin-bottom: 8px; 
     }
 
-    h2 {
-      font-size: 18px;
-      font-weight: 800;
-      margin-bottom: 16px;
-      text-transform: uppercase;
+    .subtitle { 
+      font-size: 14px; 
+      color: #555555; 
+      text-align: center; 
+      margin-bottom: 25px; 
+      line-height: 1.5; 
     }
 
-    label {
-      font-weight: 700;
-      display: block;
-      margin: 12px 0 6px;
-      font-size: 13px;
-      text-transform: uppercase;
+    .section-title { 
+      font-size: 13px; 
+      font-weight: 700; 
+      color: #111111; 
+      margin: 20px 0 10px 0; 
+      text-transform: uppercase; 
+      letter-spacing: 1.5px; 
+      border-bottom: 2px solid #FFD700; 
+      padding-bottom: 4px; 
+      width: fit-content; 
     }
 
-    input, textarea {
-      width: 100%;
-      padding: 12px;
-      background: #ffffff;
-      border: 2px solid var(--border-color);
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      color: #000000;
-      outline: none;
+    label { 
+      font-size: 13px; 
+      font-weight: 700; 
+      color: #111111; 
+      display: block; 
+      margin: 16px 0 6px 0; 
+      text-transform: uppercase; 
+      letter-spacing: 0.5px; 
     }
 
-    input:focus, textarea:focus {
-      background: #fefce8;
+    input, textarea { 
+      width: 100%; 
+      padding: 14px; 
+      background: #fdfdfd; 
+      border: 1px solid #e5e5e5; 
+      border-radius: 14px; 
+      font-size: 14px; 
+      color: #333333; 
+      outline: none; 
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04); 
+      transition: border-color 0.2s ease;
     }
 
-    .btn {
-      background: var(--primary-yellow);
-      color: #000000;
-      border: 2px solid var(--border-color);
-      width: 100%;
-      padding: 14px;
-      border-radius: 8px;
-      font-weight: 800;
-      font-size: 15px;
-      text-transform: uppercase;
-      margin-top: 20px;
-      cursor: pointer;
-      box-shadow: 2px 2px 0px #000000;
-      transition: all 0.1s ease;
+    input:focus, textarea:focus { 
+      border-color: #FFD700; 
+      background: #ffffff; 
     }
 
-    .btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 0px 0px 0px #000000;
+    .magic-box { 
+      background: linear-gradient(135deg, #111111 0%, #222222 100%); 
+      padding: 20px; 
+      border-radius: 18px; 
+      margin: 15px 0; 
+      color: #eeeeee; 
+      text-align: center; 
     }
 
-    .lipa-box {
-      background: #fef08a;
-      border: 2px solid var(--border-color);
-      padding: 16px;
-      border-radius: 8px;
-      text-align: center;
-      margin: 16px 0;
+    .magic-box small { 
+      font-size: 12px; 
+      color: #aaaaaa; 
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
+      display: block; 
+      margin-bottom: 4px; 
     }
 
-    .lipa-box strong {
-      font-size: 26px;
-      font-weight: 900;
-      display: block;
-      margin: 6px 0;
+    .magic-box strong { 
+      font-size: 28px; 
+      font-weight: 800; 
+      color: #FFD700; 
+      display: block; 
+      margin: 6px 0; 
+      letter-spacing: 1px; 
+    }
+
+    .magic-box span { 
+      font-size: 13px; 
+      color: #dddddd; 
+      font-weight: 600; 
+    }
+
+    .btn { 
+      width: 100%; 
+      padding: 18px; 
+      border: none; 
+      background: #111111; 
+      color: #FFD700; 
+      border-radius: 18px; 
+      font-weight: 800; 
+      font-size: 16px; 
+      margin-top: 24px; 
+      cursor: pointer; 
+      transition: transform 0.1s ease; 
+    }
+
+    .btn-alt { 
+      background: #FFD700; 
+      color: #111111; 
+    }
+
+    .btn:active { 
+      transform: scale(0.98); 
     }
   </style>
 </head>
+
 <body>
+  <div class="app">
+    <div class="screen">
+      <div class="card">
+        <h1>⚡ Hostel Express</h1>
+        <div class="subtitle">Agiza chakula kwa haraka na kitaletwa mpaka chumbani kwako.</div>
 
-  <header>
-    <h1>⚡ Hostel Food Express</h1>
-  </header>
+        <!-- STEP 1: ORDER FORM -->
+        <div id="step-1">
+          <div class="section-title">✨ Weka Order Yako</div>
+          
+          <form id="orderForm">
+            <label>Jina Lako (Your Name)</label>
+            <input type="text" id="name" placeholder="John Doe" required>
 
-  <!-- STEP 1: ORDER FORM -->
-  <div id="step-1" class="card">
-    <h2>1. Weka Order Yako 🍔</h2>
-    <form id="orderForm">
-      <label>Jina Lako (Your Name)</label>
-      <input type="text" id="name" placeholder="John Doe" required>
+            <label>Namba Yako ya Simu (Delivery Phone)</label>
+            <input type="tel" id="contactPhone" placeholder="07XXXXXXXX" required>
 
-      <label>Namba Yako ya Simu (Delivery Phone)</label>
-      <input type="tel" id="contactPhone" placeholder="07XXXXXXXX" required>
+            <label>Hostel Block & Room Number</label>
+            <input type="text" id="location" placeholder="Block B, Room 204" required>
 
-      <label>Hostel Block & Room Number</label>
-      <input type="text" id="location" placeholder="Block B, Room 204" required>
+            <label>Agizo Lako (Food Description)</label>
+            <textarea id="items" rows="3" placeholder="2 Chips Mayai, Pepsi 1 baridi" required></textarea>
 
-      <label>Agizo Lako (Food Description)</label>
-      <textarea id="items" rows="3" placeholder="2 Chips Mayai, Pepsi 1 baridi" required></textarea>
+            <label>Kiasi Cha Kutuma (TZS)</label>
+            <input type="number" id="amount" placeholder="7000" required>
 
-      <label>Kiasi Cha Kutuma (TZS)</label>
-      <input type="number" id="amount" placeholder="7000" required>
+            <button type="submit" class="btn btn-alt">ENDELEA KWENYE MALIPO ➔</button>
+          </form>
+        </div>
 
-      <button type="submit" class="btn">ENDELEA KWENYE MALIPO ➔</button>
-    </form>
-  </div>
+        <!-- STEP 2: LIPA NAMBA & ACCOUNT NAME ENTRY -->
+        <div id="step-2" style="display: none;">
+          <div class="section-title">💳 Lipia Malipo</div>
 
-  <!-- STEP 2: LIPA NAMBA & ACCOUNT NAME ENTRY -->
-  <div id="step-2" class="card" style="display:none;">
-    <h2>2. Lipia Malipo 💳</h2>
-    
-    <div class="lipa-box">
-      <small style="font-weight: 700;">LIPA KUPITIA TIGO / M-PESA / AIRTEL</small>
-      <strong>LIPA: 5544321</strong>
-      <small style="font-weight: 600;">HOSTEL EXPRESS SERVICES</small>
-    </div>
+          <div class="magic-box">
+            <small>LIPA KUPITIA TIGO / M-PESA / AIRTEL</small>
+            <strong>5544321</strong>
+            <span>HOSTEL EXPRESS SERVICES</span>
+          </div>
 
-    <div style="margin-top: 20px;">
-      <label>Jina Lililopo Kwenye Akaunti Uliyolipa Nayo</label>
-      <input type="text" id="payerName" placeholder="Mfano: Amina Said" required>
+          <label>Jina Lililopo Kwenye Akaunti Uliyolipa Nayo</label>
+          <input type="text" id="payerName" placeholder="Mfano: Amina Said" required>
 
-      <button type="button" onclick="sendToWhatsApp()" class="btn">
-        TUMA ORDER KWENYE WHATSAPP 💬
-      </button>
+          <button type="button" onclick="sendToWhatsApp()" class="btn btn-alt">
+            TUMA ORDER KWENYE WHATSAPP 💬
+          </button>
+        </div>
+
+      </div>
     </div>
   </div>
 
   <script>
-    // YOUR WHATSAPP NUMBER
     const ADMIN_WHATSAPP_NUMBER = "255764519027"; 
 
     let orderData = {};
