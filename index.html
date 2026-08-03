@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hostel Food Express</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --primary-yellow: #facc15;
+      --card-bg: #ffffff;
+      --border-color: #000000;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 16px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 12px 0 20px;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 22px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 4px 4px 0px #000000;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    label {
+      font-weight: 700;
+      display: block;
+      margin: 12px 0 6px;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      background: #ffffff;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #000000;
+      outline: none;
+    }
+
+    input:focus, textarea:focus {
+      background: #fefce8;
+    }
+
+    .btn {
+      background: var(--primary-yellow);
+      color: #000000;
+      border: 2px solid var(--border-color);
+      width: 100%;
+      padding: 14px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 15px;
+      text-transform: uppercase;
+      margin-top: 20px;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px #000000;
+      transition: all 0.1s ease;
+    }
+
+    .btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0px 0px 0px #000000;
+    }
+
+    .lipa-box {
+      background: #fef08a;
+      border: 2px solid var(--border-color);
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 16px 0;
+    }
+
+    .lipa-box strong {
+      font-size: 26px;
+      font-weight: 900;
+      display: block;
+      margin: 6px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>⚡ Hostel Food Express</h1>
+  </header>
+
+  <!-- STEP 1: ORDER FORM -->
+  <div id="step-1" class="card">
+    <h2>1. Weka Order Yako 🍔</h2>
+    <form id="orderForm">
+      <label>Jina Lako (Your Name)</label>
+      <input type="text" id="name" placeholder="John Doe" required>
+
+      <label>Namba Yako ya Simu (Delivery Phone)</label>
+      <input type="tel" id="contactPhone" placeholder="07XXXXXXXX" required>
+
+      <label>Hostel Block & Room Number</label>
+      <input type="text" id="location" placeholder="Block B, Room 204" required>
+
+      <label>Agizo Lako (Food Description)</label>
+      <textarea id="items" rows="3" placeholder="2 Chips Mayai, Pepsi 1 baridi" required></textarea>
+
+      <label>Kiasi Cha Kutuma (TZS)</label>
+      <input type="number" id="amount" placeholder="7000" required>
+
+      <button type="submit" class="btn">ENDELEA KWENYE MALIPO ➔</button>
+    </form>
+  </div>
+
+  <!-- STEP 2: LIPA NAMBA & ACCOUNT NAME ENTRY -->
+  <div id="step-2" class="card" style="display:none;">
+    <h2>2. Lipia Malipo 💳</h2>
+    
+    <div class="lipa-box">
+      <small style="font-weight: 700;">LIPA KUPITIA TIGO / M-PESA / AIRTEL</small>
+      <strong>LIPA: 5544321</strong>
+      <small style="font-weight: 600;">HOSTEL EXPRESS SERVICES</small>
+    </div>
+
+    <div style="margin-top: 20px;">
+      <label>Jina Lililopo Kwenye Akaunti Uliyolipa Nayo</label>
+      <input type="text" id="payerName" placeholder="Mfano: Amina Said" required>
+
+      <button type="button" onclick="sendToWhatsApp()" class="btn">
+        TUMA ORDER KWENYE WHATSAPP 💬
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // YOUR WHATSAPP NUMBER
+    const ADMIN_WHATSAPP_NUMBER = "255764519027"; 
+
+    let orderData = {};
+
+    // STEP 1 Submission
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      orderData = {
+        name: document.getElementById('name').value,
+        contactPhone: document.getElementById('contactPhone').value,
+        location: document.getElementById('location').value,
+        items: document.getElementById('items').value,
+        amount: document.getElementById('amount').value
+      };
+
+      document.getElementById('step-1').style.display = 'none';
+      document.getElementById('step-2').style.display = 'block';
+    });
+
+    // STEP 2 Submission (Open WhatsApp with formatted message)
+    function sendToWhatsApp() {
+      const payerName = document.getElementById('payerName').value;
+
+      if (!payerName) {
+        alert("Tafadhali jaza jina lililopo kwenye akaunti uliyolipa nayo!");
+        return;
+      }
+
+      const now = new Date();
+      const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const dateString = now.toLocaleDateString('sw-TZ');
+
+      // Build structured text message
+      const message = `🚨 *NEW FOOD ORDER* 🚨\n\n` +
+        `📅 *Tarehe:* ${dateString} (${timeString})\n` +
+        `👤 *Jina:* ${orderData.name}\n` +
+        `📞 *Simu:* ${orderData.contactPhone}\n` +
+        `📍 *Eneo:* ${orderData.location}\n` +
+        `🍔 *Agizo:* ${orderData.items}\n` +
+        `💰 *Kiasi:* TZS ${Number(orderData.amount).toLocaleString()}\n` +
+        `💳 *Akaunti Iliyolipa:* ${payerName}\n\n` +
+        `*Tafadhali thibitisha na anza kuandaa!*`;
+
+      // Redirect to WhatsApp
+      const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+      window.location.href = whatsappUrl;
+    }
+  </script>
+</body>
+</html>
