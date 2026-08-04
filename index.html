@@ -93,7 +93,7 @@
       color: var(--text-color);
       font-size: 1.2rem;
       cursor: pointer;
-      display: none; /* Shown dynamically on sub-views */
+      display: none; /* Shown dynamically on inner sub-views */
       padding: 4px 8px;
     }
 
@@ -101,7 +101,6 @@
       font-size: 1.4rem;
       font-weight: 900;
       letter-spacing: 0.5px;
-      cursor: pointer;
     }
     .brand-title .appea { color: var(--text-color); }
     .brand-title .rich { color: #FFD700; }
@@ -148,13 +147,14 @@
     /* ==========================================================================
        HERO & HOME DASHBOARD
        ========================================================================== */
-    /* LOCAL HERO IMAGE 1 */
+    /* PLACEHOLDER 1: MAIN HOME HERO IMAGE */
     .hero-banner {
       width: 100%;
       height: 170px;
       border-radius: 18px;
-      background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%), 
-                  url('appearich1.jpg') center/cover no-repeat #1a1a1a;
+      /* REPLACE URL BELOW WITH YOUR HERO IMAGE URL */
+      background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%), 
+                  url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=cover') center/cover;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
@@ -217,15 +217,10 @@
       filter: brightness(0.75);
     }
 
-    /* LOCAL PERFUME CARD IMAGE */
+    /* PLACEHOLDER 2: PERFUMES CARD IMAGE */
     .perfumes-card-bg {
-      background-image: url('appearich2.jpg');
-      background-color: #1a1a1a;
-    }
-
-    .meals-card-bg {
-      background-image: url('meals-card.jpg');
-      background-color: #1a1a1a;
+      /* REPLACE URL BELOW WITH YOUR PERFUME IMAGE URL */
+      background-image: url('https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=400&auto=format&fit=cover');
     }
 
     .offer-card-overlay {
@@ -412,7 +407,7 @@
     /* ==========================================================================
        AI EXPLORER SCREEN
        ========================================================================== */
-    /* LOCAL AI HERO IMAGE */
+    /* PLACEHOLDER 3: AI EXPLORER HERO IMAGE */
     .ai-hero-card {
       width: 100%;
       height: 220px;
@@ -421,7 +416,8 @@
       margin-bottom: 20px;
       position: relative;
       border: 1px solid var(--border-color);
-      background: url('appearich-ai.jpg') center/cover no-repeat #1a1a1a;
+      /* REPLACE URL BELOW WITH YOUR AI HERO IMAGE URL */
+      background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=cover') center/cover;
     }
 
     /* ==========================================================================
@@ -495,7 +491,7 @@
     <header class="top-header">
       <div class="header-left">
         <button id="backBtn" class="back-btn" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i></button>
-        <div class="brand-title" onclick="switchTab('screen-home', null)">
+        <div class="brand-title">
           <span class="appea">APPEA</span><span class="rich">RICH</span>
         </div>
       </div>
@@ -509,7 +505,7 @@
 
       <!-- SCREEN 1: HOME DASHBOARD -->
       <section id="screen-home" class="app-screen active">
-        <!-- Local Image: appearich1.jpg -->
+        <!-- Hero Banner with Custom Image Placeholder -->
         <div class="hero-banner">
           <div class="hero-greeting">Welcome!</div>
           <div class="hero-tagline">Appear Rich — Premium Delivery</div>
@@ -521,8 +517,8 @@
 
         <div class="offerings-grid">
           <!-- Hot Meals -->
-          <div class="offer-card" onclick="openInquiryWhatsApp('Hot Meals Request')">
-            <div class="offer-card-bg meals-card-bg"></div>
+          <div class="offer-card" onclick="openMealsModal()">
+            <div class="offer-card-bg" style="background-image: url('https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=400&auto=format&fit=cover');"></div>
             <div class="offer-card-overlay">
               <div class="offer-card-title">Hot Meals</div>
               <div class="offer-card-desc">Fast Sourced Food</div>
@@ -531,7 +527,6 @@
 
           <!-- Perfumes -->
           <div class="offer-card" onclick="openPerfumeModal()">
-            <!-- Local Image: appearich2.jpg -->
             <div class="offer-card-bg perfumes-card-bg"></div>
             <div class="offer-card-overlay">
               <div class="offer-card-title">Perfumes</div>
@@ -552,7 +547,6 @@
 
       <!-- SCREEN 2: AI GUIDE -->
       <section id="screen-ai" class="app-screen">
-        <!-- Local Image: appearich-ai.jpg -->
         <div class="ai-hero-card"></div>
         <div class="section-title">Appearich AI Guide</div>
         <p style="font-size:0.85rem; color:var(--text-sub); line-height:1.5;">
@@ -601,7 +595,7 @@
   </div>
 
   <!-- ==========================================================================
-     PERFUME MODAL (EXACT DESIGN MATCH FROM YOUR SCREENSHOT)
+     PERFUME MODAL (EXACT DESIGN MATCH FROM IMAGE)
      ========================================================================== -->
   <div id="perfumeModal" class="modal-overlay">
     <div class="modal-card">
@@ -737,11 +731,6 @@
 
       closePerfumeModal();
       document.getElementById('perfumeInput').value = '';
-    }
-
-    function openInquiryWhatsApp(topic) {
-      const msg = encodeURIComponent(`Hi APPEARICH! I would like to place a request regarding: ${topic}`);
-      window.open(`https://wa.me/${whatsappNumber}?text=${msg}`, '_blank');
     }
 
     function renderOrders() {
