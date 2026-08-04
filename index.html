@@ -482,7 +482,6 @@
     }
     .mini-input-group input[type="number"] { width: 64px; }
 
-    /* Fixed item description box styling */
     .item-desc-input {
       width: calc(100% - 26px);
       margin-left: 26px;
@@ -541,25 +540,55 @@
     .form-group input:focus, .form-group textarea:focus { border-color: var(--accent-gold); }
     .form-group textarea { height: 65px; resize: none; }
     .saved-loc-badge { font-size: 0.72rem; color: var(--accent-gold); font-weight: bold; margin-left: 4px; }
-    .payment-box {
-      background: var(--accent-gold-light);
-      border: 1.5px solid var(--accent-gold);
+
+    /* Simplified Dynamic Payment Styles */
+    .payment-selection-box {
+      background: var(--card-bg-sub);
+      border: 1.5px solid var(--card-border);
       border-radius: 14px;
       padding: 14px;
-      margin-top: 10px;
+      margin-top: 12px;
       margin-bottom: 16px;
     }
-    .payment-header {
+    .payment-options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .pay-option-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 8px;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 8px;
-      font-size: 0.9rem;
+      gap: 6px;
+      cursor: pointer;
+      font-size: 0.82rem;
       font-weight: 800;
       color: var(--text-main);
-      margin-bottom: 8px;
+      transition: all 0.2s ease;
     }
-    .payment-details { font-size: 0.82rem; color: var(--text-main); line-height: 1.4; margin-bottom: 10px; }
+    .pay-option-btn i { font-size: 1.2rem; }
+    .pay-option-btn.active {
+      border-color: var(--accent-gold);
+      background: var(--accent-gold-light);
+      color: var(--text-main);
+    }
+    .mobile-unfold-box {
+      display: none;
+      background: var(--card-bg);
+      border: 1.5px solid var(--accent-gold);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 12px;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .mobile-unfold-box.active { display: block; }
     .lipa-tag { background: var(--accent-gold); color: #000; font-weight: 900; padding: 2px 6px; border-radius: 6px; }
+
     .submit-order-btn {
       width: 100%;
       background: #25D366;
@@ -576,23 +605,6 @@
       justify-content: center;
       gap: 8px;
       margin-top: 8px;
-    }
-    .cash-order-btn {
-      width: 100%;
-      background: #d4af37;
-      color: #000;
-      border: none;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 900;
-      font-size: 0.95rem;
-      letter-spacing: 0.5px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 10px;
     }
     .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
     .price-card {
@@ -1103,7 +1115,7 @@
           <textarea id="mealDetails" placeholder="Enter any additional order instructions..."></textarea>
         </div>
 
-        <!-- Standard Summary Box -->
+        <!-- Summary Box -->
         <div class="calculation-summary-box">
           <div class="calc-row">
             <span>Items Subtotal:</span>
@@ -1139,30 +1151,36 @@
           <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
         </div>
 
-        <!-- Payment Section -->
-        <div class="payment-box">
-          <div class="payment-header">
-            <i class="fa-solid fa-mobile-screen-button" style="color:var(--accent-gold);"></i>
-            <span>Payment Instructions</span>
+        <!-- Simplified Payment Selector -->
+        <div class="payment-selection-box">
+          <label style="font-size:0.82rem; font-weight:800; color:var(--text-main);">Select Payment Method:</label>
+          <div class="payment-options-grid">
+            <div id="payOptCash" class="pay-option-btn active" onclick="selectPaymentMethod('cash')">
+              <i class="fa-solid fa-money-bill-wave" style="color:var(--accent-gold);"></i>
+              <span>Cash on Delivery</span>
+            </div>
+            <div id="payOptMobile" class="pay-option-btn" onclick="selectPaymentMethod('mobile')">
+              <i class="fa-solid fa-mobile-screen-button" style="color:var(--accent-gold);"></i>
+              <span>Mobile Money</span>
+            </div>
           </div>
-          <div class="payment-details">
-            Pay via Voda Lipa Namba: <span class="lipa-tag">37247619</span><br>
-            Name: <strong>EdwinAndrew</strong>
-          </div>
-          <div class="form-group" style="margin-bottom:0;">
-            <label for="payerName" style="color:var(--text-main);">Jina la namba ya simu uliyotumia kufanya malipo:</label>
-            <input type="text" id="payerName" placeholder="Weka jina la akaunti ya malipo">
+
+          <!-- Mobile Money Dynamic Unfold Section -->
+          <div id="mobileUnfoldArea" class="mobile-unfold-box">
+            <p style="font-size:0.82rem; color:var(--text-main); line-height:1.4; margin-bottom:10px;">
+              Pay via Voda Lipa Namba: <span class="lipa-tag">37247619</span><br>
+              Name: <strong>Edwin Andrew</strong>
+            </p>
+            <div class="form-group" style="margin-bottom:0;">
+              <label for="payerName" style="color:var(--text-main);">Jina la namba iliyotumika kufanya malipo:</label>
+              <input type="text" id="payerName" placeholder="Weka jina la akaunti ya malipo">
+            </div>
           </div>
         </div>
 
-        <!-- Standard Digital Payment WhatsApp Order Button -->
-        <button id="submitMealBtn" class="submit-order-btn" onclick="submitFoodOrder('mobile')">
-          <i class="fa-brands fa-whatsapp"></i> Finish & Send Order to WhatsApp (Lipa Namba)
-        </button>
-
-        <!-- Cash Payment WhatsApp Order Button -->
-        <button id="submitCashMealBtn" class="cash-order-btn" onclick="submitFoodOrder('cash')">
-          <i class="fa-solid fa-money-bill-wave"></i> Order via Cash / Cash on Delivery
+        <!-- WhatsApp Order Button -->
+        <button id="submitMealBtn" class="submit-order-btn" onclick="submitFoodOrder()">
+          <i class="fa-brands fa-whatsapp"></i> Send Order via WhatsApp
         </button>
       </div>
     </div>
@@ -1232,6 +1250,7 @@
     let calculatedSurcharge = 0;
     let calculatedGrandTotal = 0;
     let surchargePercent = 25;
+    let selectedPaymentType = 'cash'; // Default to cash
 
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('heroGreeting').innerText = `Welcome, ${loggedInUser.name}!`;
@@ -1301,6 +1320,24 @@
       selectedPerfumeSize = sizePrice;
     }
 
+    // Dynamic Payment Option Switcher
+    function selectPaymentMethod(type) {
+      selectedPaymentType = type;
+      const btnCash = document.getElementById('payOptCash');
+      const btnMobile = document.getElementById('payOptMobile');
+      const unfoldBox = document.getElementById('mobileUnfoldArea');
+
+      if (type === 'mobile') {
+        btnMobile.classList.add('active');
+        btnCash.classList.remove('active');
+        unfoldBox.classList.add('active');
+      } else {
+        btnCash.classList.add('active');
+        btnMobile.classList.remove('active');
+        unfoldBox.classList.remove('active');
+      }
+    }
+
     function recalculateMealTotal() {
       calculatedSubtotal = 0;
 
@@ -1360,7 +1397,7 @@
       document.getElementById('displayGrandTotal').innerText = calculatedGrandTotal.toLocaleString() + " TZS";
     }
 
-    function submitFoodOrder(paymentMethod = 'mobile') {
+    function submitFoodOrder() {
       const selectedItemsList = [];
 
       if (document.getElementById('chkChipsiMayai').checked) {
@@ -1414,8 +1451,8 @@
         return;
       }
 
-      if (paymentMethod === 'mobile' && !payer) {
-        alert("Tafadhali weka jina la namba ya simu uliyotumia kufanya malipo!");
+      if (selectedPaymentType === 'mobile' && !payer) {
+        alert("Tafadhali weka jina la namba iliyotumika kufanya malipo!");
         return;
       }
 
@@ -1426,9 +1463,9 @@
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
       const itemsSummaryText = selectedItemsList.join("\n• ");
 
-      let paymentDetailsMsg = paymentMethod === 'cash' 
+      let paymentDetailsMsg = selectedPaymentType === 'cash' 
         ? `💵 *Payment Method:* Cash / Cash on Delivery` 
-        : `💳 *Payment Method:* Voda Lipa Namba 37247619 (EdwinAndrew)\n👤 *Payer Account Name:* ${payer}`;
+        : `💳 *Payment Method:* Mobile Money (Lipa Namba 37247619 - Edwin Andrew)\n👤 *Jina la Namba iliyotumika:* ${payer}`;
 
       const whatsappText = `🍔 *NEW APPEARICH MEAL ORDER*\n` +
         `----------------------------------------\n` +
@@ -1450,7 +1487,7 @@
       const newOrder = {
         id: orderId,
         title: `${calculatedGrandTotal.toLocaleString()} TZS (${selectedItemsList.length} items)`,
-        details: paymentMethod === 'cash' ? `Pay on Delivery | Total: ${calculatedGrandTotal.toLocaleString()} TZS` : `Paid by ${payer} | Total: ${calculatedGrandTotal.toLocaleString()} TZS`,
+        details: selectedPaymentType === 'cash' ? `Cash on Delivery | Total: ${calculatedGrandTotal.toLocaleString()} TZS` : `Paid by ${payer} | Total: ${calculatedGrandTotal.toLocaleString()} TZS`,
         location: `${block}, Room ${room}`,
         status: "pending",
         timestamp: currentTime
