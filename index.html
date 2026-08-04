@@ -140,7 +140,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
       cursor: pointer;
       box-shadow: 0 2px 6px rgba(0,0,0,0.02);
       text-align: center;
@@ -156,7 +155,7 @@
       transform: scale(0.98);
     }
 
-    /* INLINE EXPANDABLE ASSISTANCE BOX (MATCHING YOUR IMAGE) */
+    /* INLINE EXPANDABLE ASSISTANCE BOX */
     .inline-assistance-box {
       display: none;
       margin-top: 18px;
@@ -190,7 +189,6 @@
       padding: 12px 16px;
       display: flex;
       align-items: center;
-      gap: 10px;
     }
 
     .search-box input {
@@ -323,6 +321,33 @@
       cursor: pointer; 
     }
 
+    .btn-danger {
+      background: #f44336;
+      color: #ffffff;
+      margin-top: 10px;
+    }
+
+    /* DASHBOARD LOGS & STATS */
+    .dashboard-stat {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px;
+      background: #f9f9fb;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .order-item-log {
+      border-bottom: 1px solid #eeeeee;
+      padding: 12px 0;
+      font-size: 13px;
+    }
+
+    .order-item-log:last-child {
+      border-bottom: none;
+    }
+
     /* FIXED BOTTOM NAV */
     .bottom-nav {
       position: fixed;
@@ -351,15 +376,7 @@
 
     .nav-item.active {
       color: #111111;
-    }
-
-    .nav-item.active .nav-icon {
-      color: #FFD700;
-    }
-
-    .nav-icon {
-      font-size: 20px;
-      margin-bottom: 2px;
+      font-weight: 800;
     }
   </style>
 </head>
@@ -381,22 +398,22 @@
       <!-- WELCOME HERO CARD -->
       <div class="card">
         <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=1000&auto=format&fit=crop" class="card-hero-img" alt="Express Banner">
-        <h1 id="welcomeUserHeading">Welcome Guest 👋</h1>
-        <div class="subtitle">Agiza chakula au marashi (perfumes) kuletwa mpaka chumbani kwako!</div>
+        <h1 id="welcomeUserHeading">Welcome Guest</h1>
+        <div class="subtitle">Agiza chakula au marashi kuletwa mpaka chumbani kwako.</div>
       </div>
 
       <!-- INTERACTIVE HELP CARD WITH TOGGLEABLE INLINE ASSISTANCE -->
       <div class="card">
-        <div class="card-heading">💡 What do you need help with right now?</div>
+        <div class="card-heading">What do you need help with right now?</div>
         
         <div class="grid-buttons">
-          <div class="grid-btn" id="btn-food" onclick="toggleAssistance('Food Order', 'btn-food')">🍔 Food Order</div>
-          <div class="grid-btn" id="btn-perfume" onclick="toggleAssistance('Perfumes & Scents', 'btn-perfume')">✨ Perfumes</div>
-          <div class="grid-btn" id="btn-unique" onclick="toggleAssistance('Unique Request', 'btn-unique')">✍️ Unique Order</div>
-          <div class="grid-btn" id="btn-explore" onclick="toggleAssistance('Explore & General Inquiry', 'btn-explore')">🔍 Explore All</div>
+          <div class="grid-btn" id="btn-food" onclick="toggleAssistance('Food Order', 'btn-food')">Food Order</div>
+          <div class="grid-btn" id="btn-perfume" onclick="toggleAssistance('Perfumes & Scents', 'btn-perfume')">Perfumes</div>
+          <div class="grid-btn" id="btn-unique" onclick="toggleAssistance('Unique Request', 'btn-unique')">Unique Order</div>
+          <div class="grid-btn" id="btn-explore" onclick="toggleAssistance('Explore & General Inquiry', 'btn-explore')">Explore All</div>
         </div>
 
-        <!-- COLLAPSIBLE ASSISTANCE BOX (OPENS / CLOSES ON TAP) -->
+        <!-- COLLAPSIBLE ASSISTANCE BOX -->
         <div class="inline-assistance-box" id="inlineAssistance">
           <div class="assistance-title" id="assistanceLabel">Assistance: Food Order</div>
           
@@ -411,18 +428,17 @@
       <!-- SEARCH CARD -->
       <div class="card search-card">
         <div class="search-box">
-          <span>💬</span>
           <input type="text" id="quickSearch" placeholder="Ask anything or describe what you need..." onkeypress="handleSearch(event)">
         </div>
       </div>
 
-      <!-- FEATURED CATEGORY CARDS (2 CARDS: FOOD & PERFUMES) -->
+      <!-- FEATURED CATEGORY CARDS -->
       <div class="section-title">Popular Offerings</div>
       <div class="horizontal-scroll">
         <div class="item-card" onclick="openOrderScreen('Food Order', '3500')">
           <img src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=300&auto=format&fit=crop" alt="Food">
           <div class="item-card-overlay">
-            <span class="item-card-title">🍔 Delicious Food</span>
+            <span class="item-card-title">Delicious Food</span>
             <span class="item-card-price">From TZS 3,500</span>
           </div>
         </div>
@@ -430,7 +446,7 @@
         <div class="item-card" onclick="openOrderScreen('Designer Perfume Spray', '15000')">
           <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=300&auto=format&fit=crop" alt="Perfumes">
           <div class="item-card-overlay">
-            <span class="item-card-title">✨ Perfumes & Scents</span>
+            <span class="item-card-title">Perfumes & Scents</span>
             <span class="item-card-price">From TZS 15,000</span>
           </div>
         </div>
@@ -442,14 +458,14 @@
     <div id="orderScreen" class="screen">
       
       <div class="app-header">
-        <button class="back-btn" onclick="showScreen('homeScreen')">➔ Rudi</button>
+        <button class="back-btn" onclick="showScreen('homeScreen')">Rudi</button>
         <div class="app-title" style="font-size: 18px;">Kamilisha Oda Yako</div>
       </div>
 
       <div class="card">
         <!-- STEP 1: FORM DETAILS -->
         <div id="step-1">
-          <div class="card-heading">✨ Detail za Agizo</div>
+          <div class="card-heading">Detail za Agizo</div>
 
           <label>Jina Lako (Your Name)</label>
           <input type="text" id="name" placeholder="John Doe" required>
@@ -466,12 +482,12 @@
           <label>Kiasi Cha Kutuma (TZS)</label>
           <input type="number" id="amount" placeholder="7000" required>
 
-          <button type="button" onclick="goToStep2()" class="btn">ENDELEA KWENYE MALIPO ➔</button>
+          <button type="button" onclick="goToStep2()" class="btn">ENDELEA KWENYE MALIPO</button>
         </div>
 
         <!-- STEP 2: LIPA NAMBA -->
         <div id="step-2" style="display: none;">
-          <div class="card-heading">💳 Malipo Ya Oda</div>
+          <div class="card-heading">Malipo Ya Oda</div>
 
           <div class="magic-box">
             <small>LIPA KUPITIA TIGO / M-PESA / AIRTEL</small>
@@ -483,9 +499,44 @@
           <input type="text" id="payerName" placeholder="Mfano: Amina Said" required>
 
           <button type="button" onclick="sendToWhatsApp()" class="btn">
-            TUMA ORDER KWENYE WHATSAPP 💬
+            TUMA ORDER KWENYE WHATSAPP
           </button>
         </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== 3. PANEL & HISTORY SCREEN ==================== -->
+    <div id="panelScreen" class="screen">
+      
+      <div class="app-header">
+        <div class="app-title">Panel & History</div>
+        <button class="back-btn" onclick="showScreen('homeScreen')">Exit</button>
+      </div>
+
+      <div class="card">
+        <div class="card-heading">Summary Panel</div>
+        
+        <div class="dashboard-stat">
+          <span>Total Recorded Orders:</span>
+          <span id="statTotalOrders">0</span>
+        </div>
+
+        <div class="dashboard-stat">
+          <span>Total Sales Value:</span>
+          <span id="statTotalSales">TZS 0</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-heading">Saved History Logs</div>
+        <div id="orderLogsContainer">
+          <div class="subtitle" style="padding: 10px 0;">No order history found.</div>
+        </div>
+
+        <button type="button" onclick="clearHistory()" class="btn btn-danger">
+          Clear Saved History
+        </button>
       </div>
 
     </div>
@@ -495,30 +546,22 @@
   <!-- FIXED BOTTOM NAVIGATION BAR -->
   <div class="bottom-nav">
     <div class="nav-item active" id="nav-home" onclick="showScreen('homeScreen')">
-      <span class="nav-icon">🏠</span>
       <span>Home</span>
     </div>
     <div class="nav-item" id="nav-explore" onclick="toggleAssistance('Explore & General Inquiry', 'btn-explore')">
-      <span class="nav-icon">🔍</span>
       <span>Explore</span>
     </div>
     <div class="nav-item" onclick="openOrderScreen('Custom Request', '')">
-      <span class="nav-icon">🤖</span>
-      <span>AI Guide</span>
-    </div>
-    <div class="nav-item" onclick="showScreen('orderScreen')">
-      <span class="nav-icon">💼</span>
       <span>Bookings</span>
     </div>
-    <div class="nav-item" onclick="alert('Logged out successfully.')">
-      <span class="nav-icon">👤</span>
-      <span>Logout</span>
+    <div class="nav-item" id="nav-panel" onclick="showScreen('panelScreen')">
+      <span>Panel</span>
     </div>
   </div>
 
   <script>
     const ADMIN_WHATSAPP_NUMBER = "255764519027"; 
-    
+
     let activeAssistanceCategory = "";
     let activeBtnId = "";
 
@@ -532,18 +575,18 @@
 
     window.onload = function() {
       if (registeredUser.name) {
-        document.getElementById('welcomeUserHeading').innerText = `Welcome ${registeredUser.name} 👋`;
+        document.getElementById('welcomeUserHeading').innerText = `Welcome ${registeredUser.name}`;
         document.getElementById('name').value = registeredUser.name;
         document.getElementById('contactPhone').value = registeredUser.phone || '';
         document.getElementById('location').value = registeredUser.room || '';
       }
+      renderPanelHistory();
     };
 
     // INLINE TOGGLE OPEN / CLOSE ASSISTANCE BOX
     function toggleAssistance(categoryName, btnId) {
       const box = document.getElementById('inlineAssistance');
       
-      // If clicking the active button again -> CLOSE IT
       if (box.classList.contains('active') && activeAssistanceCategory === categoryName) {
         box.classList.remove('active');
         if (activeBtnId) document.getElementById(activeBtnId).classList.remove('active');
@@ -552,28 +595,21 @@
         return;
       }
 
-      // Make sure we are on homeScreen to see the inline box
       showScreen('homeScreen');
-
-      // Clear previous button highlights
       document.querySelectorAll('.grid-btn').forEach(btn => btn.classList.remove('active'));
 
-      // Highlight current button
       if (document.getElementById(btnId)) {
         document.getElementById(btnId).classList.add('active');
       }
 
-      // Update contents and show box
       activeAssistanceCategory = categoryName;
       activeBtnId = btnId;
       document.getElementById('assistanceLabel').innerText = `Assistance: ${categoryName}`;
       box.classList.add('active');
-
-      // Smooth scroll to the box if needed
       box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    // SEND INLINE REQUEST TO WHATSAPP
+    // SEND INLINE REQUEST TO WHATSAPP & SAVE TO PANEL HISTORY
     function sendInlineRequestToWhatsApp() {
       const requestText = document.getElementById('inlineRequestText').value;
 
@@ -582,11 +618,23 @@
         return;
       }
 
-      const message = `💡 *APPEARICH ASSISTANCE REQUEST* 💡\n\n` +
-        `👤 *Mteja:* ${registeredUser.name || 'Guest'}\n` +
-        `📌 *Aina:* ${activeAssistanceCategory}\n` +
-        `💬 *Maelezo:* ${requestText}\n\n` +
-        `*Naomba msaada tafadhali!*`;
+      const now = new Date();
+      const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const dateString = now.toLocaleDateString('sw-TZ');
+
+      // Save inquiry to panel local history
+      saveToLocalHistory({
+        name: registeredUser.name || 'Guest',
+        item: `[Inquiry] ${activeAssistanceCategory}: ${requestText}`,
+        amount: 0,
+        time: `${dateString} ${timeString}`
+      });
+
+      const message = `APPEARICH ASSISTANCE REQUEST\n\n` +
+        `Mteja: ${registeredUser.name || 'Guest'}\n` +
+        `Aina: ${activeAssistanceCategory}\n` +
+        `Maelezo: ${requestText}\n\n` +
+        `Naomba msaada tafadhali!`;
 
       window.location.href = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     }
@@ -597,6 +645,15 @@
         screen.classList.remove('active');
       });
       document.getElementById(screenId).classList.add('active');
+      
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      if (screenId === 'homeScreen') document.getElementById('nav-home').classList.add('active');
+      if (screenId === 'panelScreen') document.getElementById('nav-panel').classList.add('active');
+
+      if (screenId === 'panelScreen') {
+        renderPanelHistory();
+      }
+
       window.scrollTo(0, 0);
     }
 
@@ -640,7 +697,7 @@
       document.getElementById('step-2').style.display = 'block';
     }
 
-    // SEND ORDER TO WHATSAPP
+    // SEND ORDER TO WHATSAPP & SAVE TO LOCAL STORAGE HISTORY
     function sendToWhatsApp() {
       const payerName = document.getElementById('payerName').value;
 
@@ -653,17 +710,63 @@
       const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const dateString = now.toLocaleDateString('sw-TZ');
 
-      const message = `🚨 *NEW APPEARICH ORDER* 🚨\n\n` +
-        `📅 *Tarehe:* ${dateString} (${timeString})\n` +
-        `👤 *Jina:* ${orderData.name}\n` +
-        `📞 *Simu:* ${orderData.contactPhone}\n` +
-        `📍 *Eneo:* ${orderData.location}\n` +
-        `📦 *Agizo:* ${orderData.items}\n` +
-        `💰 *Kiasi:* TZS ${Number(orderData.amount).toLocaleString()}\n` +
-        `💳 *Akaunti Iliyolipa:* ${payerName}\n\n` +
-        `*Tafadhali thibitisha na anza kuandaa!*`;
+      // Save complete order to Local History
+      saveToLocalHistory({
+        name: orderData.name,
+        item: orderData.items,
+        amount: Number(orderData.amount),
+        time: `${dateString} ${timeString}`
+      });
+
+      const message = `NEW APPEARICH ORDER\n\n` +
+        `Tarehe: ${dateString} (${timeString})\n` +
+        `Jina: ${orderData.name}\n` +
+        `Simu: ${orderData.contactPhone}\n` +
+        `Eneo: ${orderData.location}\n` +
+        `Agizo: ${orderData.items}\n` +
+        `Kiasi: TZS ${Number(orderData.amount).toLocaleString()}\n` +
+        `Akaunti Iliyolipa: ${payerName}\n\n` +
+        `Tafadhali thibitisha na anza kuandaa!`;
 
       window.location.href = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    }
+
+    // LOCAL STORAGE HISTORY MANAGEMENT
+    function saveToLocalHistory(entry) {
+      let history = JSON.parse(localStorage.getItem('appearich_history') || '[]');
+      history.unshift(entry);
+      localStorage.setItem('appearich_history', JSON.stringify(history));
+    }
+
+    function renderPanelHistory() {
+      let history = JSON.parse(localStorage.getItem('appearich_history') || '[]');
+      
+      let totalSales = history.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+
+      document.getElementById('statTotalOrders').innerText = history.length;
+      document.getElementById('statTotalSales').innerText = `TZS ${totalSales.toLocaleString()}`;
+
+      const container = document.getElementById('orderLogsContainer');
+
+      if (history.length === 0) {
+        container.innerHTML = '<div class="subtitle" style="padding: 10px 0;">No order history found.</div>';
+        return;
+      }
+
+      container.innerHTML = history.map(o => `
+        <div class="order-item-log">
+          <strong>${o.name}</strong> - ${o.amount ? 'TZS ' + Number(o.amount).toLocaleString() : 'Inquiry'}<br>
+          <span style="color: #444;">${o.item}</span><br>
+          <small style="color: #999;">${o.time}</small>
+        </div>
+      `).join('');
+    }
+
+    function clearHistory() {
+      if (confirm("Are you sure you want to clear all saved panel history?")) {
+        localStorage.removeItem('appearich_history');
+        renderPanelHistory();
+      }
     }
   </script>
 </body>
