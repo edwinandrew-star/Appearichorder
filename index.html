@@ -111,7 +111,7 @@
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      display: flex !important; /* Force visible everywhere */
+      display: flex !important;
       align-items: center;
       justify-content: center;
       font-size: 1rem;
@@ -497,8 +497,8 @@
     .horizontal-scroll-container::-webkit-scrollbar-thumb { background: var(--accent-gold); border-radius: 4px; }
     
     .food-scroll-card {
-      min-width: 140px;
-      height: 150px;
+      min-width: 130px;
+      height: 140px;
       border-radius: 16px;
       position: relative;
       flex-shrink: 0;
@@ -535,57 +535,141 @@
       justify-content: center;
     }
 
-    /* Custom Order Button positioned below scrolling images */
-    .special-order-btn {
-      width: 100%;
-      background: var(--card-bg-sub);
-      border: 1.5px dashed var(--accent-gold);
-      color: var(--accent-gold);
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-size: 0.82rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 16px;
-      transition: all 0.2s ease;
-    }
-    .special-order-btn:hover {
-      background: var(--accent-gold-light);
-    }
-
-    /* Meal Options Checkbox Selector */
+    /* Meal Selection Dynamic Checkbox Grid */
     .meal-options-box {
       background: var(--card-bg-sub);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 14px;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
     }
     .meal-options-title {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 800;
       color: var(--text-main);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .meal-option-item {
+    .meal-row {
+      display: flex;
+      flex-direction: column;
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--card-border);
+      gap: 6px;
+    }
+    .meal-row:last-child { border-bottom: none; }
+    .meal-checkbox-line {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 6px 0;
+      justify-content: space-between;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       color: var(--text-main);
-      font-weight: 600;
+      font-weight: 700;
     }
-    .meal-option-item input[type="checkbox"] {
+    .meal-checkbox-line label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .meal-checkbox-line input[type="checkbox"] {
       width: 18px;
       height: 18px;
       accent-color: var(--accent-gold);
       cursor: pointer;
+    }
+    .item-total-badge {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--accent-gold);
+    }
+    .meal-inputs-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-left: 26px;
+      margin-top: 4px;
+    }
+    .mini-input-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+    .mini-input-group input, .mini-input-group select {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      padding: 6px 8px;
+      color: var(--text-main);
+      font-size: 0.8rem;
+      outline: none;
+      font-weight: bold;
+    }
+    .mini-input-group input[type="number"] { width: 64px; }
+
+    /* Clearly Visible Repositioned Special Order Button */
+    .prominent-special-btn {
+      width: 100%;
+      background: #111111;
+      border: 2px solid var(--accent-gold);
+      color: var(--accent-gold);
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+      transition: all 0.2s ease;
+    }
+    .prominent-special-btn:hover {
+      background: var(--accent-gold);
+      color: #000;
+    }
+
+    /* Live Summary Box (Subtotal + Surcharge Calculation) */
+    .calculation-summary-box {
+      background: var(--card-bg-sub);
+      border: 1.5px solid var(--accent-gold);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-top: 12px;
+      margin-bottom: 14px;
+    }
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+    .calc-row.total-row {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--text-main);
+      border-top: 1px dashed var(--card-border);
+      padding-top: 8px;
+      margin-bottom: 0;
+    }
+    .night-tag {
+      font-size: 0.68rem;
+      background: #dc3545;
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 800;
+      margin-left: 4px;
     }
 
     /* Inline Special Custom Order Box */
@@ -998,11 +1082,11 @@
       <i class="fa-solid fa-moon"></i>
     </button>
   </header>
+
   <!-- ==========================================================================
      SCREEN 1: HOME DASHBOARD
      ========================================================================== -->
   <div id="screen-home" class="app-screen active">
-    
     <div class="hero-banner">
       <div class="hero-greeting" id="heroGreeting">Welcome, Guest!</div>
       <div class="hero-tagline">Appear Rich — Premium Delivery, Delivered with Love.</div>
@@ -1049,6 +1133,7 @@
       <button class="reorder-btn" onclick="triggerQuickReorder()">Reorder</button>
     </div>
   </div>
+
   <!-- ==========================================================================
      SCREEN: PERFUMES SCREEN
      ========================================================================== -->
@@ -1089,6 +1174,7 @@
       </button>
     </div>
   </div>
+
   <!-- ==========================================================================
      SCREEN 2: AI APPEARICH GUIDE
      ========================================================================== -->
@@ -1116,6 +1202,7 @@
       </button>
     </div>
   </div>
+
   <!-- ==========================================================================
      SCREEN 3: BOOKINGS / LIVE ORDERS
      ========================================================================== -->
@@ -1125,6 +1212,7 @@
     </div>
     <div id="bookingsListContainer"></div>
   </div>
+
   <!-- ==========================================================================
      SCREEN 4: PROFILE / AXIS
      ========================================================================== -->
@@ -1156,8 +1244,9 @@
     </div>
     <div id="historyListContainer"></div>
   </div>
+
   <!-- ==========================================================================
-     FULL-SCREEN MODAL: HOT MEALS FLOW (CUSTOM COMBINATIONS & SPECIAL ORDERS)
+     FULL-SCREEN MODAL: HOT MEALS FLOW (CUSTOM COMBINATIONS & SURCHARGE MATH)
      ========================================================================== -->
   <div id="hotMealsModal" class="modal-overlay">
     <div class="sheet-content full-screen">
@@ -1166,11 +1255,16 @@
       <div class="modal-sticky-header">
         <div class="sheet-title">Hot Meals</div>
       </div>
+
       <!-- Hot Meals Carousel -->
       <div class="horizontal-scroll-container">
         <div class="food-scroll-card">
           <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" alt="Chipsi Mayai">
           <div class="food-card-label">Chipsi Mayai</div>
+        </div>
+        <div class="food-scroll-card">
+          <img src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=300&auto=format&fit=cover" alt="Chipsi Kavu">
+          <div class="food-card-label">Chipsi Kavu</div>
         </div>
         <div class="food-scroll-card">
           <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=300&auto=format&fit=cover" alt="Mishikaki">
@@ -1182,8 +1276,94 @@
         </div>
       </div>
 
-      <!-- Special Order Button Placement (Directly below scrolling images) -->
-      <button type="button" class="special-order-btn" onclick="toggleSpecialOrderBox()">
+      <!-- Meal Selection Checkboxes & Inputs Box -->
+      <div class="meal-options-box">
+        <div class="meal-options-title">
+          <span><i class="fa-solid fa-utensils"></i> Select Items for Your Order:</span>
+        </div>
+
+        <!-- 1. Chipsi Mayai (3,000 TZS default) -->
+        <div class="meal-row">
+          <div class="meal-checkbox-line">
+            <label>
+              <input type="checkbox" id="chkChipsiMayai" checked onchange="recalculateMealTotal()"> 
+              Chipsi Mayai (3,000/=)
+            </label>
+            <span class="item-total-badge" id="badgeChipsiMayai">3,000 TZS</span>
+          </div>
+          <div class="meal-inputs-row">
+            <div class="mini-input-group">
+              <label>Qty:</label>
+              <input type="number" id="qtyChipsiMayai" value="1" min="1" onchange="recalculateMealTotal()" onkeyup="recalculateMealTotal()">
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Chipsi Kavu (2,000 TZS default) -->
+        <div class="meal-row">
+          <div class="meal-checkbox-line">
+            <label>
+              <input type="checkbox" id="chkChipsiKavu" onchange="recalculateMealTotal()"> 
+              Chipsi Kavu (2,000/=)
+            </label>
+            <span class="item-total-badge" id="badgeChipsiKavu">0 TZS</span>
+          </div>
+          <div class="meal-inputs-row">
+            <div class="mini-input-group">
+              <label>Qty:</label>
+              <input type="number" id="qtyChipsiKavu" value="1" min="1" onchange="recalculateMealTotal()" onkeyup="recalculateMealTotal()">
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Mishikaki (Choose 500 or 1000 per piece) -->
+        <div class="meal-row">
+          <div class="meal-checkbox-line">
+            <label>
+              <input type="checkbox" id="chkMishikaki" onchange="recalculateMealTotal()"> 
+              Mishikaki
+            </label>
+            <span class="item-total-badge" id="badgeMishikaki">0 TZS</span>
+          </div>
+          <div class="meal-inputs-row">
+            <div class="mini-input-group">
+              <label>Price:</label>
+              <select id="priceMishikaki" onchange="recalculateMealTotal()">
+                <option value="500">500 TZS</option>
+                <option value="1000" selected>1,000 TZS</option>
+              </select>
+            </div>
+            <div class="mini-input-group">
+              <label>Qty:</label>
+              <input type="number" id="qtyMishikaki" value="2" min="1" onchange="recalculateMealTotal()" onkeyup="recalculateMealTotal()">
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Soda (Custom Unit Price Field) -->
+        <div class="meal-row">
+          <div class="meal-checkbox-line">
+            <label>
+              <input type="checkbox" id="chkSoda" onchange="recalculateMealTotal()"> 
+              Soda
+            </label>
+            <span class="item-total-badge" id="badgeSoda">0 TZS</span>
+          </div>
+          <div class="meal-inputs-row">
+            <div class="mini-input-group">
+              <label>Price/Piece:</label>
+              <input type="number" id="priceSoda" value="1000" step="100" min="0" style="width: 80px;" onchange="recalculateMealTotal()" onkeyup="recalculateMealTotal()">
+            </div>
+            <div class="mini-input-group">
+              <label>Qty:</label>
+              <input type="number" id="qtySoda" value="1" min="1" onchange="recalculateMealTotal()" onkeyup="recalculateMealTotal()">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prominent & Clearly Visible Special Order Button Positioned Below Checkboxes -->
+      <button type="button" class="prominent-special-btn" onclick="toggleSpecialOrderBox()">
         <i class="fa-solid fa-pen-to-square"></i> Special Order / Custom Meal Request
       </button>
 
@@ -1191,30 +1371,35 @@
       <div id="specialOrderBox" class="special-order-box">
         <div class="form-group" style="margin-bottom: 8px;">
           <label for="customMealText" style="color: var(--accent-gold); font-weight: 800;">Describe Special Order:</label>
-          <textarea id="customMealText" placeholder="Describe what meal or addition you want (e.g., Kuku wa kuchoma na Chips, Wali Maharage, etc.)..."></textarea>
+          <textarea id="customMealText" placeholder="Describe what meal or custom addition you want (e.g., Kuku wa kuchoma, Wali Maharage, etc.)..."></textarea>
         </div>
         <button type="button" class="submit-order-btn" style="background:#25D366; font-size: 0.85rem; padding: 10px;" onclick="sendSpecialOrderWhatsApp()">
           <i class="fa-brands fa-whatsapp"></i> Send Special Request to WhatsApp
         </button>
       </div>
 
-      <!-- Meal Selection Checkboxes -->
-      <div class="meal-options-box">
-        <div class="meal-options-title"><i class="fa-solid fa-utensils"></i> Select Items for Your Order:</div>
-        <label class="meal-option-item">
-          <input type="checkbox" id="chkChipsiMayai" checked> Chipsi Mayai
-        </label>
-        <label class="meal-option-item">
-          <input type="checkbox" id="chkMishikaki"> Mishikaki
-        </label>
-        <label class="meal-option-item">
-          <input type="checkbox" id="chkSoda"> Soda
-        </label>
+      <!-- Automatic Calculation Breakdown Display -->
+      <div class="calculation-summary-box">
+        <div class="calc-row">
+          <span>Items Subtotal:</span>
+          <strong id="displaySubtotal">3,000 TZS</strong>
+        </div>
+        <div class="calc-row">
+          <span>
+            Service Fee (<span id="surchargeRateText">30%</span>):
+            <span id="nightBadgeSlot"></span>
+          </span>
+          <strong id="displaySurcharge">900 TZS</strong>
+        </div>
+        <div class="calc-row total-row">
+          <span>GRAND TOTAL:</span>
+          <strong id="displayGrandTotal" style="color:var(--accent-gold);">3,900 TZS</strong>
+        </div>
       </div>
 
       <div class="form-group">
         <label for="mealDetails">Additions / Special Instructions:</label>
-        <textarea id="mealDetails" placeholder="Enter specific instructions (e.g. extra sauce, 2 plates of chipsi mayai, soda flavor, etc.)"></textarea>
+        <textarea id="mealDetails" placeholder="Enter specific instructions (e.g. extra sauce, soda flavor choice, chili options, etc.)"></textarea>
       </div>
 
       <!-- Auto-Remembered Location Input Fields -->
@@ -1253,6 +1438,7 @@
       </button>
     </div>
   </div>
+
   <!-- ==========================================================================
      MODAL SHEET: PERFUME ORDER DIALOGUE
      ========================================================================== -->
@@ -1285,6 +1471,7 @@
       </button>
     </div>
   </div>
+
   <!-- ==========================================================================
      PERSISTENT BOTTOM NAVIGATION BAR
      ========================================================================== -->
@@ -1306,6 +1493,7 @@
       <span>Profile</span>
     </button>
   </nav>
+
   <!-- ==========================================================================
      APPLICATION LOGIC SCRIPT
      ========================================================================== -->
@@ -1321,6 +1509,12 @@
     let selectedPerfumeSize = "30ml (25,000/= TZS)";
     let animationLock = false;
 
+    // Calculation Global State
+    let calculatedSubtotal = 0;
+    let calculatedSurcharge = 0;
+    let calculatedGrandTotal = 0;
+    let surchargePercent = 30;
+
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('heroGreeting').innerText = `Welcome, ${loggedInUser.name}!`;
       document.getElementById('profName').innerText = loggedInUser.name;
@@ -1332,7 +1526,9 @@
       
       updateLoyaltyUI();
       renderBookings();
+      recalculateMealTotal();
     });
+
     function loadSavedUserLocation() {
       const savedBlock = localStorage.getItem('appearich_user_block');
       const savedRoom = localStorage.getItem('appearich_user_room');
@@ -1343,6 +1539,7 @@
         document.getElementById('locSavedTag').innerText = "(Auto-Filled)";
       }
     }
+
     function toggleTheme() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const icon = document.querySelector('#themeToggleBtn i');
@@ -1354,6 +1551,7 @@
         icon.className = 'fa-solid fa-sun';
       }
     }
+
     function switchTab(screenId, element) {
       document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1365,29 +1563,103 @@
         element.classList.add('active');
       }
     }
+
     function goBack() {
       const homeBtn = document.getElementById('nav-home-btn');
       switchTab('screen-home', homeBtn);
     }
+
     function openHotMealsModal() { 
       loadSavedUserLocation();
+      recalculateMealTotal();
       document.getElementById('hotMealsModal').classList.add('active'); 
     }
+
     function toggleSpecialOrderBox() {
       const box = document.getElementById('specialOrderBox');
       box.classList.toggle('active');
     }
+
     function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
     function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
+    
     function openProductModal(name) {
       document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
       openOrderModal();
     }
+
     function selectPerfumeSize(el, sizePrice) {
       document.querySelectorAll('#perfumesModal .price-card').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
       selectedPerfumeSize = sizePrice;
     }
+
+    /* Dynamic Meal Surcharge & Math Logic */
+    function recalculateMealTotal() {
+      calculatedSubtotal = 0;
+
+      // 1. Chipsi Mayai (3,000 TZS default)
+      if (document.getElementById('chkChipsiMayai').checked) {
+        const qty = Math.max(1, parseInt(document.getElementById('qtyChipsiMayai').value) || 1);
+        const lineTotal = 3000 * qty;
+        calculatedSubtotal += lineTotal;
+        document.getElementById('badgeChipsiMayai').innerText = lineTotal.toLocaleString() + " TZS";
+      } else {
+        document.getElementById('badgeChipsiMayai').innerText = "0 TZS";
+      }
+
+      // 2. Chipsi Kavu (2,000 TZS default)
+      if (document.getElementById('chkChipsiKavu').checked) {
+        const qty = Math.max(1, parseInt(document.getElementById('qtyChipsiKavu').value) || 1);
+        const lineTotal = 2000 * qty;
+        calculatedSubtotal += lineTotal;
+        document.getElementById('badgeChipsiKavu').innerText = lineTotal.toLocaleString() + " TZS";
+      } else {
+        document.getElementById('badgeChipsiKavu').innerText = "0 TZS";
+      }
+
+      // 3. Mishikaki (500 or 1000 TZS unit choice)
+      if (document.getElementById('chkMishikaki').checked) {
+        const unitPrice = parseInt(document.getElementById('priceMishikaki').value) || 1000;
+        const qty = Math.max(1, parseInt(document.getElementById('qtyMishikaki').value) || 1);
+        const lineTotal = unitPrice * qty;
+        calculatedSubtotal += lineTotal;
+        document.getElementById('badgeMishikaki').innerText = lineTotal.toLocaleString() + " TZS";
+      } else {
+        document.getElementById('badgeMishikaki').innerText = "0 TZS";
+      }
+
+      // 4. Soda (Custom Unit Price)
+      if (document.getElementById('chkSoda').checked) {
+        const unitPrice = Math.max(0, parseInt(document.getElementById('priceSoda').value) || 0);
+        const qty = Math.max(1, parseInt(document.getElementById('qtySoda').value) || 1);
+        const lineTotal = unitPrice * qty;
+        calculatedSubtotal += lineTotal;
+        document.getElementById('badgeSoda').innerText = lineTotal.toLocaleString() + " TZS";
+      } else {
+        document.getElementById('badgeSoda').innerText = "0 TZS";
+      }
+
+      // Surcharge Calculation: Check if late night (23:00 / 11:00 PM or later)
+      const currentHour = new Date().getHours();
+      if (currentHour >= 23) {
+        surchargePercent = 40;
+        document.getElementById('nightBadgeSlot').innerHTML = `<span class="night-tag">Night Rate</span>`;
+      } else {
+        surchargePercent = 30;
+        document.getElementById('nightBadgeSlot').innerHTML = '';
+      }
+
+      calculatedSurcharge = Math.round(calculatedSubtotal * (surchargePercent / 100));
+      calculatedGrandTotal = calculatedSubtotal + calculatedSurcharge;
+
+      // Update Live UI Display
+      document.getElementById('surchargeRateText').innerText = surchargePercent + "%";
+      document.getElementById('displaySubtotal').innerText = calculatedSubtotal.toLocaleString() + " TZS";
+      document.getElementById('displaySurcharge').innerText = calculatedSurcharge.toLocaleString() + " TZS";
+      document.getElementById('displayGrandTotal').innerText = calculatedGrandTotal.toLocaleString() + " TZS";
+    }
+
     function sendSpecialOrderWhatsApp() {
       const customText = document.getElementById('customMealText').value.trim();
       if (!customText) {
@@ -1402,14 +1674,31 @@
         `Please inform me of the total and availability!`;
       window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`, '_blank');
     }
-    function submitFoodOrder() {
-      const selectedItems = [];
-      if (document.getElementById('chkChipsiMayai').checked) selectedItems.push("Chipsi Mayai");
-      if (document.getElementById('chkMishikaki').checked) selectedItems.push("Mishikaki");
-      if (document.getElementById('chkSoda').checked) selectedItems.push("Soda");
 
-      if (selectedItems.length === 0) {
-        alert("Please choose at least one item (Chipsi Mayai, Mishikaki, or Soda) or use the Special Order button!");
+    function submitFoodOrder() {
+      const selectedItemsList = [];
+
+      if (document.getElementById('chkChipsiMayai').checked) {
+        const q = Math.max(1, parseInt(document.getElementById('qtyChipsiMayai').value) || 1);
+        selectedItemsList.push(`Chipsi Mayai (${q}x @ 3,000)`);
+      }
+      if (document.getElementById('chkChipsiKavu').checked) {
+        const q = Math.max(1, parseInt(document.getElementById('qtyChipsiKavu').value) || 1);
+        selectedItemsList.push(`Chipsi Kavu (${q}x @ 2,000)`);
+      }
+      if (document.getElementById('chkMishikaki').checked) {
+        const p = parseInt(document.getElementById('priceMishikaki').value) || 1000;
+        const q = Math.max(1, parseInt(document.getElementById('qtyMishikaki').value) || 1);
+        selectedItemsList.push(`Mishikaki (${q}x @ ${p})`);
+      }
+      if (document.getElementById('chkSoda').checked) {
+        const p = Math.max(0, parseInt(document.getElementById('priceSoda').value) || 0);
+        const q = Math.max(1, parseInt(document.getElementById('qtySoda').value) || 1);
+        selectedItemsList.push(`Soda (${q}x @ ${p})`);
+      }
+
+      if (selectedItemsList.length === 0) {
+        alert("Please choose at least one item or use the Special Order button!");
         return;
       }
 
@@ -1431,40 +1720,48 @@
         alert("Tafadhali weka jina la namba ya simu uliyotumia kufanya malipo!");
         return;
       }
+
       // Save user location
       localStorage.setItem('appearich_user_block', block);
       localStorage.setItem('appearich_user_room', room);
+
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
       
-      const itemSummary = selectedItems.join(" + ");
+      const itemsSummaryText = selectedItemsList.join("\n• ");
       const whatsappText = `🍔 *NEW APPEARICH MEAL ORDER*\n` +
         `----------------------------------------\n` +
         `🆔 *Order ID:* ${orderId}\n` +
-        `🍽️ *Selected Items:* ${itemSummary}\n` +
-        `📝 *Additions/Instructions:* ${details || "None"}\n` +
+        `🍽️ *Selected Items:*\n• ${itemsSummaryText}\n\n` +
+        `💵 *Subtotal:* ${calculatedSubtotal.toLocaleString()} TZS\n` +
+        `⚡ *Service Fee (${surchargePercent}%):* ${calculatedSurcharge.toLocaleString()} TZS\n` +
+        `💰 *TOTAL PAYABLE:* ${calculatedGrandTotal.toLocaleString()} TZS\n` +
         `----------------------------------------\n` +
+        `📝 *Special Notes:* ${details || "None"}\n` +
         `📍 *Location:* ${block}, Room ${room}\n` +
         `📞 *Phone:* ${phone}\n` +
-        `👤 *Payer Name:* ${payer}\n` +
+        `👤 *Payer Account Name:* ${payer}\n` +
         `⏰ *Time Placed:* ${currentTime}\n` +
         `----------------------------------------\n` +
-        `Payment sent via Lipa Namba 37247619 (EdwinAndrew).`;
+        `Payment sent via Voda Lipa Namba 37247619 (EdwinAndrew).`;
 
       window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`, '_blank');
+
       const newOrder = {
         id: orderId,
-        title: itemSummary,
-        details: `Payment name: ${payer}`,
+        title: `${calculatedGrandTotal.toLocaleString()} TZS (${selectedItemsList.length} items)`,
+        details: `Paid by ${payer} | Total: ${calculatedGrandTotal.toLocaleString()} TZS`,
         location: `${block}, Room ${room}`,
         status: "pending",
         timestamp: currentTime
       };
+
       activeOrders.unshift(newOrder);
       closeSheet('hotMealsModal');
       renderBookings();
       simulateVerification(newOrder.id);
     }
+
     function submitPerfumeOrder() {
       const desc = document.getElementById('perfumeDesc').value.trim();
       if (!desc) {
@@ -1475,6 +1772,7 @@
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       closeSheet('perfumesModal');
     }
+
     function simulateVerification(orderId) {
       setTimeout(() => {
         const orderIdx = activeOrders.findIndex(o => o.id === orderId);
@@ -1492,6 +1790,7 @@
         }
       }, 3500);
     }
+
     function renderBookings() {
       const container = document.getElementById('bookingsListContainer');
       if (activeOrders.length === 0) {
@@ -1519,6 +1818,7 @@
         </div>
       `).join('');
     }
+
     function renderHistory() {
       const container = document.getElementById('historyListContainer');
       if (completedHistory.length === 0) {
@@ -1537,6 +1837,7 @@
         </div>
       `).join('');
     }
+
     function updateLoyaltyUI() {
       document.getElementById('loyaltyCountBadge').innerText = `${completedOrdersCount} / 5 Orders`;
       const stamps = document.querySelectorAll('.stamp-dot');
@@ -1548,6 +1849,7 @@
         }
       });
     }
+
     function sendCustomInquiry() {
       const val = document.getElementById('customInquiryInput').value.trim();
       if (!val) return;
@@ -1555,9 +1857,11 @@
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       document.getElementById('customInquiryInput').value = '';
     }
+
     function triggerQuickReorder() {
       openHotMealsModal();
     }
+
     function igniteTeaserToast() {
       if (animationLock) return;
       animationLock = true;
