@@ -371,133 +371,82 @@
       margin-bottom: 16px;
     }
     .sheet-title { font-size: 1.4rem; font-weight: 900; color: var(--text-main); text-align: center; }
-    .horizontal-scroll-container {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      padding: 4px 4px 12px 4px;
-      margin-top: 16px;
-      margin-bottom: 12px;
-      scrollbar-width: thin;
+
+    /* Vertical-Scroll Food Selection Grid */
+    .food-selection-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+      margin-bottom: 16px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 4px;
     }
-    .horizontal-scroll-container::-webkit-scrollbar { height: 4px; }
-    .horizontal-scroll-container::-webkit-scrollbar-thumb { background: var(--accent-gold); border-radius: 4px; }
-    .food-scroll-card {
-      min-width: 130px;
-      height: 140px;
-      border-radius: 16px;
+    .food-selection-card {
+      height: 110px;
+      border-radius: 14px;
       position: relative;
-      flex-shrink: 0;
       overflow: hidden;
       border: 2px solid var(--card-border);
       cursor: pointer;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, transform 0.2s;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
     }
-    .food-scroll-card img {
+    .food-selection-card.selected {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 10px var(--accent-gold-light);
+    }
+    .food-selection-card img {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-    .food-card-label {
+    .food-card-overlay-label {
       position: relative;
       z-index: 2;
       background: linear-gradient(to top, rgba(0,0,0,0.95) 20%, rgba(0,0,0,0.7) 80%, transparent);
-      padding: 10px 6px 8px 6px;
+      padding: 6px;
       text-align: center;
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: #ffffff;
-      white-space: normal;
-      word-wrap: break-word;
-      line-height: 1.2;
-      min-height: 44px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
     }
-    .meal-options-box {
+    .food-name-text { font-size: 0.82rem; font-weight: 800; color: #ffffff; }
+    .food-price-text { font-size: 0.72rem; color: var(--accent-gold); font-weight: 700; }
+
+    /* Selected Items Vertical List */
+    .selected-items-box {
       background: var(--card-bg-sub);
       border: 1px solid var(--card-border);
       border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 12px;
+      padding: 12px;
+      margin-bottom: 14px;
     }
-    .meal-options-title {
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: var(--text-main);
-      margin-bottom: 10px;
+    .selected-item-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-    }
-    .meal-row {
-      display: flex;
-      flex-direction: column;
-      padding: 10px 0;
+      justify-content: space-between;
+      padding: 8px 0;
       border-bottom: 1px dashed var(--card-border);
-      gap: 6px;
     }
-    .meal-row:last-child { border-bottom: none; }
-    .meal-checkbox-line {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      font-size: 0.88rem;
-      color: var(--text-main);
-      font-weight: 700;
-    }
-    .meal-checkbox-line label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
-    .meal-checkbox-line input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--accent-gold);
-      cursor: pointer;
-    }
-    .item-total-badge { font-size: 0.8rem; font-weight: 800; color: var(--accent-gold); }
-    .meal-inputs-row { display: flex; align-items: center; gap: 8px; padding-left: 26px; margin-top: 4px; }
-    .mini-input-group {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.75rem;
-      color: var(--text-sub);
-      font-weight: 600;
-    }
-    .mini-input-group input, .mini-input-group select {
+    .selected-item-row:last-child { border-bottom: none; }
+    .selected-item-info { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
+    .selected-item-ctrls { display: flex; align-items: center; gap: 8px; }
+    .selected-item-ctrls input {
+      width: 55px;
       background: var(--input-bg);
       border: 1px solid var(--input-border);
-      border-radius: 8px;
-      padding: 6px 8px;
+      border-radius: 6px;
+      padding: 4px 6px;
       color: var(--text-main);
-      font-size: 0.8rem;
-      outline: none;
       font-weight: bold;
-    }
-    .mini-input-group input[type="number"] { width: 64px; }
-
-    .item-desc-input {
-      width: calc(100% - 26px);
-      margin-left: 26px;
-      margin-top: 6px;
-      background: var(--input-bg);
-      border: 1px solid var(--input-border);
-      border-radius: 8px;
-      padding: 8px 10px;
-      color: var(--text-main);
-      font-size: 0.8rem;
-      outline: none;
-      resize: none;
-      height: 48px;
-    }
-    .item-desc-input:focus {
-      border-color: var(--accent-gold);
+      text-align: center;
     }
 
     .calculation-summary-box {
@@ -541,7 +490,7 @@
     .form-group textarea { height: 65px; resize: none; }
     .saved-loc-badge { font-size: 0.72rem; color: var(--accent-gold); font-weight: bold; margin-left: 4px; }
 
-    /* Simplified Dynamic Payment Styles */
+    /* Payment Styles */
     .payment-selection-box {
       background: var(--card-bg-sub);
       border: 1.5px solid var(--card-border);
@@ -990,7 +939,7 @@
     <div id="historyListContainer"></div>
   </div>
 
-  <!-- HOT MEALS FULL MODAL -->
+  <!-- HOT MEALS MODAL -->
   <div id="hotMealsModal" class="modal-overlay">
     <div class="sheet-content full-screen">
       <span class="sheet-close" onclick="closeSheet('hotMealsModal')">&times;</span>
@@ -998,191 +947,135 @@
       <div class="modal-sticky-header">
         <div class="sheet-title">Hot Meals</div>
       </div>
-      <!-- Horizontal Showcase -->
-      <div class="horizontal-scroll-container">
-        <div class="food-scroll-card">
+
+      <div style="font-size: 0.82rem; font-weight:800; color:var(--text-main); margin-bottom:4px;">
+        <i class="fa-solid fa-plus-circle" style="color:var(--accent-gold);"></i> Tap to Add Available Items:
+      </div>
+
+      <!-- Item Options Grid (Horizontal to Vertical Grid) -->
+      <div class="food-selection-grid">
+        <div class="food-selection-card" onclick="addItemToOrder('Chipsi Mayai', 3000)">
           <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" alt="Chipsi Mayai">
-          <div class="food-card-label">Chipsi Mayai</div>
+          <div class="food-card-overlay-label">
+            <span class="food-name-text">Chipsi Mayai</span>
+            <span class="food-price-text">3,000 TZS</span>
+          </div>
         </div>
-        <div class="food-scroll-card">
+        <div class="food-selection-card" onclick="addItemToOrder('Chipsi Kavu', 2000)">
           <img src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=300&auto=format&fit=cover" alt="Chipsi Kavu">
-          <div class="food-card-label">Chipsi Kavu</div>
+          <div class="food-card-overlay-label">
+            <span class="food-name-text">Chipsi Kavu</span>
+            <span class="food-price-text">2,000 TZS</span>
+          </div>
         </div>
-        <div class="food-scroll-card">
+        <div class="food-selection-card" onclick="addItemToOrder('Paja', 3000)">
+          <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?q=80&w=300&auto=format&fit=cover" alt="Paja">
+          <div class="food-card-overlay-label">
+            <span class="food-name-text">Paja</span>
+            <span class="food-price-text">3,000 TZS</span>
+          </div>
+        </div>
+        <div class="food-selection-card" onclick="addItemToOrder('Kidali', 3000)">
+          <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?q=80&w=300&auto=format&fit=cover" alt="Kidali">
+          <div class="food-card-overlay-label">
+            <span class="food-name-text">Kidali</span>
+            <span class="food-price-text">3,000 TZS</span>
+          </div>
+        </div>
+        <div class="food-selection-card" onclick="addItemToOrder('Mishikaki', 1000)">
           <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=300&auto=format&fit=cover" alt="Mishikaki">
-          <div class="food-card-label">Mishikaki</div>
+          <div class="food-card-overlay-label">
+            <span class="food-name-text">Mishikaki</span>
+            <span class="food-price-text">1,000 TZS</span>
+          </div>
         </div>
-        <div class="food-scroll-card">
+        <div class="food-selection-card" onclick="addItemToOrder('Soda', 1000)">
           <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=300&auto=format&fit=cover" alt="Soda">
-          <div class="food-card-label">Soda</div>
+          <div class="food-card-overlay-label">
+            <span class="food-name-text">Soda</span>
+            <span class="food-price-text">1,000 TZS</span>
+          </div>
         </div>
       </div>
 
-      <!-- Meal Selection Checkboxes -->
-      <div class="meal-options-box">
-        <div class="meal-options-title">
-          <span><i class="fa-solid fa-utensils"></i> Choose Selected Items:</span>
-        </div>
+      <!-- Vertical Dynamic Selected List Container -->
+      <div id="selectedItemsContainer" class="selected-items-box">
+        <p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet. Click an item above to add to order.</p>
+      </div>
 
-        <!-- Chipsi Mayai -->
-        <div class="meal-row">
-          <div class="meal-checkbox-line">
-            <label>
-              <input type="checkbox" id="chkChipsiMayai" checked onchange="recalculateMealTotal()"> 
-              Chipsi Mayai (3,000/=)
-            </label>
-            <span class="item-total-badge" id="badgeChipsiMayai">3,000 TZS</span>
-          </div>
-          <div class="meal-inputs-row">
-            <div class="mini-input-group">
-              <label>Qty:</label>
-              <input type="number" id="qtyChipsiMayai" value="1" min="1" onchange="recalculateMealTotal()" onkeyup="recalculateMealTotal()">
-            </div>
-          </div>
-          <textarea id="descChipsiMayai" class="item-desc-input" placeholder="Describe how you want Chipsi Mayai prepared (e.g. extra chili, salt level, etc.)..."></textarea>
-        </div>
+      <!-- Single Overall Order Description Textarea -->
+      <div class="form-group">
+        <label for="mealDetails">Overall Order Description / Special Instructions:</label>
+        <textarea id="mealDetails" placeholder="Describe your full meal request (e.g., extra chili, salt level, soft chips, specific soda flavor)..."></textarea>
+      </div>
 
-        <!-- Chipsi Kavu -->
-        <div class="meal-row">
-          <div class="meal-checkbox-line">
-            <label>
-              <input type="checkbox" id="chkChipsiKavu" onchange="recalculateMealTotal()"> 
-              Chipsi Kavu (2,000/=)
-            </label>
-            <span class="item-total-badge" id="badgeChipsiKavu">0 TZS</span>
-          </div>
-          <div class="meal-inputs-row">
-            <div class="mini-input-group">
-              <label>Qty:</label>
-              <input type="number" id="qtyChipsiKavu" value="1" min="1" onchange="recalculateMealTotal()" onkeyup="recalculateMealTotal()">
-            </div>
-          </div>
-          <textarea id="descChipsiKavu" class="item-desc-input" placeholder="Describe how you want Chipsi Kavu prepared..."></textarea>
+      <!-- Summary Box -->
+      <div class="calculation-summary-box">
+        <div class="calc-row">
+          <span>Items Subtotal:</span>
+          <strong id="displaySubtotal">0 TZS</strong>
         </div>
-
-        <!-- Mishikaki -->
-        <div class="meal-row">
-          <div class="meal-checkbox-line">
-            <label>
-              <input type="checkbox" id="chkMishikaki" onchange="recalculateMealTotal()"> 
-              Mishikaki
-            </label>
-            <span class="item-total-badge" id="badgeMishikaki">0 TZS</span>
-          </div>
-          <div class="meal-inputs-row">
-            <div class="mini-input-group">
-              <label>Price:</label>
-              <select id="priceMishikaki" onchange="recalculateMealTotal()">
-                <option value="500">500 TZS</option>
-                <option value="1000" selected>1,000 TZS</option>
-              </select>
-            </div>
-            <div class="mini-input-group">
-              <label>Qty:</label>
-              <input type="number" id="qtyMishikaki" value="2" min="1" onchange="recalculateMealTotal()" onkeyup="recalculateMealTotal()">
-            </div>
-          </div>
-          <textarea id="descMishikaki" class="item-desc-input" placeholder="Describe your Mishikaki preference (e.g. well done, soft, extra spice)..."></textarea>
+        <div class="calc-row">
+          <span>
+            Service Fee (<span id="surchargeRateText">25%</span>):
+            <span id="nightBadgeSlot"></span>
+          </span>
+          <strong id="displaySurcharge">0 TZS</strong>
         </div>
-
-        <!-- Soda -->
-        <div class="meal-row">
-          <div class="meal-checkbox-line">
-            <label>
-              <input type="checkbox" id="chkSoda" onchange="recalculateMealTotal()"> 
-              Soda
-            </label>
-            <span class="item-total-badge" id="badgeSoda">0 TZS</span>
-          </div>
-          <div class="meal-inputs-row">
-            <div class="mini-input-group">
-              <label>Price/Piece:</label>
-              <input type="number" id="priceSoda" value="1000" step="100" min="0" style="width: 80px;" onchange="recalculateMealTotal()" onkeyup="recalculateMealTotal()">
-            </div>
-            <div class="mini-input-group">
-              <label>Qty:</label>
-              <input type="number" id="qtySoda" value="1" min="1" onchange="recalculateMealTotal()" onkeyup="recalculateMealTotal()">
-            </div>
-          </div>
-          <textarea id="descSoda" class="item-desc-input" placeholder="Specify Soda flavor/brand choice (e.g. Coca-Cola, Fanta, Pepsi, chilled)..."></textarea>
+        <div class="calc-row total-row">
+          <span>GRAND TOTAL:</span>
+          <strong id="displayGrandTotal" style="color:var(--accent-gold);">0 TZS</strong>
         </div>
       </div>
 
-      <!-- Standard Selected Items Panel -->
-      <div id="standardOrderPanel">
+      <!-- Location Inputs -->
+      <div class="form-row">
         <div class="form-group">
-          <label for="mealDetails">Overall Order Notes (Optional):</label>
-          <textarea id="mealDetails" placeholder="Enter any additional order instructions..."></textarea>
+          <label for="mealBlockLoc">Block / Location: <span id="locSavedTag" class="saved-loc-badge"></span></label>
+          <input type="text" id="mealBlockLoc" placeholder="e.g. Block C / Hall 2">
         </div>
-
-        <!-- Summary Box -->
-        <div class="calculation-summary-box">
-          <div class="calc-row">
-            <span>Items Subtotal:</span>
-            <strong id="displaySubtotal">3,000 TZS</strong>
-          </div>
-          <div class="calc-row">
-            <span>
-              Service Fee (<span id="surchargeRateText">25%</span>):
-              <span id="nightBadgeSlot"></span>
-            </span>
-            <strong id="displaySurcharge">750 TZS</strong>
-          </div>
-          <div class="calc-row total-row">
-            <span>GRAND TOTAL:</span>
-            <strong id="displayGrandTotal" style="color:var(--accent-gold);">3,750 TZS</strong>
-          </div>
-        </div>
-
-        <!-- Location Inputs -->
-        <div class="form-row">
-          <div class="form-group">
-            <label for="mealBlockLoc">Block / Location: <span id="locSavedTag" class="saved-loc-badge"></span></label>
-            <input type="text" id="mealBlockLoc" placeholder="e.g. Block C / Hall 2">
-          </div>
-          <div class="form-group">
-            <label for="mealRoomLoc">Room Number:</label>
-            <input type="text" id="mealRoomLoc" placeholder="e.g. Room 104">
-          </div>
-        </div>
-        
         <div class="form-group">
-          <label for="mealPhoneNum">Contact Phone Number:</label>
-          <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
+          <label for="mealRoomLoc">Room Number:</label>
+          <input type="text" id="mealRoomLoc" placeholder="e.g. Room 104">
         </div>
-
-        <!-- Simplified Payment Selector -->
-        <div class="payment-selection-box">
-          <label style="font-size:0.82rem; font-weight:800; color:var(--text-main);">Select Payment Method:</label>
-          <div class="payment-options-grid">
-            <div id="payOptCash" class="pay-option-btn active" onclick="selectPaymentMethod('cash')">
-              <i class="fa-solid fa-money-bill-wave" style="color:var(--accent-gold);"></i>
-              <span>Cash on Delivery</span>
-            </div>
-            <div id="payOptMobile" class="pay-option-btn" onclick="selectPaymentMethod('mobile')">
-              <i class="fa-solid fa-mobile-screen-button" style="color:var(--accent-gold);"></i>
-              <span>Mobile Money</span>
-            </div>
-          </div>
-
-          <!-- Mobile Money Dynamic Unfold Section -->
-          <div id="mobileUnfoldArea" class="mobile-unfold-box">
-            <p style="font-size:0.82rem; color:var(--text-main); line-height:1.4; margin-bottom:10px;">
-              Pay via Voda Lipa Namba: <span class="lipa-tag">37247619</span><br>
-              Name: <strong>Edwin Andrew</strong>
-            </p>
-            <div class="form-group" style="margin-bottom:0;">
-              <label for="payerName" style="color:var(--text-main);">Jina la namba iliyotumika kufanya malipo:</label>
-              <input type="text" id="payerName" placeholder="Weka jina la akaunti ya malipo">
-            </div>
-          </div>
-        </div>
-
-        <!-- WhatsApp Order Button -->
-        <button id="submitMealBtn" class="submit-order-btn" onclick="submitFoodOrder()">
-          <i class="fa-brands fa-whatsapp"></i> Send Order via WhatsApp
-        </button>
       </div>
+      
+      <div class="form-group">
+        <label for="mealPhoneNum">Contact Phone Number:</label>
+        <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
+      </div>
+
+      <!-- Payment Selector -->
+      <div class="payment-selection-box">
+        <label style="font-size:0.82rem; font-weight:800; color:var(--text-main);">Select Payment Method:</label>
+        <div class="payment-options-grid">
+          <div id="payOptCash" class="pay-option-btn active" onclick="selectPaymentMethod('cash')">
+            <i class="fa-solid fa-money-bill-wave" style="color:var(--accent-gold);"></i>
+            <span>Cash on Delivery</span>
+          </div>
+          <div id="payOptMobile" class="pay-option-btn" onclick="selectPaymentMethod('mobile')">
+            <i class="fa-solid fa-mobile-screen-button" style="color:var(--accent-gold);"></i>
+            <span>Mobile Money</span>
+          </div>
+        </div>
+
+        <!-- Mobile Money Dynamic Unfold Area -->
+        <div id="mobileUnfoldArea" class="mobile-unfold-box">
+          <p style="font-size:0.82rem; color:var(--text-main); line-height:1.4; margin-bottom:10px;">
+            Pay via Voda Lipa Namba: <span class="lipa-tag">37247619</span><br>
+            Name: <strong>Edwin Andrew</strong>
+          </p>
+          <div class="form-group" style="margin-bottom:0;">
+            <label for="payerName" style="color:var(--text-main);">Jina la namba iliyotumika kufanya malipo:</label>
+            <input type="text" id="payerName" placeholder="Weka jina la akaunti ya malipo">
+          </div>
+        </div>
+      </div>
+
+      <!-- WhatsApp Order Button -->
+      <button id="submitMealBtn" class="submit-order-btn" onclick="submitFoodOrder()">
+        <i class="fa-brands fa-whatsapp"></i> Send Order via WhatsApp
+      </button>
     </div>
   </div>
 
@@ -1250,7 +1143,8 @@
     let calculatedSurcharge = 0;
     let calculatedGrandTotal = 0;
     let surchargePercent = 25;
-    let selectedPaymentType = 'cash'; // Default to cash
+    let selectedPaymentType = 'cash';
+    let selectedFoodItems = [];
 
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('heroGreeting').innerText = `Welcome, ${loggedInUser.name}!`;
@@ -1262,7 +1156,7 @@
       loadSavedUserLocation();
       updateLoyaltyUI();
       renderBookings();
-      recalculateMealTotal();
+      renderSelectedItems();
     });
 
     function loadSavedUserLocation() {
@@ -1302,7 +1196,7 @@
 
     function openHotMealsModal() { 
       loadSavedUserLocation();
-      recalculateMealTotal();
+      renderSelectedItems();
       document.getElementById('hotMealsModal').classList.add('active'); 
     }
 
@@ -1320,7 +1214,7 @@
       selectedPerfumeSize = sizePrice;
     }
 
-    // Dynamic Payment Option Switcher
+    // Payment Selection Toggle
     function selectPaymentMethod(type) {
       selectedPaymentType = type;
       const btnCash = document.getElementById('payOptCash');
@@ -1338,46 +1232,55 @@
       }
     }
 
+    // Dynamic Food Addition
+    function addItemToOrder(name, unitPrice) {
+      const existing = selectedFoodItems.find(item => item.name === name);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        selectedFoodItems.push({ name: name, unitPrice: unitPrice, qty: 1 });
+      }
+      renderSelectedItems();
+    }
+
+    function updateItemQty(index, newQty) {
+      const qty = parseInt(newQty) || 1;
+      if (qty <= 0) {
+        selectedFoodItems.splice(index, 1);
+      } else {
+        selectedFoodItems[index].qty = qty;
+      }
+      renderSelectedItems();
+    }
+
+    function removeItem(index) {
+      selectedFoodItems.splice(index, 1);
+      renderSelectedItems();
+    }
+
+    function renderSelectedItems() {
+      const container = document.getElementById('selectedItemsContainer');
+      if (selectedFoodItems.length === 0) {
+        container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet. Click an item above to add to order.</p>`;
+      } else {
+        container.innerHTML = selectedFoodItems.map((item, index) => `
+          <div class="selected-item-row">
+            <div class="selected-item-info">
+              ${item.name} (${item.unitPrice.toLocaleString()} TZS)
+            </div>
+            <div class="selected-item-ctrls">
+              <label style="font-size:0.75rem; color:var(--text-sub);">Qty:</label>
+              <input type="number" value="${item.qty}" min="1" onchange="updateItemQty(${index}, this.value)" onkeyup="updateItemQty(${index}, this.value)">
+              <i class="fa-solid fa-trash" style="color:#e74c3c; cursor:pointer; font-size:0.9rem;" onclick="removeItem(${index})"></i>
+            </div>
+          </div>
+        `).join('');
+      }
+      recalculateMealTotal();
+    }
+
     function recalculateMealTotal() {
-      calculatedSubtotal = 0;
-
-      if (document.getElementById('chkChipsiMayai').checked) {
-        const qty = Math.max(1, parseInt(document.getElementById('qtyChipsiMayai').value) || 1);
-        const lineTotal = 3000 * qty;
-        calculatedSubtotal += lineTotal;
-        document.getElementById('badgeChipsiMayai').innerText = lineTotal.toLocaleString() + " TZS";
-      } else {
-        document.getElementById('badgeChipsiMayai').innerText = "0 TZS";
-      }
-
-      if (document.getElementById('chkChipsiKavu').checked) {
-        const qty = Math.max(1, parseInt(document.getElementById('qtyChipsiKavu').value) || 1);
-        const lineTotal = 2000 * qty;
-        calculatedSubtotal += lineTotal;
-        document.getElementById('badgeChipsiKavu').innerText = lineTotal.toLocaleString() + " TZS";
-      } else {
-        document.getElementById('badgeChipsiKavu').innerText = "0 TZS";
-      }
-
-      if (document.getElementById('chkMishikaki').checked) {
-        const unitPrice = parseInt(document.getElementById('priceMishikaki').value) || 1000;
-        const qty = Math.max(1, parseInt(document.getElementById('qtyMishikaki').value) || 1);
-        const lineTotal = unitPrice * qty;
-        calculatedSubtotal += lineTotal;
-        document.getElementById('badgeMishikaki').innerText = lineTotal.toLocaleString() + " TZS";
-      } else {
-        document.getElementById('badgeMishikaki').innerText = "0 TZS";
-      }
-
-      if (document.getElementById('chkSoda').checked) {
-        const unitPrice = Math.max(0, parseInt(document.getElementById('priceSoda').value) || 0);
-        const qty = Math.max(1, parseInt(document.getElementById('qtySoda').value) || 1);
-        const lineTotal = unitPrice * qty;
-        calculatedSubtotal += lineTotal;
-        document.getElementById('badgeSoda').innerText = lineTotal.toLocaleString() + " TZS";
-      } else {
-        document.getElementById('badgeSoda').innerText = "0 TZS";
-      }
+      calculatedSubtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
 
       const currentHour = new Date().getHours();
       if (currentHour >= 23) {
@@ -1398,40 +1301,8 @@
     }
 
     function submitFoodOrder() {
-      const selectedItemsList = [];
-
-      if (document.getElementById('chkChipsiMayai').checked) {
-        const q = Math.max(1, parseInt(document.getElementById('qtyChipsiMayai').value) || 1);
-        const d = document.getElementById('descChipsiMayai').value.trim();
-        const note = d ? ` [Note: ${d}]` : '';
-        selectedItemsList.push(`Chipsi Mayai (${q}x @ 3,000)${note}`);
-      }
-
-      if (document.getElementById('chkChipsiKavu').checked) {
-        const q = Math.max(1, parseInt(document.getElementById('qtyChipsiKavu').value) || 1);
-        const d = document.getElementById('descChipsiKavu').value.trim();
-        const note = d ? ` [Note: ${d}]` : '';
-        selectedItemsList.push(`Chipsi Kavu (${q}x @ 2,000)${note}`);
-      }
-
-      if (document.getElementById('chkMishikaki').checked) {
-        const p = parseInt(document.getElementById('priceMishikaki').value) || 1000;
-        const q = Math.max(1, parseInt(document.getElementById('qtyMishikaki').value) || 1);
-        const d = document.getElementById('descMishikaki').value.trim();
-        const note = d ? ` [Note: ${d}]` : '';
-        selectedItemsList.push(`Mishikaki (${q}x @ ${p})${note}`);
-      }
-
-      if (document.getElementById('chkSoda').checked) {
-        const p = Math.max(0, parseInt(document.getElementById('priceSoda').value) || 0);
-        const q = Math.max(1, parseInt(document.getElementById('qtySoda').value) || 1);
-        const d = document.getElementById('descSoda').value.trim();
-        const note = d ? ` [Note: ${d}]` : '';
-        selectedItemsList.push(`Soda (${q}x @ ${p})${note}`);
-      }
-
-      if (selectedItemsList.length === 0) {
-        alert("Please select at least one item before ordering!");
+      if (selectedFoodItems.length === 0) {
+        alert("Please select at least one item before placing your order!");
         return;
       }
 
@@ -1461,7 +1332,7 @@
 
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
-      const itemsSummaryText = selectedItemsList.join("\n• ");
+      const itemsSummaryText = selectedFoodItems.map(i => `${i.name} (${i.qty}x @ ${i.unitPrice.toLocaleString()} TZS)`).join("\n• ");
 
       let paymentDetailsMsg = selectedPaymentType === 'cash' 
         ? `💵 *Payment Method:* Cash / Cash on Delivery` 
@@ -1475,7 +1346,7 @@
         `⚡ *Service Fee (${surchargePercent}%):* ${calculatedSurcharge.toLocaleString()} TZS\n` +
         `💰 *TOTAL PAYABLE:* ${calculatedGrandTotal.toLocaleString()} TZS\n` +
         `----------------------------------------\n` +
-        `📝 *Overall Notes:* ${details || "None"}\n` +
+        `📝 *Overall Description:* ${details || "None"}\n` +
         `📍 *Location:* ${block}, Room ${room}\n` +
         `📞 *Phone:* ${phone}\n` +
         `${paymentDetailsMsg}\n` +
@@ -1486,7 +1357,7 @@
 
       const newOrder = {
         id: orderId,
-        title: `${calculatedGrandTotal.toLocaleString()} TZS (${selectedItemsList.length} items)`,
+        title: `${calculatedGrandTotal.toLocaleString()} TZS (${selectedFoodItems.length} items)`,
         details: selectedPaymentType === 'cash' ? `Cash on Delivery | Total: ${calculatedGrandTotal.toLocaleString()} TZS` : `Paid by ${payer} | Total: ${calculatedGrandTotal.toLocaleString()} TZS`,
         location: `${block}, Room ${room}`,
         status: "pending",
@@ -1494,6 +1365,7 @@
       };
 
       activeOrders.unshift(newOrder);
+      selectedFoodItems = [];
       closeSheet('hotMealsModal');
       renderBookings();
       simulateVerification(newOrder.id);
