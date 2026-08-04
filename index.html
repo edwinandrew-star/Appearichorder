@@ -9,13 +9,35 @@
   
   <title>Appearich Express</title>
   <style>
+    :root {
+      --bg-color: #f4f4f6;
+      --card-bg: #ffffff;
+      --text-main: #111111;
+      --text-muted: #666666;
+      --border-color: #e5e5e5;
+      --accent-gold: #FFD700;
+      --accent-dark: #111111;
+    }
+
+    body.night-mode {
+      --bg-color: #0f0f12;
+      --card-bg: #1a1a20;
+      --text-main: #f4f4f6;
+      --text-muted: #aaaaaa;
+      --border-color: #2a2a35;
+      --accent-gold: #FFD700;
+      --accent-dark: #22222b;
+    }
+
     html, body { 
       margin: 0; 
       padding: 0; 
       width: 100%; 
       height: 100%; 
-      background: #f4f4f6; 
+      background: var(--bg-color); 
+      color: var(--text-main);
       overflow-x: hidden;
+      transition: background 0.3s ease;
     }
 
     * { 
@@ -26,8 +48,21 @@
     .app { 
       width: 100vw; 
       min-height: 100vh; 
-      background: #f4f4f6; 
+      background: var(--bg-color); 
       padding: 16px 16px 90px 16px;
+    }
+
+    /* CUSTOM SVG ICON BADGES ("SPECIAL EMOJIS") */
+    .icon-badge {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      display: inline-block;
+      vertical-align: middle;
     }
 
     /* SCREEN MANAGEMENT */
@@ -71,12 +106,13 @@
     .app-title {
       font-size: 22px;
       font-weight: 800;
-      color: #111111;
+      color: var(--text-main);
     }
 
     .back-btn {
-      background: #ffffff;
-      border: 1px solid #e5e5e5;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
       padding: 8px 14px;
       border-radius: 12px;
       font-weight: 700;
@@ -86,40 +122,44 @@
 
     /* CARDS */
     .card { 
-      background: #ffffff; 
+      background: var(--card-bg); 
       padding: 20px; 
       border-radius: 28px; 
       margin-bottom: 16px; 
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border-color);
     }
 
     .card-hero-img {
       width: 100%;
-      height: 190px;
+      height: 170px;
       object-fit: cover;
       border-radius: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .card h1 { 
-      font-size: 26px; 
-      color: #111111; 
+      font-size: 24px; 
+      color: var(--text-main); 
       font-weight: 800; 
-      margin: 0 0 8px 0; 
+      margin: 0 0 6px 0; 
     }
 
     .subtitle { 
-      font-size: 14px; 
-      color: #666666; 
+      font-size: 13px; 
+      color: var(--text-muted); 
       line-height: 1.5; 
       margin: 0;
     }
 
     .card-heading {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 800;
-      color: #111111;
-      margin-bottom: 16px;
+      color: var(--text-main);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     /* 2x2 GRID BUTTONS */
@@ -130,37 +170,38 @@
     }
 
     .grid-btn {
-      background: #fdfdfd;
-      border: 1px solid #e8e8e8;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
       padding: 14px 10px;
       border-radius: 16px;
       font-size: 13px;
       font-weight: 700;
-      color: #111111;
+      color: var(--text-main);
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 8px;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
       text-align: center;
       transition: all 0.2s ease;
     }
 
     .grid-btn.active {
-      background: #FFD700;
-      border-color: #FFD700;
+      background: var(--accent-gold);
+      border-color: var(--accent-gold);
+      color: #111111;
     }
 
     .grid-btn:active {
-      transform: scale(0.98);
+      transform: scale(0.97);
     }
 
     /* INLINE EXPANDABLE ASSISTANCE BOX */
     .inline-assistance-box {
       display: none;
       margin-top: 18px;
-      background: #ffffff;
-      border: 2px solid #FFD700;
+      background: var(--card-bg);
+      border: 2px solid var(--accent-gold);
       border-radius: 20px;
       padding: 16px;
       animation: fadeIn 0.25s ease-in-out;
@@ -173,39 +214,32 @@
     .assistance-title {
       font-size: 15px;
       font-weight: 800;
-      color: #111111;
+      color: var(--text-main);
       margin-bottom: 12px;
     }
 
-    /* SEARCH CARD & INPUT */
-    .search-card {
-      padding: 14px 16px;
-    }
-
-    .search-box {
-      background: #f9f9fb;
-      border: 1px solid #eeeeee;
-      border-radius: 18px;
-      padding: 12px 16px;
+    /* VOICE REQUEST BAR */
+    .voice-request-bar {
       display: flex;
       align-items: center;
-    }
-
-    .search-box input {
-      border: none;
-      background: transparent;
-      outline: none;
-      width: 100%;
-      font-size: 14px;
-      color: #111111;
+      justify-content: space-between;
+      background: var(--accent-dark);
+      color: #ffffff;
+      padding: 12px 16px;
+      border-radius: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
     }
 
     /* POPULAR SECTION & HORIZONTAL CARDS */
     .section-title { 
-      font-size: 20px; 
+      font-size: 18px; 
       font-weight: 800; 
-      color: #111111; 
-      margin: 24px 0 14px 0; 
+      color: var(--text-main); 
+      margin: 20px 0 12px 0; 
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .horizontal-scroll {
@@ -217,13 +251,13 @@
 
     .item-card {
       flex: 1;
-      min-width: 140px;
-      height: 190px;
+      min-width: 145px;
+      height: 195px;
       border-radius: 22px;
       overflow: hidden;
       position: relative;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     .item-card img {
@@ -246,21 +280,21 @@
     }
 
     .item-card-title {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
     }
 
     .item-card-price {
       font-size: 12px;
-      color: #FFD700;
+      color: var(--accent-gold);
       font-weight: 700;
     }
 
     /* FORM STYLING */
     label { 
-      font-size: 12px; 
-      font-weight: 700; 
-      color: #111111; 
+      font-size: 11px; 
+      font-weight: 800; 
+      color: var(--text-main); 
       display: block; 
       margin: 14px 0 6px 0; 
       text-transform: uppercase; 
@@ -270,82 +304,95 @@
     input, textarea, select { 
       width: 100%; 
       padding: 14px; 
-      background: #fdfdfd; 
-      border: 1px solid #e5e5e5; 
+      background: var(--bg-color); 
+      border: 1px solid var(--border-color); 
       border-radius: 14px; 
       font-size: 14px; 
-      color: #333333; 
+      color: var(--text-main); 
       outline: none; 
-    }
-
-    input:focus, textarea:focus, select:focus { 
-      border-color: #FFD700; 
-      background: #ffffff; 
-    }
-
-    .magic-box { 
-      background: linear-gradient(135deg, #111111 0%, #222222 100%); 
-      padding: 20px; 
-      border-radius: 18px; 
-      margin: 15px 0; 
-      color: #eeeeee; 
-      text-align: center; 
-    }
-
-    .magic-box small { 
-      font-size: 11px; 
-      color: #aaaaaa; 
-      text-transform: uppercase; 
-      letter-spacing: 1px; 
-      display: block; 
-    }
-
-    .magic-box strong { 
-      font-size: 28px; 
-      font-weight: 800; 
-      color: #FFD700; 
-      display: block; 
-      margin: 6px 0; 
     }
 
     .btn { 
       width: 100%; 
       padding: 16px; 
       border: none; 
-      background: #FFD700; 
+      background: var(--accent-gold); 
       color: #111111; 
       border-radius: 18px; 
       font-weight: 800; 
       font-size: 15px; 
       margin-top: 14px; 
       cursor: pointer; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
-    .btn-danger {
-      background: #f44336;
+    .btn-secondary {
+      background: var(--accent-dark);
       color: #ffffff;
+    }
+
+    /* STEPPER FOR LIVE ORDER STATUS */
+    .stepper {
+      display: flex;
+      justify-content: space-between;
+      margin: 16px 0;
+      position: relative;
+    }
+
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      z-index: 1;
+    }
+
+    .step-item.completed {
+      color: var(--accent-gold);
+    }
+
+    .step-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+    }
+
+    .step-item.completed .step-circle {
+      background: var(--accent-gold);
+      color: #111111;
+    }
+
+    /* STAMP CARD LOYALTY */
+    .stamp-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
       margin-top: 10px;
     }
 
-    /* DASHBOARD LOGS & STATS */
-    .dashboard-stat {
-      display: flex;
-      justify-content: space-between;
-      padding: 12px;
-      background: #f9f9fb;
+    .stamp {
+      height: 48px;
+      border: 2px dashed var(--border-color);
       border-radius: 12px;
-      margin-bottom: 10px;
-      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .order-item-log {
-      border-bottom: 1px solid #eeeeee;
-      padding: 12px 0;
-      font-size: 13px;
-    }
-
-    .order-item-log:last-child {
-      border-bottom: none;
+    .stamp.active {
+      border-style: solid;
+      border-color: var(--accent-gold);
+      background: rgba(255, 215, 0, 0.15);
     }
 
     /* FIXED BOTTOM NAV */
@@ -355,8 +402,8 @@
       left: 0;
       width: 100%;
       height: 70px;
-      background: #ffffff;
-      border-top: 1px solid #eeeeee;
+      background: var(--card-bg);
+      border-top: 1px solid var(--border-color);
       display: flex;
       justify-content: space-around;
       align-items: center;
@@ -369,13 +416,14 @@
       align-items: center;
       font-size: 11px;
       font-weight: 600;
-      color: #999999;
+      color: var(--text-muted);
       text-decoration: none;
       cursor: pointer;
+      gap: 3px;
     }
 
     .nav-item.active {
-      color: #111111;
+      color: var(--text-main);
       font-weight: 800;
     }
   </style>
@@ -390,65 +438,122 @@
       <!-- HEADER -->
       <div class="app-header">
         <div class="header-left">
-          <img src="images/appearich-logo.png" class="app-logo" alt="Logo" onerror="this.src='https://via.placeholder.com/44/000000/FFD700?text=HE'">
+          <img src="images/appearich-logo.png" class="app-logo" alt="Logo" onerror="this.src='https://via.placeholder.com/44/000000/FFD700?text=AR'">
           <div class="app-title">Appearich Express</div>
         </div>
+        <button class="back-btn" onclick="toggleNightMode()">
+          <svg class="icon-badge" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
       </div>
 
       <!-- WELCOME HERO CARD -->
       <div class="card">
         <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=1000&auto=format&fit=crop" class="card-hero-img" alt="Express Banner">
         <h1 id="welcomeUserHeading">Welcome Guest</h1>
-        <div class="subtitle">Agiza chakula au marashi kuletwa mpaka chumbani kwako.</div>
+        <div class="subtitle">Express hostel delivery for food, scents, and study fuels.</div>
       </div>
 
-      <!-- INTERACTIVE HELP CARD WITH TOGGLEABLE INLINE ASSISTANCE -->
+      <!-- QUICK REORDER BANNER (IF LAST ORDER EXISTS) -->
+      <div id="quickReorderCard" class="card" style="display:none; background: var(--accent-dark); color:#ffffff;">
+        <div class="card-heading" style="color:#fff;">
+          <svg class="icon-badge" viewBox="0 0 24 24" stroke="#FFD700"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+          Quick Reorder
+        </div>
+        <div class="subtitle" id="lastOrderText" style="color:#aaa;">-</div>
+        <button class="btn" onclick="reorderLastItem()" style="margin-top:10px;">Reorder Same Item</button>
+      </div>
+
+      <!-- INTERACTIVE HELP CARD WITH VECTOR BADGES -->
       <div class="card">
-        <div class="card-heading">What do you need help with right now?</div>
+        <div class="card-heading">
+          <svg class="icon-badge" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          What can we deliver right now?
+        </div>
         
         <div class="grid-buttons">
-          <div class="grid-btn" id="btn-food" onclick="toggleAssistance('Food Order', 'btn-food')">Food Order</div>
-          <div class="grid-btn" id="btn-perfume" onclick="toggleAssistance('Perfumes & Scents', 'btn-perfume')">Perfumes</div>
-          <div class="grid-btn" id="btn-unique" onclick="toggleAssistance('Unique Request', 'btn-unique')">Unique Order</div>
-          <div class="grid-btn" id="btn-explore" onclick="toggleAssistance('Explore & General Inquiry', 'btn-explore')">Explore All</div>
+          <div class="grid-btn" id="btn-food" onclick="toggleAssistance('Food Order', 'btn-food')">
+            <svg class="icon-badge" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+            Food Order
+          </div>
+          <div class="grid-btn" id="btn-perfume" onclick="toggleAssistance('Perfumes & Scents', 'btn-perfume')">
+            <svg class="icon-badge" viewBox="0 0 24 24"><path d="M12 2v4M8 6h8M6 10h12v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V10z"></path></svg>
+            Perfumes
+          </div>
+          <div class="grid-btn" id="btn-unique" onclick="toggleAssistance('Unique Request', 'btn-unique')">
+            <svg class="icon-badge" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            Unique Order
+          </div>
+          <div class="grid-btn" id="btn-explore" onclick="toggleAssistance('Explore & General Inquiry', 'btn-explore')">
+            <svg class="icon-badge" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            Explore All
+          </div>
         </div>
 
         <!-- COLLAPSIBLE ASSISTANCE BOX -->
         <div class="inline-assistance-box" id="inlineAssistance">
-          <div class="assistance-title" id="assistanceLabel">Assistance: Food Order</div>
+          <div class="assistance-title" id="assistanceLabel">Assistance Request</div>
           
-          <textarea id="inlineRequestText" rows="3" placeholder="Type your request..."></textarea>
+          <!-- VOICE MOCKUP -->
+          <div class="voice-request-bar" onclick="triggerVoiceNote()">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <svg class="icon-badge" viewBox="0 0 24 24" stroke="#FFD700"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg>
+              <span id="voiceStatusText" style="font-size:12px; font-weight:700;">Tap to Record Voice Request</span>
+            </div>
+          </div>
+
+          <textarea id="inlineRequestText" rows="3" placeholder="Or type your exact request here..."></textarea>
 
           <button type="button" onclick="sendInlineRequestToWhatsApp()" class="btn">
-            Send to WhatsApp
+            Send via WhatsApp
           </button>
         </div>
       </div>
 
-      <!-- SEARCH CARD -->
-      <div class="card search-card">
-        <div class="search-box">
-          <input type="text" id="quickSearch" placeholder="Ask anything or describe what you need..." onkeypress="handleSearch(event)">
+      <!-- FEATURED CATEGORY CARDS -->
+      <div class="section-title">
+        <span>Popular Offerings</span>
+        <small style="font-size:12px; color:var(--accent-gold); cursor:pointer;" onclick="openOrderScreen('Mystery Snack Box', '5000')">+ Mystery Box</small>
+      </div>
+
+      <div class="horizontal-scroll">
+        <div class="item-card" onclick="openOrderScreen('Hot Meal Basket', '4500')">
+          <img src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=300&auto=format&fit=crop" alt="Food">
+          <div class="item-card-overlay">
+            <span class="item-card-title">Hot Meal Basket</span>
+            <span class="item-card-price">From TZS 4,500</span>
+          </div>
+        </div>
+
+        <div class="item-card" onclick="openOrderScreen('Designer Perfume Refill', '15000')">
+          <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=300&auto=format&fit=crop" alt="Perfumes">
+          <div class="item-card-overlay">
+            <span class="item-card-title">Luxury Fragrance</span>
+            <span class="item-card-price">From TZS 15,000</span>
+          </div>
+        </div>
+
+        <div class="item-card" onclick="openOrderScreen('Mystery Snack Box', '5000')">
+          <img src="https://images.unsplash.com/photo-1582293041079-7814c2f12063?q=80&w=300&auto=format&fit=crop" alt="Mystery Box">
+          <div class="item-card-overlay">
+            <span class="item-card-title">Mystery Snack Box</span>
+            <span class="item-card-price">TZS 5,000</span>
+          </div>
         </div>
       </div>
 
-      <!-- FEATURED CATEGORY CARDS -->
-      <div class="section-title">Popular Offerings</div>
-      <div class="horizontal-scroll">
-        <div class="item-card" onclick="openOrderScreen('Food Order', '3500')">
-          <img src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=300&auto=format&fit=crop" alt="Food">
-          <div class="item-card-overlay">
-            <span class="item-card-title">Delicious Food</span>
-            <span class="item-card-price">From TZS 3,500</span>
-          </div>
+      <!-- LOYALTY STAMP CARD -->
+      <div class="card" style="margin-top:20px;">
+        <div class="card-heading">
+          <svg class="icon-badge" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+          Hostel Loyalty Card
         </div>
-
-        <div class="item-card" onclick="openOrderScreen('Designer Perfume Spray', '15000')">
-          <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=300&auto=format&fit=crop" alt="Perfumes">
-          <div class="item-card-overlay">
-            <span class="item-card-title">Perfumes & Scents</span>
-            <span class="item-card-price">From TZS 15,000</span>
-          </div>
+        <div class="subtitle">Complete 5 orders to earn 1 free delivery pass.</div>
+        <div class="stamp-grid" id="stampGrid">
+          <div class="stamp active"><svg class="icon-badge" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="stamp"><svg class="icon-badge" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle></svg></div>
+          <div class="stamp"><svg class="icon-badge" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle></svg></div>
+          <div class="stamp"><svg class="icon-badge" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle></svg></div>
+          <div class="stamp"><svg class="icon-badge" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"></circle></svg></div>
         </div>
       </div>
 
@@ -459,13 +564,13 @@
       
       <div class="app-header">
         <button class="back-btn" onclick="showScreen('homeScreen')">Rudi</button>
-        <div class="app-title" style="font-size: 18px;">Kamilisha Oda Yako</div>
+        <div class="app-title" style="font-size: 18px;">Checkout Cart</div>
       </div>
 
       <div class="card">
-        <!-- STEP 1: FORM DETAILS -->
+        <!-- STEP 1: CART & DELIVERY FORM -->
         <div id="step-1">
-          <div class="card-heading">Detail za Agizo</div>
+          <div class="card-heading">Item & Room Details</div>
 
           <label>Jina Lako (Your Name)</label>
           <input type="text" id="name" placeholder="John Doe" required>
@@ -476,31 +581,47 @@
           <label>Hostel Block & Room Number</label>
           <input type="text" id="location" placeholder="Block B, Room 204" required>
 
-          <label>Agizo / Maelezo Ya Pekee (Food / Perfume Details)</label>
-          <textarea id="items" rows="3" placeholder="Maelezo ya agizo lako..." required></textarea>
+          <label>Agizo / Item Details</label>
+          <textarea id="items" rows="2" placeholder="Item description..." required></textarea>
 
-          <label>Kiasi Cha Kutuma (TZS)</label>
-          <input type="number" id="amount" placeholder="7000" required>
+          <label>Amount (TZS)</label>
+          <input type="number" id="amount" placeholder="5000" required>
 
-          <button type="button" onclick="goToStep2()" class="btn">ENDELEA KWENYE MALIPO</button>
-        </div>
-
-        <!-- STEP 2: LIPA NAMBA -->
-        <div id="step-2" style="display: none;">
-          <div class="card-heading">Malipo Ya Oda</div>
-
-          <div class="magic-box">
-            <small>LIPA KUPITIA TIGO / M-PESA / AIRTEL</small>
-            <strong>5544321</strong>
-            <span>APPEARICH SERVICES</span>
+          <div style="margin-top:14px; display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="groupOrderSplit" style="width:auto;">
+            <span style="font-size:12px; font-weight:700;">Group Order (Split delivery cost with roommates)</span>
           </div>
 
-          <label>Jina Lililopo Kwenye Akaunti Uliyolipa Nayo</label>
-          <input type="text" id="payerName" placeholder="Mfano: Amina Said" required>
+          <button type="button" onclick="goToStep2()" class="btn">Proceed to Payment</button>
+        </div>
+
+        <!-- STEP 2: LIPA NAMBA & CONFIRM -->
+        <div id="step-2" style="display: none;">
+          <div class="card-heading">Payment Step</div>
+
+          <div style="background: var(--accent-dark); color:#FFD700; padding:18px; border-radius:18px; text-align:center; margin-bottom:15px;">
+            <small style="color:#aaa; display:block; font-size:10px;">LIPA KUPITIA TIGO / M-PESA / AIRTEL</small>
+            <strong style="font-size:26px; display:block; margin:4px 0;">5544321</strong>
+            <span style="color:#ffffff; font-size:12px;">APPEARICH SERVICES</span>
+          </div>
+
+          <label>Account Name Used for Payment</label>
+          <input type="text" id="payerName" placeholder="e.g., Amina Said" required>
 
           <button type="button" onclick="sendToWhatsApp()" class="btn">
-            TUMA ORDER KWENYE WHATSAPP
+            Confirm & Send to WhatsApp
           </button>
+        </div>
+      </div>
+
+      <!-- LIVE ORDER TRACKER MOCKUP -->
+      <div id="trackerCard" class="card" style="display:none;">
+        <div class="card-heading">Live Order Tracker</div>
+        <div class="stepper">
+          <div class="step-item completed" id="st-1"><div class="step-circle">1</div>Received</div>
+          <div class="step-item" id="st-2"><div class="step-circle">2</div>Preparing</div>
+          <div class="step-item" id="st-3"><div class="step-circle">3</div>On Way</div>
+          <div class="step-item" id="st-4"><div class="step-circle">4</div>Delivered</div>
         </div>
       </div>
 
@@ -517,14 +638,14 @@
       <div class="card">
         <div class="card-heading">Summary Panel</div>
         
-        <div class="dashboard-stat">
+        <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border-color);">
           <span>Total Recorded Orders:</span>
-          <span id="statTotalOrders">0</span>
+          <span id="statTotalOrders" style="font-weight:800;">0</span>
         </div>
 
-        <div class="dashboard-stat">
+        <div style="display:flex; justify-content:space-between; padding:10px 0;">
           <span>Total Sales Value:</span>
-          <span id="statTotalSales">TZS 0</span>
+          <span id="statTotalSales" style="font-weight:800; color:var(--accent-gold);">TZS 0</span>
         </div>
       </div>
 
@@ -533,28 +654,28 @@
         <div id="orderLogsContainer">
           <div class="subtitle" style="padding: 10px 0;">No order history found.</div>
         </div>
-
-        <button type="button" onclick="clearHistory()" class="btn btn-danger">
-          Clear Saved History
-        </button>
       </div>
 
     </div>
 
   </div>
 
-  <!-- FIXED BOTTOM NAVIGATION BAR -->
+  <!-- FIXED BOTTOM NAVIGATION BAR WITH CUSTOM SVG ICONS -->
   <div class="bottom-nav">
     <div class="nav-item active" id="nav-home" onclick="showScreen('homeScreen')">
+      <svg class="icon-badge" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
       <span>Home</span>
     </div>
     <div class="nav-item" id="nav-explore" onclick="toggleAssistance('Explore & General Inquiry', 'btn-explore')">
+      <svg class="icon-badge" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
       <span>Explore</span>
     </div>
-    <div class="nav-item" onclick="openOrderScreen('Custom Request', '')">
+    <div class="nav-item" onclick="openOrderScreen('Custom Hostel Booking', '')">
+      <svg class="icon-badge" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
       <span>Bookings</span>
     </div>
     <div class="nav-item" id="nav-panel" onclick="showScreen('panelScreen')">
+      <svg class="icon-badge" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
       <span>Panel</span>
     </div>
   </div>
@@ -564,6 +685,7 @@
 
     let activeAssistanceCategory = "";
     let activeBtnId = "";
+    let isVoiceRecording = false;
 
     const registeredUser = {
       name: "Edwin",
@@ -580,8 +702,51 @@
         document.getElementById('contactPhone').value = registeredUser.phone || '';
         document.getElementById('location').value = registeredUser.room || '';
       }
+
+      // AUTO NIGHT MODE AFTER 7 PM
+      const currentHour = new Date().getHours();
+      if (currentHour >= 19 || currentHour < 6) {
+        document.body.classList.add('night-mode');
+      }
+
+      checkLastOrder();
       renderPanelHistory();
     };
+
+    function toggleNightMode() {
+      document.body.classList.toggle('night-mode');
+    }
+
+    // CHECK LAST ORDER FOR QUICK REORDER
+    function checkLastOrder() {
+      let history = JSON.parse(localStorage.getItem('appearich_history') || '[]');
+      if (history.length > 0) {
+        const last = history[0];
+        document.getElementById('lastOrderText').innerText = `${last.item} (${last.amount ? 'TZS ' + Number(last.amount).toLocaleString() : 'Inquiry'})`;
+        document.getElementById('quickReorderCard').style.display = 'block';
+      }
+    }
+
+    function reorderLastItem() {
+      let history = JSON.parse(localStorage.getItem('appearich_history') || '[]');
+      if (history.length > 0) {
+        const last = history[0];
+        openOrderScreen(last.item, last.amount);
+      }
+    }
+
+    // VOICE NOTE SIMULATOR
+    function triggerVoiceNote() {
+      const label = document.getElementById('voiceStatusText');
+      if (!isVoiceRecording) {
+        isVoiceRecording = true;
+        label.innerText = "Recording... (Tap to finish)";
+      } else {
+        isVoiceRecording = false;
+        label.innerText = "Voice Note Attached!";
+        document.getElementById('inlineRequestText').value = "[Voice Note Attached: Audio Request]";
+      }
+    }
 
     // INLINE TOGGLE OPEN / CLOSE ASSISTANCE BOX
     function toggleAssistance(categoryName, btnId) {
@@ -609,12 +774,12 @@
       box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    // SEND INLINE REQUEST TO WHATSAPP & SAVE TO PANEL HISTORY
+    // SEND INLINE REQUEST TO WHATSAPP
     function sendInlineRequestToWhatsApp() {
       const requestText = document.getElementById('inlineRequestText').value;
 
       if (!requestText) {
-        alert("Tafadhali andika maelezo ya ombi yako!");
+        alert("Please specify your request!");
         return;
       }
 
@@ -622,7 +787,6 @@
       const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const dateString = now.toLocaleDateString('sw-TZ');
 
-      // Save inquiry to panel local history
       saveToLocalHistory({
         name: registeredUser.name || 'Guest',
         item: `[Inquiry] ${activeAssistanceCategory}: ${requestText}`,
@@ -631,10 +795,10 @@
       });
 
       const message = `APPEARICH ASSISTANCE REQUEST\n\n` +
-        `Mteja: ${registeredUser.name || 'Guest'}\n` +
-        `Aina: ${activeAssistanceCategory}\n` +
-        `Maelezo: ${requestText}\n\n` +
-        `Naomba msaada tafadhali!`;
+        `Client: ${registeredUser.name || 'Guest'}\n` +
+        `Category: ${activeAssistanceCategory}\n` +
+        `Details: ${requestText}\n\n` +
+        `Assistance requested!`;
 
       window.location.href = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     }
@@ -650,9 +814,7 @@
       if (screenId === 'homeScreen') document.getElementById('nav-home').classList.add('active');
       if (screenId === 'panelScreen') document.getElementById('nav-panel').classList.add('active');
 
-      if (screenId === 'panelScreen') {
-        renderPanelHistory();
-      }
+      if (screenId === 'panelScreen') renderPanelHistory();
 
       window.scrollTo(0, 0);
     }
@@ -668,16 +830,6 @@
       showScreen('orderScreen');
     }
 
-    // ENTER SEARCH SUPPORT
-    function handleSearch(event) {
-      if (event.key === 'Enter') {
-        const query = document.getElementById('quickSearch').value;
-        if (query) {
-          toggleAssistance(query, '');
-        }
-      }
-    }
-
     // PROCEED TO STEP 2
     function goToStep2() {
       const name = document.getElementById('name').value;
@@ -687,22 +839,29 @@
       const amount = document.getElementById('amount').value;
 
       if (!name || !phone || !location || !items || !amount) {
-        alert("Tafadhali jaza taarifa zote kabla ya kuendelea!");
+        alert("Please complete all required fields!");
         return;
       }
 
-      orderData = { name, contactPhone: phone, location, items, amount };
+      orderData = { 
+        name, 
+        contactPhone: phone, 
+        location, 
+        items, 
+        amount,
+        isGroup: document.getElementById('groupOrderSplit').checked
+      };
 
       document.getElementById('step-1').style.display = 'none';
       document.getElementById('step-2').style.display = 'block';
     }
 
-    // SEND ORDER TO WHATSAPP & SAVE TO LOCAL STORAGE HISTORY
+    // SEND ORDER TO WHATSAPP & SAVE TO HISTORY
     function sendToWhatsApp() {
       const payerName = document.getElementById('payerName').value;
 
       if (!payerName) {
-        alert("Tafadhali jaza jina lililopo kwenye akaunti uliyolipa nayo!");
+        alert("Please enter the name on your payment account!");
         return;
       }
 
@@ -710,23 +869,27 @@
       const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const dateString = now.toLocaleDateString('sw-TZ');
 
-      // Save complete order to Local History
       saveToLocalHistory({
         name: orderData.name,
-        item: orderData.items,
+        item: orderData.items + (orderData.isGroup ? ' [Group Order Split]' : ''),
         amount: Number(orderData.amount),
         time: `${dateString} ${timeString}`
       });
 
+      // TRIGGER LIVE TRACKER ANIMATION DEMO
+      document.getElementById('trackerCard').style.display = 'block';
+      setTimeout(() => document.getElementById('st-2').classList.add('completed'), 2500);
+
       const message = `NEW APPEARICH ORDER\n\n` +
-        `Tarehe: ${dateString} (${timeString})\n` +
-        `Jina: ${orderData.name}\n` +
-        `Simu: ${orderData.contactPhone}\n` +
-        `Eneo: ${orderData.location}\n` +
-        `Agizo: ${orderData.items}\n` +
-        `Kiasi: TZS ${Number(orderData.amount).toLocaleString()}\n` +
-        `Akaunti Iliyolipa: ${payerName}\n\n` +
-        `Tafadhali thibitisha na anza kuandaa!`;
+        `Date: ${dateString} (${timeString})\n` +
+        `Name: ${orderData.name}\n` +
+        `Phone: ${orderData.contactPhone}\n` +
+        `Room: ${orderData.location}\n` +
+        `Item: ${orderData.items}\n` +
+        `Group Order: ${orderData.isGroup ? 'Yes (Split Delivery)' : 'No'}\n` +
+        `Amount: TZS ${Number(orderData.amount).toLocaleString()}\n` +
+        `Account Name: ${payerName}\n\n` +
+        `Please confirm and prepare!`;
 
       window.location.href = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     }
@@ -736,11 +899,11 @@
       let history = JSON.parse(localStorage.getItem('appearich_history') || '[]');
       history.unshift(entry);
       localStorage.setItem('appearich_history', JSON.stringify(history));
+      checkLastOrder();
     }
 
     function renderPanelHistory() {
       let history = JSON.parse(localStorage.getItem('appearich_history') || '[]');
-      
       let totalSales = history.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
       document.getElementById('statTotalOrders').innerText = history.length;
@@ -754,19 +917,12 @@
       }
 
       container.innerHTML = history.map(o => `
-        <div class="order-item-log">
+        <div style="border-bottom: 1px solid var(--border-color); padding: 10px 0; font-size: 13px;">
           <strong>${o.name}</strong> - ${o.amount ? 'TZS ' + Number(o.amount).toLocaleString() : 'Inquiry'}<br>
-          <span style="color: #444;">${o.item}</span><br>
-          <small style="color: #999;">${o.time}</small>
+          <span style="color: var(--text-muted);">${o.item}</span><br>
+          <small style="color: #888;">${o.time}</small>
         </div>
       `).join('');
-    }
-
-    function clearHistory() {
-      if (confirm("Are you sure you want to clear all saved panel history?")) {
-        localStorage.removeItem('appearich_history');
-        renderPanelHistory();
-      }
     }
   </script>
 </body>
