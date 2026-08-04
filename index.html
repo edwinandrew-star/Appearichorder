@@ -58,11 +58,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 75px; /* Offset for fixed header */
+      padding-top: 75px;
       padding-bottom: 80px;
       overflow-x: hidden;
     }
-    /* Screen Views Manager */
     .app-screen {
       display: none;
       width: 100%;
@@ -80,9 +79,7 @@
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    /* ==========================================================================
-       FIXED HEADER & ALWAYS-VISIBLE BACK BUTTON
-       ========================================================================== */
+    /* HEADER */
     .app-header {
       position: fixed;
       top: 0;
@@ -111,7 +108,7 @@
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      display: flex !important; /* Force visible everywhere */
+      display: flex !important;
       align-items: center;
       justify-content: center;
       font-size: 1rem;
@@ -156,9 +153,7 @@
       font-size: 1rem;
       cursor: pointer;
     }
-    /* ==========================================================================
-       HERO SECTION (HOME)
-       ========================================================================== */
+    /* HERO */
     .hero-banner {
       width: 100%;
       height: 160px;
@@ -188,9 +183,7 @@
       margin-top: 4px;
       letter-spacing: 0.5px;
     }
-    /* ==========================================================================
-       SECTION: WE OFFER THIS
-       ========================================================================== */
+    /* OFFERINGS */
     .section-title {
       font-size: 1.1rem;
       font-weight: 800;
@@ -256,7 +249,6 @@
       font-weight: 600;
       text-shadow: 0 1px 2px rgba(0,0,0,0.8);
     }
-    /* Horizontal Line & Inquiry Section */
     .section-divider {
       width: 100%;
       height: 1px;
@@ -307,7 +299,6 @@
       font-size: 0.85rem;
       cursor: pointer;
     }
-    /* Bottom Quick Reorder Container */
     .quick-reorder-section {
       background: var(--card-bg);
       border-radius: 16px;
@@ -347,9 +338,8 @@
       font-weight: 700;
       cursor: pointer;
     }
-    /* ==========================================================================
-       SCREEN: PERFUMES HUB SCREEN
-       ========================================================================== */
+
+    /* PERFUMES HUB */
     .perfumes-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -421,9 +411,8 @@
       background: var(--accent-gold);
       color: #000;
     }
-    /* ==========================================================================
-       MODALS & CREATIVE SHEETS
-       ========================================================================== */
+
+    /* MODALS & SHEETS */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -449,7 +438,6 @@
       position: relative;
       animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    
     .sheet-content.full-screen {
       height: 100vh;
       max-height: 100vh;
@@ -458,7 +446,6 @@
       max-width: 480px;
       padding: 0 18px 40px 18px;
     }
-    
     @keyframes slideUp {
       from { transform: translateY(100%); }
       to { transform: translateY(0); }
@@ -472,7 +459,6 @@
       cursor: pointer;
       z-index: 20;
     }
-    
     .modal-sticky-header {
       position: sticky;
       top: 0;
@@ -483,66 +469,86 @@
       margin-bottom: 16px;
     }
     .sheet-title { font-size: 1.4rem; font-weight: 900; color: var(--text-main); text-align: center; }
-    
-    .horizontal-scroll-container {
+
+    /* DYNAMIC MULTI-ITEM ORDER CREATOR STYLES */
+    .add-item-bar {
       display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      padding: 4px 4px 12px 4px;
-      margin-top: 16px;
-      margin-bottom: 16px;
-      scrollbar-width: thin;
+      gap: 8px;
+      margin-bottom: 12px;
     }
-    .horizontal-scroll-container::-webkit-scrollbar { height: 4px; }
-    .horizontal-scroll-container::-webkit-scrollbar-thumb { background: var(--accent-gold); border-radius: 4px; }
-    
-    .food-scroll-card {
-      min-width: 140px;
-      height: 150px;
-      border-radius: 16px;
-      position: relative;
-      flex-shrink: 0;
-      overflow: hidden;
-      border: 2px solid var(--card-border);
+    .add-item-bar input {
+      flex: 1;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: 10px;
+      padding: 10px;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      outline: none;
+    }
+    .add-item-bar input:focus { border-color: var(--accent-gold); }
+    .add-btn {
+      background: var(--accent-gold);
+      color: #000;
+      border: none;
+      padding: 0 14px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.85rem;
       cursor: pointer;
-      transition: border-color 0.2s;
+      white-space: nowrap;
+    }
+    .items-list-container {
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-    }
-    .food-scroll-card img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .food-scroll-card.selected {
-      border-color: var(--accent-gold);
-      box-shadow: 0 0 12px var(--accent-gold-light);
-    }
-    .food-card-label {
-      position: relative;
-      z-index: 2;
-      background: linear-gradient(to top, rgba(0,0,0,0.95) 20%, rgba(0,0,0,0.7) 80%, transparent);
-      padding: 10px 6px 8px 6px;
-      text-align: center;
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: #ffffff;
-      white-space: normal;
-      word-wrap: break-word;
-      line-height: 1.2;
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    /* Form Fields inside Sheet */
-    .form-row {
-      display: flex;
       gap: 10px;
+      margin-bottom: 16px;
     }
+    .order-item-row {
+      background: var(--card-bg-sub);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .item-row-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .item-name-tag {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .remove-item-btn {
+      color: #dc3545;
+      background: none;
+      border: none;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .item-row-inputs {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .item-row-inputs input {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      padding: 6px 8px;
+      color: var(--text-main);
+      font-size: 0.8rem;
+      outline: none;
+    }
+    .price-field { flex: 2; }
+    .qty-field { flex: 1; text-align: center; }
+
+    /* FORM GROUPS */
+    .form-row { display: flex; gap: 10px; }
     .form-group { margin-bottom: 12px; text-align: left; flex: 1; }
     .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-bottom: 5px; }
     .form-group input, .form-group textarea {
@@ -557,15 +563,9 @@
     }
     .form-group input:focus, .form-group textarea:focus { border-color: var(--accent-gold); }
     .form-group textarea { height: 60px; resize: none; }
-    
-    .saved-loc-badge {
-      font-size: 0.72rem;
-      color: var(--accent-gold);
-      font-weight: bold;
-      margin-left: 4px;
-    }
+    .saved-loc-badge { font-size: 0.72rem; color: var(--accent-gold); font-weight: bold; margin-left: 4px; }
 
-    /* Dynamic Pricing & Surcharge Summary Card */
+    /* PRICING BREAKDOWN */
     .calc-box {
       background: var(--card-bg-sub);
       border: 1.5px dashed var(--accent-gold);
@@ -588,11 +588,9 @@
       padding-top: 8px;
       margin-top: 6px;
     }
-    .calc-row .amount-bold {
-      color: var(--accent-gold);
-    }
+    .calc-row .amount-bold { color: var(--accent-gold); }
 
-    /* Payment Box Section */
+    /* PAYMENT INSTRUCTIONS */
     .payment-box {
       background: var(--accent-gold-light);
       border: 1.5px solid var(--accent-gold);
@@ -623,7 +621,6 @@
       padding: 2px 6px;
       border-radius: 6px;
     }
-    
     .submit-order-btn {
       width: 100%;
       background: #25D366;
@@ -641,7 +638,8 @@
       gap: 8px;
       margin-top: 8px;
     }
-    /* Perfume Bottle Size Grid */
+
+    /* PERFUME SELECTION GRID */
     .price-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -663,10 +661,8 @@
     }
     .size-title { font-size: 0.8rem; color: var(--text-main); font-weight: bold; }
     .size-price { font-size: 0.75rem; font-weight: bold; color: var(--accent-gold); margin-top: 2px; }
-    
-    /* ==========================================================================
-       LOYALTY SECTION (PROFILE)
-       ========================================================================== */
+
+    /* LOYALTY CARD */
     .loyalty-card {
       background: var(--card-bg);
       border: 1.5px solid var(--accent-gold);
@@ -683,11 +679,7 @@
     }
     .loyalty-title { font-size: 0.95rem; font-weight: 800; color: var(--accent-gold); }
     .loyalty-badge { font-size: 0.7rem; background: var(--accent-gold); color: #000; font-weight: 900; padding: 3px 8px; border-radius: 10px; }
-    .stamps-row {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-    }
+    .stamps-row { display: flex; justify-content: space-between; margin-top: 10px; }
     .stamp-dot {
       width: 44px;
       height: 44px;
@@ -707,10 +699,8 @@
       border-color: var(--accent-gold);
       color: #000;
     }
-    
-    /* ==========================================================================
-       SCREEN: AI APPEARICH GUIDE
-       ========================================================================== */
+
+    /* AI TAB */
     .ai-screen-wrap {
       text-align: center;
       display: flex;
@@ -739,11 +729,7 @@
       background: var(--card-bg);
       cursor: pointer;
     }
-    .teaser-image-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .teaser-image-card img { width: 100%; height: 100%; object-fit: cover; }
     .image-overlay {
       position: absolute;
       inset: 0;
@@ -825,9 +811,8 @@
       font-size: 1.1rem;
       flex-shrink: 0;
     }
-    /* ==========================================================================
-       SCREEN: BOOKINGS / LIVE ORDERS
-       ========================================================================== */
+
+    /* BOOKINGS TRACKING */
     .order-card-track {
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
@@ -845,7 +830,6 @@
       padding-bottom: 8px;
     }
     .order-id { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
-    
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -866,9 +850,8 @@
       border: 1px solid #28a745;
     }
     .track-details p { font-size: 0.82rem; color: var(--text-sub); margin-bottom: 4px; }
-    /* ==========================================================================
-       SCREEN: PROFILE / AXIS
-       ========================================================================== */
+
+    /* PROFILE */
     .profile-header-card {
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
@@ -910,9 +893,8 @@
       margin-bottom: 20px;
       text-decoration: none;
     }
-    /* ==========================================================================
-       BOTTOM PERSISTENT NAVIGATION BAR
-       ========================================================================== */
+
+    /* BOTTOM NAV */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -944,7 +926,7 @@
   </style>
 </head>
 <body>
-  <!-- FIXED Global Header with Back Button & Theme Switcher -->
+  <!-- Fixed Header -->
   <header class="app-header">
     <div class="header-left">
       <button id="globalBackBtn" class="back-btn" onclick="goBack()" title="Back to Home">
@@ -966,17 +948,14 @@
      SCREEN 1: HOME DASHBOARD
      ========================================================================== -->
   <div id="screen-home" class="app-screen active">
-    
     <div class="hero-banner">
       <div class="hero-greeting" id="heroGreeting">Welcome, Guest!</div>
       <div class="hero-tagline">Appear Rich — Premium Delivery, Delivered with Love.</div>
     </div>
-    <!-- We Offer This Grid -->
     <div class="section-title">
       <i class="fa-solid fa-layer-group" style="color:var(--accent-gold);"></i> We Offer This
     </div>
     <div class="offerings-grid">
-      <!-- Hot Meals Card -->
       <div class="offer-card" onclick="openHotMealsModal()">
         <div class="offer-card-bg" style="background-image: url('https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=400&auto=format&fit=cover');"></div>
         <div class="offer-card-overlay">
@@ -984,7 +963,6 @@
           <div class="offer-card-desc">Fastest Sourced Food</div>
         </div>
       </div>
-      <!-- Perfumes Card -->
       <div class="offer-card" onclick="switchTab('screen-perfumes')">
         <div class="offer-card-bg" style="background-image: url('images/appearich-perfume1.jpg');"></div>
         <div class="offer-card-overlay">
@@ -1126,47 +1104,33 @@
   </div>
 
   <!-- ==========================================================================
-     FULL-SCREEN MODAL: HOT MEALS FLOW WITH DYNAMIC PRICES & NIGHT SURCHARGE
+     FULL-SCREEN MODAL: HOT MEALS FLOW WITH ITEMIZED PRICING & SURCHARGE
      ========================================================================== -->
   <div id="hotMealsModal" class="modal-overlay">
     <div class="sheet-content full-screen">
       <span class="sheet-close" onclick="closeSheet('hotMealsModal')">&times;</span>
       
       <div class="modal-sticky-header">
-        <div class="sheet-title">Hot Meals</div>
+        <div class="sheet-title">Hot Meals Order</div>
       </div>
 
-      <!-- Hot Meals Carousel -->
-      <div class="horizontal-scroll-container">
-        <div class="food-scroll-card selected" onclick="selectFoodItem(this, 'Chips')">
-          <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" alt="Chips">
-          <div class="food-card-label">Chips</div>
-        </div>
-        <div class="food-scroll-card" onclick="selectFoodItem(this, 'Mishikaki')">
-          <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=300&auto=format&fit=cover" alt="Mishikaki">
-          <div class="food-card-label">Mishikaki</div>
-        </div>
-        <div class="food-scroll-card" onclick="selectFoodItem(this, 'Soda')">
-          <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=300&auto=format&fit=cover" alt="Soda">
-          <div class="food-card-label">Soda</div>
+      <!-- Add New Item Section -->
+      <div class="form-group">
+        <label>Add Item Name (e.g. Chips Mayai, Soda, Mishikaki):</label>
+        <div class="add-item-bar">
+          <input type="text" id="newItemInput" placeholder="Type food or drink name...">
+          <button type="button" class="add-btn" onclick="addNewOrderItem()"><i class="fa-solid fa-plus"></i> Add Item</button>
         </div>
       </div>
 
-      <!-- Dynamic Price & Quantity Input Inputs -->
-      <div class="form-row">
-        <div class="form-group">
-          <label for="mealUnitPrice">Price Per Item (TZS):</label>
-          <input type="number" id="mealUnitPrice" placeholder="e.g. 3000" oninput="calculateOrderTotal()">
-        </div>
-        <div class="form-group">
-          <label for="mealQuantity">Quantity:</label>
-          <input type="number" id="mealQuantity" value="1" min="1" oninput="calculateOrderTotal()">
-        </div>
+      <!-- List of Added Order Items with Individual Price & Qty Fields -->
+      <div id="orderItemsContainer" class="items-list-container">
+        <!-- Dynamically injected items will appear here -->
       </div>
 
       <div class="form-group">
-        <label for="mealDetails">Order Details & Instructions:</label>
-        <textarea id="mealDetails" placeholder="Enter specific instructions (e.g. 2 plates chips, extra sauce)"></textarea>
+        <label for="mealDetails">Extra Order Details & Instructions:</label>
+        <textarea id="mealDetails" placeholder="Enter special instructions (e.g., extra pepper, well done)"></textarea>
       </div>
 
       <!-- Auto-Remembered Location Input Fields -->
@@ -1188,7 +1152,7 @@
       <!-- Price Breakdown Card -->
       <div class="calc-box">
         <div class="calc-row">
-          <span>Items Total Amount:</span>
+          <span>Items Subtotal:</span>
           <span id="calcTotalItemCost">0 TZS</span>
         </div>
         <div class="calc-row">
@@ -1260,9 +1224,7 @@
     </div>
   </div>
 
-  <!-- ==========================================================================
-     PERSISTENT BOTTOM NAVIGATION BAR
-     ========================================================================== -->
+  <!-- PERSISTENT BOTTOM NAVIGATION BAR -->
   <nav class="bottom-nav">
     <button id="nav-home-btn" class="nav-item active" onclick="switchTab('screen-home', this)">
       <i class="fa-solid fa-house"></i>
@@ -1294,11 +1256,15 @@
     let completedOrdersCount = 0;
     let activeOrders = [];
     let completedHistory = [];
-    let selectedStandardMeal = "Chips";
     let selectedPerfumeSize = "30ml (25,000/= TZS)";
     let animationLock = false;
 
-    // Calculation State Variables
+    // Multi-Item Order State Array
+    let foodOrderList = [
+      { id: 1, name: "Chips Mayai", price: 3000, qty: 1 }
+    ];
+
+    // Calculated Totals
     let computedItemTotal = 0;
     let computedPayableTotal = 0;
     let isLateNightOrder = false;
@@ -1358,32 +1324,83 @@
 
     function openHotMealsModal() { 
       loadSavedUserLocation();
-      calculateOrderTotal(); // Trigger automatic fee assessment when sheet opens
+      renderOrderItems();
       document.getElementById('hotMealsModal').classList.add('active'); 
+    }
+
+    /* DYNAMIC MULTI-ITEM MANAGERS */
+    function addNewOrderItem() {
+      const input = document.getElementById('newItemInput');
+      const itemName = input.value.trim();
+      if (!itemName) {
+        alert("Please enter the food/drink name first!");
+        return;
+      }
+      foodOrderList.push({
+        id: Date.now(),
+        name: itemName,
+        price: 0,
+        qty: 1
+      });
+      input.value = '';
+      renderOrderItems();
+    }
+
+    function removeOrderItem(id) {
+      foodOrderList = foodOrderList.filter(item => item.id !== id);
+      renderOrderItems();
+    }
+
+    function updateItemPrice(id, val) {
+      const item = foodOrderList.find(i => i.id === id);
+      if (item) {
+        item.price = parseFloat(val) || 0;
+        calculateOrderTotal();
+      }
+    }
+
+    function updateItemQty(id, val) {
+      const item = foodOrderList.find(i => i.id === id);
+      if (item) {
+        item.qty = parseInt(val) || 1;
+        calculateOrderTotal();
+      }
+    }
+
+    function renderOrderItems() {
+      const container = document.getElementById('orderItemsContainer');
+      if (foodOrderList.length === 0) {
+        container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub); text-align:center; padding:10px;">No items added yet. Type an item name above to start!</p>`;
+      } else {
+        container.innerHTML = foodOrderList.map(item => `
+          <div class="order-item-row">
+            <div class="item-row-top">
+              <span class="item-name-tag">🍽️ ${item.name}</span>
+              <button class="remove-item-btn" onclick="removeOrderItem(${item.id})"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+            <div class="item-row-inputs">
+              <input type="number" class="price-field" placeholder="Enter Price (TZS)" value="${item.price || ''}" oninput="updateItemPrice(${item.id}, this.value)">
+              <input type="number" class="qty-field" min="1" value="${item.qty}" oninput="updateItemQty(${item.id}, this.value)">
+            </div>
+          </div>
+        `).join('');
+      }
+      calculateOrderTotal();
     }
 
     /* Calculation Handler for 25% Deposit & 40% Night Surcharge */
     function calculateOrderTotal() {
-      const unitPrice = parseFloat(document.getElementById('mealUnitPrice').value) || 0;
-      const quantity = parseInt(document.getElementById('mealQuantity').value) || 1;
+      computedItemTotal = foodOrderList.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
-      // Base total calculation
-      computedItemTotal = unitPrice * quantity;
-
-      // Time Check for Night Surcharge (>= 23:00 or early morning < 05:00)
+      // Check for night time (>= 23:00 or early morning < 05:00)
       const currentHour = new Date().getHours();
       isLateNightOrder = (currentHour >= 23 || currentHour < 5);
 
-      // Base payable rate is 25% of the total amount
       const baseDeposit = computedItemTotal * 0.25;
-      
-      // Calculate night fee (+40% surcharge of total amount if after 23:00)
       const nightSurcharge = isLateNightOrder ? (computedItemTotal * 0.40) : 0;
 
-      // Total payable sum
       computedPayableTotal = baseDeposit + nightSurcharge;
 
-      // UI Text updates
       document.getElementById('calcTotalItemCost').innerText = `${computedItemTotal.toLocaleString()} TZS`;
       document.getElementById('calcBaseDeposit').innerText = `${baseDeposit.toLocaleString()} TZS`;
 
@@ -1400,15 +1417,12 @@
 
     function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
     function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
+    
     function openProductModal(name) {
       document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
       openOrderModal();
     }
-    function selectFoodItem(el, itemName) {
-      document.querySelectorAll('.food-scroll-card').forEach(c => c.classList.remove('selected'));
-      el.classList.add('selected');
-      selectedStandardMeal = itemName;
-    }
+
     function selectPerfumeSize(el, sizePrice) {
       document.querySelectorAll('#perfumesModal .price-card').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
@@ -1416,18 +1430,23 @@
     }
 
     function submitFoodOrder() {
-      const unitPrice = parseFloat(document.getElementById('mealUnitPrice').value) || 0;
-      const quantity = parseInt(document.getElementById('mealQuantity').value) || 1;
+      if (foodOrderList.length === 0) {
+        alert("Please add at least one item to your order!");
+        return;
+      }
+
+      const hasInvalidPrices = foodOrderList.some(item => item.price <= 0);
+      if (hasInvalidPrices) {
+        alert("Please enter a valid price for all items in your order!");
+        return;
+      }
+
       const details = document.getElementById('mealDetails').value.trim();
       const block = document.getElementById('mealBlockLoc').value.trim();
       const room = document.getElementById('mealRoomLoc').value.trim();
       const phone = document.getElementById('mealPhoneNum').value.trim();
       const payer = document.getElementById('payerName').value.trim();
 
-      if (unitPrice <= 0) {
-        alert("Please enter a valid price for the item!");
-        return;
-      }
       if (!block || !room) {
         alert("Please fill in both Block/Location and Room Number!");
         return;
@@ -1441,14 +1460,14 @@
         return;
       }
 
-      // Save user location
       localStorage.setItem('appearich_user_block', block);
       localStorage.setItem('appearich_user_room', room);
 
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
 
-      // Construct dynamic message based on time & payment breakdown
+      const itemsSummaryText = foodOrderList.map(i => `• ${i.name} (x${i.qty}) @ ${i.price.toLocaleString()} TZS`).join('\n');
+
       let nightFeeNote = isLateNightOrder 
         ? `\n🌙 *Night Surcharge (40%):* +${(computedItemTotal * 0.40).toLocaleString()} TZS` 
         : "";
@@ -1456,9 +1475,8 @@
       const whatsappText = `🍔 *NEW APPEARICH MEAL ORDER*\n` +
         `----------------------------------------\n` +
         `🆔 *Order ID:* ${orderId}\n` +
-        `🍽️ *Item:* ${selectedStandardMeal} (x${quantity})\n` +
-        `💰 *Unit Price:* ${unitPrice.toLocaleString()} TZS\n` +
-        `💵 *Items Total:* ${computedItemTotal.toLocaleString()} TZS\n` +
+        `📋 *Items Requested:*\n${itemsSummaryText}\n` +
+        `💵 *Items Subtotal:* ${computedItemTotal.toLocaleString()} TZS\n` +
         `----------------------------------------\n` +
         `📊 *Deposit Payable (25%):* ${(computedItemTotal * 0.25).toLocaleString()} TZS` +
         `${nightFeeNote}\n` +
@@ -1474,10 +1492,12 @@
 
       window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`, '_blank');
 
+      const itemsTitle = foodOrderList.map(i => `${i.name} (x${i.qty})`).join(', ');
+
       const newOrder = {
         id: orderId,
-        title: `${selectedStandardMeal} (x${quantity})`,
-        details: `Paid: ${computedPayableTotal.toLocaleString()} TZS (Total: ${computedItemTotal.toLocaleString()} TZS)` + (isLateNightOrder ? " [Night Fee Included]" : ""),
+        title: itemsTitle,
+        details: `Paid: ${computedPayableTotal.toLocaleString()} TZS (Subtotal: ${computedItemTotal.toLocaleString()} TZS)` + (isLateNightOrder ? " [Night Fee Included]" : ""),
         location: `${block}, Room ${room}`,
         status: "pending",
         timestamp: currentTime
