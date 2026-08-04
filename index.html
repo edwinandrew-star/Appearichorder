@@ -586,6 +586,23 @@
       gap: 8px;
       margin-top: 8px;
     }
+    .cash-order-btn {
+      width: 100%;
+      background: #d4af37;
+      color: #000;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
     .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
     .price-card {
       background: var(--input-bg);
@@ -827,7 +844,6 @@
       <div class="hero-greeting" id="heroGreeting">Welcome, Guest!</div>
       <div class="hero-tagline">Appear Rich — Premium Delivery, Delivered with Love.</div>
     </div>
-
     <div class="section-title">
       <i class="fa-solid fa-layer-group" style="color:var(--accent-gold);"></i> We Offer This
     </div>
@@ -847,9 +863,7 @@
         </div>
       </div>
     </div>
-
     <div class="section-divider"></div>
-
     <div class="inquiry-box">
       <h4><i class="fa-solid fa-circle-question" style="color:var(--accent-gold);"></i> Need Anything Specific?</h4>
       <p>Describe your needs, custom order details, or ask any question directly.</p>
@@ -858,7 +872,6 @@
         <button class="inquiry-btn" onclick="sendCustomInquiry()">Ask</button>
       </div>
     </div>
-
     <div class="quick-reorder-section">
       <div class="quick-reorder-info">
         <div class="quick-reorder-icon"><i class="fa-solid fa-rotate-right"></i></div>
@@ -983,6 +996,7 @@
         <div class="sheet-title">Hot Meals</div>
       </div>
 
+      <!-- Horizontal Showcase -->
       <div class="horizontal-scroll-container">
         <div class="food-scroll-card">
           <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" alt="Chipsi Mayai">
@@ -1005,12 +1019,12 @@
       <!-- Meal Selection Checkboxes -->
       <div class="meal-options-box">
         <div class="meal-options-title">
-          <span><i class="fa-solid fa-utensils"></i> Select Items for Your Order:</span>
+          <span><i class="fa-solid fa-utensils"></i> Choose Selected Items:</span>
         </div>
         <div class="meal-row">
           <div class="meal-checkbox-line">
             <label>
-              <input type="checkbox" id="chkChipsiMayai" checked onchange="recalculateMealTotal()"> 
+              <input type="checkbox" id="chkChipsiMayai" checked onchange="handleStandardItemChange()"> 
               Chipsi Mayai (3,000/=)
             </label>
             <span class="item-total-badge" id="badgeChipsiMayai">3,000 TZS</span>
@@ -1022,10 +1036,11 @@
             </div>
           </div>
         </div>
+
         <div class="meal-row">
           <div class="meal-checkbox-line">
             <label>
-              <input type="checkbox" id="chkChipsiKavu" onchange="recalculateMealTotal()"> 
+              <input type="checkbox" id="chkChipsiKavu" onchange="handleStandardItemChange()"> 
               Chipsi Kavu (2,000/=)
             </label>
             <span class="item-total-badge" id="badgeChipsiKavu">0 TZS</span>
@@ -1037,10 +1052,11 @@
             </div>
           </div>
         </div>
+
         <div class="meal-row">
           <div class="meal-checkbox-line">
             <label>
-              <input type="checkbox" id="chkMishikaki" onchange="recalculateMealTotal()"> 
+              <input type="checkbox" id="chkMishikaki" onchange="handleStandardItemChange()"> 
               Mishikaki
             </label>
             <span class="item-total-badge" id="badgeMishikaki">0 TZS</span>
@@ -1059,10 +1075,11 @@
             </div>
           </div>
         </div>
+
         <div class="meal-row">
           <div class="meal-checkbox-line">
             <label>
-              <input type="checkbox" id="chkSoda" onchange="recalculateMealTotal()"> 
+              <input type="checkbox" id="chkSoda" onchange="handleStandardItemChange()"> 
               Soda
             </label>
             <span class="item-total-badge" id="badgeSoda">0 TZS</span>
@@ -1080,18 +1097,17 @@
         </div>
       </div>
 
-      <!-- Button To Toggle Special Order Panel -->
-      <button type="button" class="prominent-special-btn" onclick="toggleSpecialOrderBox()">
-        <i class="fa-solid fa-pen-to-square"></i> Special Order / Custom Meal Request
+      <!-- Prominent Special Order Toggle Button -->
+      <button type="button" id="toggleSpecialBtn" class="prominent-special-btn" onclick="toggleSpecialOrderBox()">
+        <i class="fa-solid fa-pen-to-square"></i> Request Special Custom Order
       </button>
 
-      <!-- Expandable Special Order Box -->
+      <!-- Expandable Special Order Panel (Unfolds on Request) -->
       <div id="specialOrderBox" class="special-order-box">
         <div class="form-group" style="margin-bottom: 8px;">
           <label for="customMealText" style="color: var(--accent-gold); font-weight: 800;">Describe Special Order:</label>
           <textarea id="customMealText" placeholder="Describe what meal or custom addition you want (e.g., Kuku wa kuchoma, Wali Maharage, etc.)..."></textarea>
         </div>
-
         <div class="form-group" style="margin-bottom: 12px;">
           <label for="customMealEstPrice" style="color: var(--text-main); font-weight: 800;">Estimated Meal Price (TZS):</label>
           <input type="number" id="customMealEstPrice" placeholder="Enter estimated price" value="0" step="500" min="0" onchange="recalculateMealTotal()" onkeyup="recalculateMealTotal()">
@@ -1113,70 +1129,80 @@
           </div>
         </div>
 
-        <button type="button" class="submit-order-btn" style="background:#25D366; font-size: 0.85rem; padding: 10px;" onclick="sendSpecialOrderWhatsApp()">
+        <button type="button" class="submit-order-btn" style="background:#25D366; font-size: 0.85rem; padding: 12px;" onclick="sendSpecialOrderWhatsApp()">
           <i class="fa-brands fa-whatsapp"></i> Send Special Request to WhatsApp
         </button>
       </div>
 
-      <div class="form-group">
-        <label for="mealDetails">Additions / Special Instructions:</label>
-        <textarea id="mealDetails" placeholder="Enter specific instructions (e.g. extra sauce, soda flavor choice, chili options, etc.)"></textarea>
-      </div>
-
-      <!-- Main Summary Box -->
-      <div class="calculation-summary-box">
-        <div class="calc-row">
-          <span>Items Subtotal:</span>
-          <strong id="displaySubtotal">3,000 TZS</strong>
-        </div>
-        <div class="calc-row">
-          <span>
-            Service Fee (<span id="surchargeRateText">25%</span>):
-            <span id="nightBadgeSlot"></span>
-          </span>
-          <strong id="displaySurcharge">750 TZS</strong>
-        </div>
-        <div class="calc-row total-row">
-          <span>GRAND TOTAL:</span>
-          <strong id="displayGrandTotal" style="color:var(--accent-gold);">3,750 TZS</strong>
-        </div>
-      </div>
-
-      <!-- Location Inputs -->
-      <div class="form-row">
+      <!-- Standard Selected Items Panel (Unfolds by Default for Standard Items) -->
+      <div id="standardOrderPanel">
         <div class="form-group">
-          <label for="mealBlockLoc">Block / Location: <span id="locSavedTag" class="saved-loc-badge"></span></label>
-          <input type="text" id="mealBlockLoc" placeholder="e.g. Block C / Hall 2">
+          <label for="mealDetails">Additions / Special Instructions:</label>
+          <textarea id="mealDetails" placeholder="Enter specific instructions (e.g. extra sauce, soda flavor choice, chili options, etc.)"></textarea>
         </div>
+
+        <!-- Standard Summary Box -->
+        <div class="calculation-summary-box">
+          <div class="calc-row">
+            <span>Items Subtotal:</span>
+            <strong id="displaySubtotal">3,000 TZS</strong>
+          </div>
+          <div class="calc-row">
+            <span>
+              Service Fee (<span id="surchargeRateText">25%</span>):
+              <span id="nightBadgeSlot"></span>
+            </span>
+            <strong id="displaySurcharge">750 TZS</strong>
+          </div>
+          <div class="calc-row total-row">
+            <span>GRAND TOTAL:</span>
+            <strong id="displayGrandTotal" style="color:var(--accent-gold);">3,750 TZS</strong>
+          </div>
+        </div>
+
+        <!-- Location Inputs -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="mealBlockLoc">Block / Location: <span id="locSavedTag" class="saved-loc-badge"></span></label>
+            <input type="text" id="mealBlockLoc" placeholder="e.g. Block C / Hall 2">
+          </div>
+          <div class="form-group">
+            <label for="mealRoomLoc">Room Number:</label>
+            <input type="text" id="mealRoomLoc" placeholder="e.g. Room 104">
+          </div>
+        </div>
+        
         <div class="form-group">
-          <label for="mealRoomLoc">Room Number:</label>
-          <input type="text" id="mealRoomLoc" placeholder="e.g. Room 104">
+          <label for="mealPhoneNum">Contact Phone Number:</label>
+          <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
         </div>
-      </div>
-      <div class="form-group">
-        <label for="mealPhoneNum">Contact Phone Number:</label>
-        <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
-      </div>
 
-      <!-- Payment Section -->
-      <div class="payment-box">
-        <div class="payment-header">
-          <i class="fa-solid fa-mobile-screen-button" style="color:var(--accent-gold);"></i>
-          <span>Payment Instructions</span>
+        <!-- Payment Section -->
+        <div class="payment-box">
+          <div class="payment-header">
+            <i class="fa-solid fa-mobile-screen-button" style="color:var(--accent-gold);"></i>
+            <span>Payment Instructions</span>
+          </div>
+          <div class="payment-details">
+            Pay via Voda Lipa Namba: <span class="lipa-tag">37247619</span><br>
+            Name: <strong>EdwinAndrew</strong>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label for="payerName" style="color:var(--text-main);">Jina la namba ya simu uliyotumia kufanya malipo:</label>
+            <input type="text" id="payerName" placeholder="Weka jina la akaunti ya malipo">
+          </div>
         </div>
-        <div class="payment-details">
-          Pay via Voda Lipa Namba: <span class="lipa-tag">37247619</span><br>
-          Name: <strong>EdwinAndrew</strong>
-        </div>
-        <div class="form-group" style="margin-bottom:0;">
-          <label for="payerName" style="color:var(--text-main);">Jina la namba ya simu uliyotumia kufanya malipo:</label>
-          <input type="text" id="payerName" placeholder="Weka jina la akaunti ya malipo">
-        </div>
-      </div>
 
-      <button id="submitMealBtn" class="submit-order-btn" onclick="submitFoodOrder()">
-        <i class="fa-brands fa-whatsapp"></i> Finish & Send Order to WhatsApp
-      </button>
+        <!-- Standard Digital Payment WhatsApp Order Button -->
+        <button id="submitMealBtn" class="submit-order-btn" onclick="submitFoodOrder('mobile')">
+          <i class="fa-brands fa-whatsapp"></i> Finish & Send Order to WhatsApp (Lipa Namba)
+        </button>
+
+        <!-- Cash Payment WhatsApp Order Button -->
+        <button id="submitCashMealBtn" class="cash-order-btn" onclick="submitFoodOrder('cash')">
+          <i class="fa-solid fa-money-bill-wave"></i> Order via Cash / Cash on Delivery
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1186,6 +1212,7 @@
       <span class="sheet-close" onclick="closeSheet('perfumesModal')">&times;</span>
       <div class="sheet-title">Place Your Order</div>
       <div class="sheet-subtitle">Select your bottle size & perfume details</div>
+
       <label style="font-size:0.8rem; color:var(--text-main); font-weight:600; display:block; margin-bottom:6px;">1. Select Size:</label>
       <div class="price-grid">
         <div class="price-card active" onclick="selectPerfumeSize(this, '30ml (25,000/= TZS)')">
@@ -1201,10 +1228,12 @@
           <div class="size-price">55,000/=</div>
         </div>
       </div>
+
       <div class="form-group">
         <label for="perfumeDesc">2. Perfume Name or Description:</label>
         <textarea id="perfumeDesc" placeholder="Enter perfume name (e.g., Appearich Signature, 212 VIP) or describe what scent you want..."></textarea>
       </div>
+
       <button class="submit-order-btn" onclick="submitPerfumeOrder()">
         <i class="fa-brands fa-whatsapp"></i> Send Order on WhatsApp
       </button>
@@ -1240,7 +1269,6 @@
     let completedHistory = [];
     let selectedPerfumeSize = "30ml (25,000/= TZS)";
     let animationLock = false;
-
     let calculatedSubtotal = 0;
     let calculatedSurcharge = 0;
     let calculatedGrandTotal = 0;
@@ -1301,14 +1329,38 @@
     }
 
     function toggleSpecialOrderBox() {
-      const box = document.getElementById('specialOrderBox');
-      box.classList.toggle('active');
+      const specialBox = document.getElementById('specialOrderBox');
+      const standardPanel = document.getElementById('standardOrderPanel');
+      const toggleBtn = document.getElementById('toggleSpecialBtn');
+
+      if (specialBox.classList.contains('active')) {
+        specialBox.classList.remove('active');
+        standardPanel.style.display = 'block';
+        toggleBtn.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Request Special Custom Order`;
+      } else {
+        specialBox.classList.add('active');
+        standardPanel.style.display = 'none';
+        toggleBtn.innerHTML = `<i class="fa-solid fa-xmark"></i> Close Special Order Request`;
+      }
+      recalculateMealTotal();
+    }
+
+    function handleStandardItemChange() {
+      const specialBox = document.getElementById('specialOrderBox');
+      const standardPanel = document.getElementById('standardOrderPanel');
+      const toggleBtn = document.getElementById('toggleSpecialBtn');
+
+      if (specialBox.classList.contains('active')) {
+        specialBox.classList.remove('active');
+        standardPanel.style.display = 'block';
+        toggleBtn.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Request Special Custom Order`;
+      }
       recalculateMealTotal();
     }
 
     function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
     function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
-    
+
     function openProductModal(name) {
       document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
       openOrderModal();
@@ -1322,7 +1374,6 @@
 
     function recalculateMealTotal() {
       calculatedSubtotal = 0;
-
       if (document.getElementById('chkChipsiMayai').checked) {
         const qty = Math.max(1, parseInt(document.getElementById('qtyChipsiMayai').value) || 1);
         const lineTotal = 3000 * qty;
@@ -1378,7 +1429,6 @@
       document.getElementById('displaySurcharge').innerText = calculatedSurcharge.toLocaleString() + " TZS";
       document.getElementById('displayGrandTotal').innerText = calculatedGrandTotal.toLocaleString() + " TZS";
 
-      // Special Order Box Math (40% Fee)
       const specialPrice = Math.max(0, parseInt(document.getElementById('customMealEstPrice').value) || 0);
       const specialFee = Math.round(specialPrice * 0.40);
       const specialTotal = specialPrice + specialFee;
@@ -1413,7 +1463,7 @@
       window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`, '_blank');
     }
 
-    function submitFoodOrder() {
+    function submitFoodOrder(paymentMethod = 'mobile') {
       const selectedItemsList = [];
       if (document.getElementById('chkChipsiMayai').checked) {
         const q = Math.max(1, parseInt(document.getElementById('qtyChipsiMayai').value) || 1);
@@ -1453,7 +1503,8 @@
         alert("Please provide a contact phone number!");
         return;
       }
-      if (!payer) {
+
+      if (paymentMethod === 'mobile' && !payer) {
         alert("Tafadhali weka jina la namba ya simu uliyotumia kufanya malipo!");
         return;
       }
@@ -1463,8 +1514,12 @@
 
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
-      
       const itemsSummaryText = selectedItemsList.join("\n• ");
+
+      let paymentDetailsMsg = paymentMethod === 'cash' 
+        ? `💵 *Payment Method:* Cash / Cash on Delivery` 
+        : `💳 *Payment Method:* Voda Lipa Namba 37247619 (EdwinAndrew)\n👤 *Payer Account Name:* ${payer}`;
+
       const whatsappText = `🍔 *NEW APPEARICH MEAL ORDER*\n` +
         `----------------------------------------\n` +
         `🆔 *Order ID:* ${orderId}\n` +
@@ -1476,17 +1531,16 @@
         `📝 *Special Notes:* ${details || "None"}\n` +
         `📍 *Location:* ${block}, Room ${room}\n` +
         `📞 *Phone:* ${phone}\n` +
-        `👤 *Payer Account Name:* ${payer}\n` +
+        `${paymentDetailsMsg}\n` +
         `⏰ *Time Placed:* ${currentTime}\n` +
-        `----------------------------------------\n` +
-        `Payment sent via Voda Lipa Namba 37247619 (EdwinAndrew).`;
+        `----------------------------------------`;
 
       window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`, '_blank');
 
       const newOrder = {
         id: orderId,
         title: `${calculatedGrandTotal.toLocaleString()} TZS (${selectedItemsList.length} items)`,
-        details: `Paid by ${payer} | Total: ${calculatedGrandTotal.toLocaleString()} TZS`,
+        details: paymentMethod === 'cash' ? `Pay on Delivery | Total: ${calculatedGrandTotal.toLocaleString()} TZS` : `Paid by ${payer} | Total: ${calculatedGrandTotal.toLocaleString()} TZS`,
         location: `${block}, Room ${room}`,
         status: "pending",
         timestamp: currentTime
