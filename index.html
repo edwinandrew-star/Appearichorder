@@ -27,13 +27,12 @@
       width: 100vw; 
       min-height: 100vh; 
       background: #f4f4f6; 
-      padding-bottom: 90px;
+      padding: 16px 16px 90px 16px;
     }
 
     /* SCREEN MANAGEMENT */
     .screen {
       display: none;
-      padding: 16px;
       animation: fadeIn 0.2s ease-in-out;
     }
 
@@ -117,10 +116,10 @@
     }
 
     .card-heading {
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 800;
       color: #111111;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     /* 2x2 GRID BUTTONS */
@@ -131,8 +130,8 @@
     }
 
     .grid-btn {
-      background: #ffffff;
-      border: 1px solid #eeeeee;
+      background: #fdfdfd;
+      border: 1px solid #e8e8e8;
       padding: 14px 10px;
       border-radius: 16px;
       font-size: 13px;
@@ -145,10 +144,38 @@
       cursor: pointer;
       box-shadow: 0 2px 6px rgba(0,0,0,0.02);
       text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .grid-btn.active {
+      background: #FFD700;
+      border-color: #FFD700;
     }
 
     .grid-btn:active {
-      background: #f9f9fb;
+      transform: scale(0.98);
+    }
+
+    /* INLINE EXPANDABLE ASSISTANCE BOX (MATCHING YOUR IMAGE) */
+    .inline-assistance-box {
+      display: none;
+      margin-top: 18px;
+      background: #ffffff;
+      border: 2px solid #FFD700;
+      border-radius: 20px;
+      padding: 16px;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .inline-assistance-box.active {
+      display: block;
+    }
+
+    .assistance-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #111111;
+      margin-bottom: 12px;
     }
 
     /* SEARCH CARD & INPUT */
@@ -292,7 +319,7 @@
       border-radius: 18px; 
       font-weight: 800; 
       font-size: 15px; 
-      margin-top: 18px; 
+      margin-top: 14px; 
       cursor: pointer; 
     }
 
@@ -358,14 +385,26 @@
         <div class="subtitle">Agiza chakula au marashi (perfumes) kuletwa mpaka chumbani kwako!</div>
       </div>
 
-      <!-- CUSTOM HELP & CATEGORIES GRID -->
+      <!-- INTERACTIVE HELP CARD WITH TOGGLEABLE INLINE ASSISTANCE -->
       <div class="card">
         <div class="card-heading">💡 What do you need help with right now?</div>
+        
         <div class="grid-buttons">
-          <div class="grid-btn" onclick="openOrderScreen('Order Food', '')">🍔 Food Order</div>
-          <div class="grid-btn" onclick="openOrderScreen('Perfumes / Fragrance', '')">✨ Perfumes</div>
-          <div class="grid-btn" onclick="openOrderScreen('Unique Custom Order', '')">✍️ Unique Order</div>
-          <div class="grid-btn" onclick="showScreen('exploreScreen')">🔍 Explore All</div>
+          <div class="grid-btn" id="btn-food" onclick="toggleAssistance('Food Order', 'btn-food')">🍔 Food Order</div>
+          <div class="grid-btn" id="btn-perfume" onclick="toggleAssistance('Perfumes & Scents', 'btn-perfume')">✨ Perfumes</div>
+          <div class="grid-btn" id="btn-unique" onclick="toggleAssistance('Unique Request', 'btn-unique')">✍️ Unique Order</div>
+          <div class="grid-btn" id="btn-explore" onclick="toggleAssistance('Explore & General Inquiry', 'btn-explore')">🔍 Explore All</div>
+        </div>
+
+        <!-- COLLAPSIBLE ASSISTANCE BOX (OPENS / CLOSES ON TAP) -->
+        <div class="inline-assistance-box" id="inlineAssistance">
+          <div class="assistance-title" id="assistanceLabel">Assistance: Food Order</div>
+          
+          <textarea id="inlineRequestText" rows="3" placeholder="Type your request..."></textarea>
+
+          <button type="button" onclick="sendInlineRequestToWhatsApp()" class="btn">
+            Send to WhatsApp
+          </button>
         </div>
       </div>
 
@@ -377,7 +416,7 @@
         </div>
       </div>
 
-      <!-- FEATURED CATEGORY CARDS (EXACTLY 2 CARDS: FOOD & PERFUMES) -->
+      <!-- FEATURED CATEGORY CARDS (2 CARDS: FOOD & PERFUMES) -->
       <div class="section-title">Popular Offerings</div>
       <div class="horizontal-scroll">
         <div class="item-card" onclick="openOrderScreen('Food Order', '3500')">
@@ -399,37 +438,7 @@
 
     </div>
 
-    <!-- ==================== 2. EXPLORE SCREEN (NAV TOOL 2) ==================== -->
-    <div id="exploreScreen" class="screen">
-      
-      <div class="app-header">
-        <div class="app-title">🔍 Explore & Enquire</div>
-        <button class="back-btn" onclick="showScreen('homeScreen')">➔ Home</button>
-      </div>
-
-      <div class="card">
-        <div class="card-heading">Describe What You Need</div>
-        <div class="subtitle" style="margin-bottom: 16px;">
-          Unatafuta manukato, chakula cha pekee au maelezo mengine? Eleza hapa na tutakutumia moja kwa moja WhatsApp!
-        </div>
-
-        <label>Aina ya Item (Category)</label>
-        <select id="exploreCategory">
-          <option value="Food & Meals">🍔 Food & Meals</option>
-          <option value="Perfumes & Scents">✨ Perfumes & Scents</option>
-        </select>
-
-        <label>Eleza Kitu Unachohitaji (Describe Detail)</label>
-        <textarea id="exploreDescription" rows="4" placeholder="Mfano: Nataka Perfume ya Arabian Oud au Chips Kuku..."></textarea>
-
-        <button type="button" onclick="sendExploreToWhatsApp()" class="btn">
-          TUMA MAULIZO WHATSAPP 💬
-        </button>
-      </div>
-
-    </div>
-
-    <!-- ==================== 3. ORDER / CHECKOUT SCREEN ==================== -->
+    <!-- ==================== 2. ORDER / CHECKOUT SCREEN ==================== -->
     <div id="orderScreen" class="screen">
       
       <div class="app-header">
@@ -489,7 +498,7 @@
       <span class="nav-icon">🏠</span>
       <span>Home</span>
     </div>
-    <div class="nav-item" id="nav-explore" onclick="showScreen('exploreScreen')">
+    <div class="nav-item" id="nav-explore" onclick="toggleAssistance('Explore & General Inquiry', 'btn-explore')">
       <span class="nav-icon">🔍</span>
       <span>Explore</span>
     </div>
@@ -510,7 +519,9 @@
   <script>
     const ADMIN_WHATSAPP_NUMBER = "255764519027"; 
     
-    // Simulate registered user data
+    let activeAssistanceCategory = "";
+    let activeBtnId = "";
+
     const registeredUser = {
       name: "Edwin",
       phone: "0764519027",
@@ -528,21 +539,68 @@
       }
     };
 
-    // SCREEN SWITCHER WITH ACTIVE NAV STATE
+    // INLINE TOGGLE OPEN / CLOSE ASSISTANCE BOX
+    function toggleAssistance(categoryName, btnId) {
+      const box = document.getElementById('inlineAssistance');
+      
+      // If clicking the active button again -> CLOSE IT
+      if (box.classList.contains('active') && activeAssistanceCategory === categoryName) {
+        box.classList.remove('active');
+        if (activeBtnId) document.getElementById(activeBtnId).classList.remove('active');
+        activeAssistanceCategory = "";
+        activeBtnId = "";
+        return;
+      }
+
+      // Make sure we are on homeScreen to see the inline box
+      showScreen('homeScreen');
+
+      // Clear previous button highlights
+      document.querySelectorAll('.grid-btn').forEach(btn => btn.classList.remove('active'));
+
+      // Highlight current button
+      if (document.getElementById(btnId)) {
+        document.getElementById(btnId).classList.add('active');
+      }
+
+      // Update contents and show box
+      activeAssistanceCategory = categoryName;
+      activeBtnId = btnId;
+      document.getElementById('assistanceLabel').innerText = `Assistance: ${categoryName}`;
+      box.classList.add('active');
+
+      // Smooth scroll to the box if needed
+      box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // SEND INLINE REQUEST TO WHATSAPP
+    function sendInlineRequestToWhatsApp() {
+      const requestText = document.getElementById('inlineRequestText').value;
+
+      if (!requestText) {
+        alert("Tafadhali andika maelezo ya ombi yako!");
+        return;
+      }
+
+      const message = `💡 *APPEARICH ASSISTANCE REQUEST* 💡\n\n` +
+        `👤 *Mteja:* ${registeredUser.name || 'Guest'}\n` +
+        `📌 *Aina:* ${activeAssistanceCategory}\n` +
+        `💬 *Maelezo:* ${requestText}\n\n` +
+        `*Naomba msaada tafadhali!*`;
+
+      window.location.href = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    }
+
+    // SCREEN SWITCHER
     function showScreen(screenId) {
       document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
       });
       document.getElementById(screenId).classList.add('active');
-      
-      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-      if (screenId === 'homeScreen') document.getElementById('nav-home').classList.add('active');
-      if (screenId === 'exploreScreen') document.getElementById('nav-explore').classList.add('active');
-
       window.scrollTo(0, 0);
     }
 
-    // OPEN ORDER SCREEN WITH PREFILLED VALUES
+    // OPEN ORDER SCREEN
     function openOrderScreen(itemText, priceText) {
       if (itemText) document.getElementById('items').value = itemText;
       if (priceText) document.getElementById('amount').value = priceText;
@@ -557,7 +615,9 @@
     function handleSearch(event) {
       if (event.key === 'Enter') {
         const query = document.getElementById('quickSearch').value;
-        if (query) openOrderScreen(query, '');
+        if (query) {
+          toggleAssistance(query, '');
+        }
       }
     }
 
@@ -602,25 +662,6 @@
         `💰 *Kiasi:* TZS ${Number(orderData.amount).toLocaleString()}\n` +
         `💳 *Akaunti Iliyolipa:* ${payerName}\n\n` +
         `*Tafadhali thibitisha na anza kuandaa!*`;
-
-      window.location.href = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-    }
-
-    // EXPLORE DIRECT WHATSAPP SEND
-    function sendExploreToWhatsApp() {
-      const category = document.getElementById('exploreCategory').value;
-      const description = document.getElementById('exploreDescription').value;
-
-      if (!description) {
-        alert("Tafadhali eleza kitu unachotaka kabla ya kutuma!");
-        return;
-      }
-
-      const message = `🔍 *EXPLORE & ENQUIRY* 🔍\n\n` +
-        `👤 *Kutoka:* ${registeredUser.name || 'Mteja'}\n` +
-        `📦 *Aina:* ${category}\n` +
-        `💬 *Maelezo:* ${description}\n\n` +
-        `*Naomba msaada wa bei na upatikanaji!*`;
 
       window.location.href = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     }
