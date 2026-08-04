@@ -534,7 +534,6 @@
       align-items: center;
       justify-content: center;
     }
-
     /* Meal Selection Dynamic Checkbox Grid */
     .meal-options-box {
       background: var(--card-bg-sub);
@@ -612,7 +611,6 @@
       font-weight: bold;
     }
     .mini-input-group input[type="number"] { width: 64px; }
-
     /* Clearly Visible Repositioned Special Order Button */
     .prominent-special-btn {
       width: 100%;
@@ -636,7 +634,6 @@
       background: var(--accent-gold);
       color: #000;
     }
-
     /* Live Summary Box (Subtotal + Surcharge Calculation) */
     .calculation-summary-box {
       background: var(--card-bg-sub);
@@ -671,7 +668,6 @@
       font-weight: 800;
       margin-left: 4px;
     }
-
     /* Inline Special Custom Order Box */
     .special-order-box {
       display: none;
@@ -685,7 +681,6 @@
     .special-order-box.active {
       display: block;
     }
-
     /* Form Fields inside Sheet */
     .form-row {
       display: flex;
@@ -712,7 +707,6 @@
       font-weight: bold;
       margin-left: 4px;
     }
-
     /* Payment Box Section */
     .payment-box {
       background: var(--accent-gold-light);
@@ -1082,7 +1076,6 @@
       <i class="fa-solid fa-moon"></i>
     </button>
   </header>
-
   <!-- ==========================================================================
      SCREEN 1: HOME DASHBOARD
      ========================================================================== -->
@@ -1133,7 +1126,6 @@
       <button class="reorder-btn" onclick="triggerQuickReorder()">Reorder</button>
     </div>
   </div>
-
   <!-- ==========================================================================
      SCREEN: PERFUMES SCREEN
      ========================================================================== -->
@@ -1174,7 +1166,6 @@
       </button>
     </div>
   </div>
-
   <!-- ==========================================================================
      SCREEN 2: AI APPEARICH GUIDE
      ========================================================================== -->
@@ -1202,7 +1193,6 @@
       </button>
     </div>
   </div>
-
   <!-- ==========================================================================
      SCREEN 3: BOOKINGS / LIVE ORDERS
      ========================================================================== -->
@@ -1212,7 +1202,6 @@
     </div>
     <div id="bookingsListContainer"></div>
   </div>
-
   <!-- ==========================================================================
      SCREEN 4: PROFILE / AXIS
      ========================================================================== -->
@@ -1244,7 +1233,6 @@
     </div>
     <div id="historyListContainer"></div>
   </div>
-
   <!-- ==========================================================================
      FULL-SCREEN MODAL: HOT MEALS FLOW (CUSTOM COMBINATIONS & SURCHARGE MATH)
      ========================================================================== -->
@@ -1255,7 +1243,6 @@
       <div class="modal-sticky-header">
         <div class="sheet-title">Hot Meals</div>
       </div>
-
       <!-- Hot Meals Carousel -->
       <div class="horizontal-scroll-container">
         <div class="food-scroll-card">
@@ -1275,13 +1262,11 @@
           <div class="food-card-label">Soda</div>
         </div>
       </div>
-
       <!-- Meal Selection Checkboxes & Inputs Box -->
       <div class="meal-options-box">
         <div class="meal-options-title">
           <span><i class="fa-solid fa-utensils"></i> Select Items for Your Order:</span>
         </div>
-
         <!-- 1. Chipsi Mayai (3,000 TZS default) -->
         <div class="meal-row">
           <div class="meal-checkbox-line">
@@ -1298,7 +1283,6 @@
             </div>
           </div>
         </div>
-
         <!-- 2. Chipsi Kavu (2,000 TZS default) -->
         <div class="meal-row">
           <div class="meal-checkbox-line">
@@ -1315,7 +1299,6 @@
             </div>
           </div>
         </div>
-
         <!-- 3. Mishikaki (Choose 500 or 1000 per piece) -->
         <div class="meal-row">
           <div class="meal-checkbox-line">
@@ -1339,7 +1322,6 @@
             </div>
           </div>
         </div>
-
         <!-- 4. Soda (Custom Unit Price Field) -->
         <div class="meal-row">
           <div class="meal-checkbox-line">
@@ -1361,12 +1343,10 @@
           </div>
         </div>
       </div>
-
       <!-- Prominent & Clearly Visible Special Order Button Positioned Below Checkboxes -->
       <button type="button" class="prominent-special-btn" onclick="toggleSpecialOrderBox()">
         <i class="fa-solid fa-pen-to-square"></i> Special Order / Custom Meal Request
       </button>
-
       <!-- Custom Special Order Input Section (Toggled by Button) -->
       <div id="specialOrderBox" class="special-order-box">
         <div class="form-group" style="margin-bottom: 8px;">
@@ -1377,7 +1357,10 @@
           <i class="fa-brands fa-whatsapp"></i> Send Special Request to WhatsApp
         </button>
       </div>
-
+      <div class="form-group">
+        <label for="mealDetails">Additions / Special Instructions:</label>
+        <textarea id="mealDetails" placeholder="Enter specific instructions (e.g. extra sauce, soda flavor choice, chili options, etc.)"></textarea>
+      </div>
       <!-- Automatic Calculation Breakdown Display -->
       <div class="calculation-summary-box">
         <div class="calc-row">
@@ -1386,22 +1369,16 @@
         </div>
         <div class="calc-row">
           <span>
-            Service Fee (<span id="surchargeRateText">30%</span>):
+            Service Fee (<span id="surchargeRateText">25%</span>):
             <span id="nightBadgeSlot"></span>
           </span>
-          <strong id="displaySurcharge">900 TZS</strong>
+          <strong id="displaySurcharge">750 TZS</strong>
         </div>
         <div class="calc-row total-row">
           <span>GRAND TOTAL:</span>
-          <strong id="displayGrandTotal" style="color:var(--accent-gold);">3,900 TZS</strong>
+          <strong id="displayGrandTotal" style="color:var(--accent-gold);">3,750 TZS</strong>
         </div>
       </div>
-
-      <div class="form-group">
-        <label for="mealDetails">Additions / Special Instructions:</label>
-        <textarea id="mealDetails" placeholder="Enter specific instructions (e.g. extra sauce, soda flavor choice, chili options, etc.)"></textarea>
-      </div>
-
       <!-- Auto-Remembered Location Input Fields -->
       <div class="form-row">
         <div class="form-group">
@@ -1417,7 +1394,6 @@
         <label for="mealPhoneNum">Contact Phone Number:</label>
         <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
       </div>
-
       <!-- Lipa Namba Payment Container -->
       <div class="payment-box">
         <div class="payment-header">
@@ -1438,7 +1414,6 @@
       </button>
     </div>
   </div>
-
   <!-- ==========================================================================
      MODAL SHEET: PERFUME ORDER DIALOGUE
      ========================================================================== -->
@@ -1471,7 +1446,6 @@
       </button>
     </div>
   </div>
-
   <!-- ==========================================================================
      PERSISTENT BOTTOM NAVIGATION BAR
      ========================================================================== -->
@@ -1493,7 +1467,6 @@
       <span>Profile</span>
     </button>
   </nav>
-
   <!-- ==========================================================================
      APPLICATION LOGIC SCRIPT
      ========================================================================== -->
@@ -1508,13 +1481,11 @@
     let completedHistory = [];
     let selectedPerfumeSize = "30ml (25,000/= TZS)";
     let animationLock = false;
-
     // Calculation Global State
     let calculatedSubtotal = 0;
     let calculatedSurcharge = 0;
     let calculatedGrandTotal = 0;
-    let surchargePercent = 30;
-
+    let surchargePercent = 25;
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('heroGreeting').innerText = `Welcome, ${loggedInUser.name}!`;
       document.getElementById('profName').innerText = loggedInUser.name;
@@ -1528,7 +1499,6 @@
       renderBookings();
       recalculateMealTotal();
     });
-
     function loadSavedUserLocation() {
       const savedBlock = localStorage.getItem('appearich_user_block');
       const savedRoom = localStorage.getItem('appearich_user_room');
@@ -1539,7 +1509,6 @@
         document.getElementById('locSavedTag').innerText = "(Auto-Filled)";
       }
     }
-
     function toggleTheme() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const icon = document.querySelector('#themeToggleBtn i');
@@ -1551,7 +1520,6 @@
         icon.className = 'fa-solid fa-sun';
       }
     }
-
     function switchTab(screenId, element) {
       document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1563,23 +1531,19 @@
         element.classList.add('active');
       }
     }
-
     function goBack() {
       const homeBtn = document.getElementById('nav-home-btn');
       switchTab('screen-home', homeBtn);
     }
-
     function openHotMealsModal() { 
       loadSavedUserLocation();
       recalculateMealTotal();
       document.getElementById('hotMealsModal').classList.add('active'); 
     }
-
     function toggleSpecialOrderBox() {
       const box = document.getElementById('specialOrderBox');
       box.classList.toggle('active');
     }
-
     function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
     function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
     
@@ -1587,17 +1551,14 @@
       document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
       openOrderModal();
     }
-
     function selectPerfumeSize(el, sizePrice) {
       document.querySelectorAll('#perfumesModal .price-card').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
       selectedPerfumeSize = sizePrice;
     }
-
     /* Dynamic Meal Surcharge & Math Logic */
     function recalculateMealTotal() {
       calculatedSubtotal = 0;
-
       // 1. Chipsi Mayai (3,000 TZS default)
       if (document.getElementById('chkChipsiMayai').checked) {
         const qty = Math.max(1, parseInt(document.getElementById('qtyChipsiMayai').value) || 1);
@@ -1607,7 +1568,6 @@
       } else {
         document.getElementById('badgeChipsiMayai').innerText = "0 TZS";
       }
-
       // 2. Chipsi Kavu (2,000 TZS default)
       if (document.getElementById('chkChipsiKavu').checked) {
         const qty = Math.max(1, parseInt(document.getElementById('qtyChipsiKavu').value) || 1);
@@ -1617,7 +1577,6 @@
       } else {
         document.getElementById('badgeChipsiKavu').innerText = "0 TZS";
       }
-
       // 3. Mishikaki (500 or 1000 TZS unit choice)
       if (document.getElementById('chkMishikaki').checked) {
         const unitPrice = parseInt(document.getElementById('priceMishikaki').value) || 1000;
@@ -1628,7 +1587,6 @@
       } else {
         document.getElementById('badgeMishikaki').innerText = "0 TZS";
       }
-
       // 4. Soda (Custom Unit Price)
       if (document.getElementById('chkSoda').checked) {
         const unitPrice = Math.max(0, parseInt(document.getElementById('priceSoda').value) || 0);
@@ -1639,27 +1597,23 @@
       } else {
         document.getElementById('badgeSoda').innerText = "0 TZS";
       }
-
       // Surcharge Calculation: Check if late night (23:00 / 11:00 PM or later)
       const currentHour = new Date().getHours();
       if (currentHour >= 23) {
         surchargePercent = 40;
         document.getElementById('nightBadgeSlot').innerHTML = `<span class="night-tag">Night Rate</span>`;
       } else {
-        surchargePercent = 30;
+        surchargePercent = 25;
         document.getElementById('nightBadgeSlot').innerHTML = '';
       }
-
       calculatedSurcharge = Math.round(calculatedSubtotal * (surchargePercent / 100));
       calculatedGrandTotal = calculatedSubtotal + calculatedSurcharge;
-
       // Update Live UI Display
       document.getElementById('surchargeRateText').innerText = surchargePercent + "%";
       document.getElementById('displaySubtotal').innerText = calculatedSubtotal.toLocaleString() + " TZS";
       document.getElementById('displaySurcharge').innerText = calculatedSurcharge.toLocaleString() + " TZS";
       document.getElementById('displayGrandTotal').innerText = calculatedGrandTotal.toLocaleString() + " TZS";
     }
-
     function sendSpecialOrderWhatsApp() {
       const customText = document.getElementById('customMealText').value.trim();
       if (!customText) {
@@ -1674,10 +1628,8 @@
         `Please inform me of the total and availability!`;
       window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`, '_blank');
     }
-
     function submitFoodOrder() {
       const selectedItemsList = [];
-
       if (document.getElementById('chkChipsiMayai').checked) {
         const q = Math.max(1, parseInt(document.getElementById('qtyChipsiMayai').value) || 1);
         selectedItemsList.push(`Chipsi Mayai (${q}x @ 3,000)`);
@@ -1696,18 +1648,15 @@
         const q = Math.max(1, parseInt(document.getElementById('qtySoda').value) || 1);
         selectedItemsList.push(`Soda (${q}x @ ${p})`);
       }
-
       if (selectedItemsList.length === 0) {
         alert("Please choose at least one item or use the Special Order button!");
         return;
       }
-
       const details = document.getElementById('mealDetails').value.trim();
       const block = document.getElementById('mealBlockLoc').value.trim();
       const room = document.getElementById('mealRoomLoc').value.trim();
       const phone = document.getElementById('mealPhoneNum').value.trim();
       const payer = document.getElementById('payerName').value.trim();
-
       if (!block || !room) {
         alert("Please fill in both Block/Location and Room Number!");
         return;
@@ -1720,11 +1669,9 @@
         alert("Tafadhali weka jina la namba ya simu uliyotumia kufanya malipo!");
         return;
       }
-
       // Save user location
       localStorage.setItem('appearich_user_block', block);
       localStorage.setItem('appearich_user_room', room);
-
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
       
@@ -1744,9 +1691,7 @@
         `⏰ *Time Placed:* ${currentTime}\n` +
         `----------------------------------------\n` +
         `Payment sent via Voda Lipa Namba 37247619 (EdwinAndrew).`;
-
       window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`, '_blank');
-
       const newOrder = {
         id: orderId,
         title: `${calculatedGrandTotal.toLocaleString()} TZS (${selectedItemsList.length} items)`,
@@ -1755,13 +1700,11 @@
         status: "pending",
         timestamp: currentTime
       };
-
       activeOrders.unshift(newOrder);
       closeSheet('hotMealsModal');
       renderBookings();
       simulateVerification(newOrder.id);
     }
-
     function submitPerfumeOrder() {
       const desc = document.getElementById('perfumeDesc').value.trim();
       if (!desc) {
@@ -1772,7 +1715,6 @@
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       closeSheet('perfumesModal');
     }
-
     function simulateVerification(orderId) {
       setTimeout(() => {
         const orderIdx = activeOrders.findIndex(o => o.id === orderId);
@@ -1790,7 +1732,6 @@
         }
       }, 3500);
     }
-
     function renderBookings() {
       const container = document.getElementById('bookingsListContainer');
       if (activeOrders.length === 0) {
@@ -1818,7 +1759,6 @@
         </div>
       `).join('');
     }
-
     function renderHistory() {
       const container = document.getElementById('historyListContainer');
       if (completedHistory.length === 0) {
@@ -1837,7 +1777,6 @@
         </div>
       `).join('');
     }
-
     function updateLoyaltyUI() {
       document.getElementById('loyaltyCountBadge').innerText = `${completedOrdersCount} / 5 Orders`;
       const stamps = document.querySelectorAll('.stamp-dot');
@@ -1849,7 +1788,6 @@
         }
       });
     }
-
     function sendCustomInquiry() {
       const val = document.getElementById('customInquiryInput').value.trim();
       if (!val) return;
@@ -1857,11 +1795,9 @@
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       document.getElementById('customInquiryInput').value = '';
     }
-
     function triggerQuickReorder() {
       openHotMealsModal();
     }
-
     function igniteTeaserToast() {
       if (animationLock) return;
       animationLock = true;
