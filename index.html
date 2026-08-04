@@ -7,19 +7,55 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     /* ==========================================================================
-       GLOBAL RESET & THEME STYLING
+       THEME VARIABLES & GLOBAL RESET
        ========================================================================== */
+    :root {
+      --bg-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --card-bg-sub: #f1f3f5;
+      --card-border: #e9ecef;
+      --text-main: #111111;
+      --text-sub: #666666;
+      --accent-gold: #d4af37;
+      --accent-gold-light: rgba(212, 175, 55, 0.15);
+      --nav-bg: #ffffff;
+      --nav-border: #e9ecef;
+      --input-bg: #f1f3f5;
+      --input-border: #ced4da;
+      --modal-bg: #ffffff;
+      --overlay-bg: rgba(0, 0, 0, 0.5);
+      --shadow-color: rgba(0, 0, 0, 0.08);
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #0d0d0d;
+      --card-bg: #181818;
+      --card-bg-sub: #141414;
+      --card-border: #282828;
+      --text-main: #ffffff;
+      --text-sub: #aaaaaa;
+      --accent-gold: #FFD700;
+      --accent-gold-light: rgba(255, 215, 0, 0.15);
+      --nav-bg: #111111;
+      --nav-border: #222222;
+      --input-bg: #000000;
+      --input-border: #333333;
+      --modal-bg: #141414;
+      --overlay-bg: rgba(0, 0, 0, 0.85);
+      --shadow-color: rgba(0, 0, 0, 0.5);
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
+      transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
     }
-
     body {
-      background: #0d0d0d;
-      color: #ffffff;
+      background: var(--bg-color);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -27,7 +63,6 @@
       padding-bottom: 80px;
       overflow-x: hidden;
     }
-
     /* Screen Views Manager */
     .app-screen {
       display: none;
@@ -39,16 +74,13 @@
       position: relative;
       animation: fadeIn 0.3s ease-in-out;
     }
-
     .app-screen.active {
       display: flex;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     /* ==========================================================================
        HEADER & HERO SECTION (HOME)
        ========================================================================== */
@@ -59,40 +91,73 @@
       margin-bottom: 20px;
       width: 100%;
     }
-
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .back-btn {
+      background: var(--card-bg-sub);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .back-btn.visible {
+      display: flex;
+    }
     .brand-logo-wrap {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
     .brand-logo-img {
       width: 42px;
       height: 42px;
       border-radius: 10px;
-      background: #FFD700;
+      background: var(--accent-gold);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 900;
       color: #000;
       font-size: 1.2rem;
-      border: 2px solid #d99b00;
+      border: 2px solid var(--accent-gold);
     }
-
     .brand-name {
       font-size: 1.8rem;
       font-weight: 900;
       letter-spacing: 1px;
     }
-    .brand-name .logo-appea { color: #ffffff; }
-    .brand-name .logo-rich { color: #FFD700; }
+    .brand-name .logo-appea { color: var(--text-main); }
+    .brand-name .logo-rich { color: var(--accent-gold); }
+    
+    /* Theme Toggle Button */
+    .theme-toggle-btn {
+      background: var(--card-bg-sub);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+    }
 
     .hero-banner {
       width: 100%;
       height: 160px;
       border-radius: 20px;
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%), 
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%), 
                   url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=cover') center/cover;
       position: relative;
       overflow: hidden;
@@ -100,18 +165,16 @@
       flex-direction: column;
       justify-content: flex-end;
       padding: 18px;
-      border: 1px solid rgba(255, 215, 0, 0.3);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 10px 25px var(--shadow-color);
       margin-bottom: 24px;
     }
-
     .hero-greeting {
       font-size: 1.5rem;
       font-weight: 800;
       color: #ffffff;
       text-shadow: 0 2px 4px rgba(0,0,0,0.8);
     }
-
     .hero-tagline {
       font-size: 0.85rem;
       color: #FFD700;
@@ -119,7 +182,6 @@
       margin-top: 4px;
       letter-spacing: 0.5px;
     }
-
     /* ==========================================================================
        SECTION: WE OFFER THIS
        ========================================================================== */
@@ -128,120 +190,109 @@
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      color: #ffffff;
+      color: var(--text-main);
       margin-bottom: 14px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-
     .offerings-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
       margin-bottom: 24px;
     }
-
     .offer-card {
-      background: #181818;
+      background: var(--card-bg);
       border-radius: 18px;
       height: 160px;
       position: relative;
       overflow: hidden;
-      border: 1.5px solid #282828;
+      border: 1.5px solid var(--card-border);
       cursor: pointer;
       transition: all 0.25s ease;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
       padding: 14px;
+      box-shadow: 0 4px 12px var(--shadow-color);
     }
-
     .offer-card:hover, .offer-card:active {
       transform: translateY(-3px);
-      border-color: #FFD700;
-      box-shadow: 0 8px 20px rgba(255, 215, 0, 0.2);
+      border-color: var(--accent-gold);
+      box-shadow: 0 8px 20px var(--accent-gold-light);
     }
-
     .offer-card-bg {
       position: absolute;
       inset: 0;
       background-size: cover;
       background-position: center;
-      filter: brightness(0.7);
+      filter: brightness(0.85);
       transition: transform 0.4s ease;
     }
-
     .offer-card:hover .offer-card-bg {
       transform: scale(1.06);
     }
-
     .offer-card-overlay {
       position: relative;
       z-index: 2;
     }
-
     .offer-card-title {
       font-size: 1.15rem;
       font-weight: 800;
       color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
     }
-
     .offer-card-desc {
       font-size: 0.72rem;
       color: #FFD700;
       margin-top: 2px;
       font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
     }
-
     /* Horizontal Line & Inquiry Section */
     .section-divider {
       width: 100%;
       height: 1px;
-      background: linear-gradient(90deg, transparent, #FFD700, transparent);
+      background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
       margin: 10px 0 24px 0;
     }
-
     .inquiry-box {
-      background: #141414;
-      border: 1px solid #2a2a2a;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       border-radius: 16px;
       padding: 16px;
       margin-bottom: 24px;
+      box-shadow: 0 4px 12px var(--shadow-color);
     }
-
     .inquiry-box h4 {
       font-size: 0.95rem;
-      color: #ffffff;
+      color: var(--text-main);
       margin-bottom: 6px;
     }
-
     .inquiry-box p {
       font-size: 0.8rem;
-      color: #aaaaaa;
+      color: var(--text-sub);
       margin-bottom: 12px;
       line-height: 1.4;
     }
-
     .inquiry-input-wrap {
       display: flex;
       gap: 8px;
     }
-
     .inquiry-input {
       flex: 1;
-      background: #000;
-      border: 1px solid #333;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
       border-radius: 10px;
       padding: 10px 12px;
-      color: #fff;
+      color: var(--text-main);
       font-size: 0.85rem;
       outline: none;
     }
-    .inquiry-input:focus { border-color: #FFD700; }
-
+    .inquiry-input:focus { border-color: var(--accent-gold); }
     .inquiry-btn {
-      background: #FFD700;
+      background: var(--accent-gold);
       color: #000;
       border: none;
       padding: 0 16px;
@@ -250,51 +301,46 @@
       font-size: 0.85rem;
       cursor: pointer;
     }
-
     /* Bottom Quick Reorder Container */
     .quick-reorder-section {
-      background: #181818;
+      background: var(--card-bg);
       border-radius: 16px;
       padding: 14px;
-      border: 1px solid #282828;
+      border: 1px solid var(--card-border);
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 20px;
+      box-shadow: 0 4px 12px var(--shadow-color);
     }
-
     .quick-reorder-info {
       display: flex;
       align-items: center;
       gap: 12px;
     }
-
     .quick-reorder-icon {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: rgba(255, 215, 0, 0.15);
-      color: #FFD700;
+      background: var(--accent-gold-light);
+      color: var(--accent-gold);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.1rem;
     }
-
-    .reorder-text-main { font-size: 0.9rem; font-weight: 700; }
-    .reorder-text-sub { font-size: 0.75rem; color: #888; }
-
+    .reorder-text-main { font-size: 0.9rem; font-weight: 700; color: var(--text-main); }
+    .reorder-text-sub { font-size: 0.75rem; color: var(--text-sub); }
     .reorder-btn {
       background: transparent;
-      border: 1px solid #FFD700;
-      color: #FFD700;
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
       padding: 6px 14px;
       border-radius: 20px;
       font-size: 0.75rem;
       font-weight: 700;
       cursor: pointer;
     }
-
     /* ==========================================================================
        MODALS & CREATIVE SHEETS (HOT MEALS & PERFUMES)
        ========================================================================== */
@@ -302,18 +348,16 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.85);
+      background: var(--overlay-bg);
       backdrop-filter: blur(8px);
       justify-content: center;
       align-items: flex-end;
       z-index: 2000;
     }
-
     .modal-overlay.active { display: flex; }
-
     .sheet-content {
-      background: #141414;
-      border: 2px solid #333;
+      background: var(--modal-bg);
+      border: 2px solid var(--card-border);
       border-top-left-radius: 24px;
       border-top-right-radius: 24px;
       width: 100%;
@@ -324,24 +368,20 @@
       position: relative;
       animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-
     @keyframes slideUp {
       from { transform: translateY(100%); }
       to { transform: translateY(0); }
     }
-
     .sheet-close {
       position: absolute;
       top: 16px;
       right: 18px;
       font-size: 1.4rem;
-      color: #888;
+      color: var(--text-sub);
       cursor: pointer;
     }
-
-    .sheet-title { font-size: 1.4rem; font-weight: 900; color: #fff; text-align: center; }
-    .sheet-subtitle { font-size: 0.8rem; color: #FFD700; text-align: center; margin-bottom: 20px; font-weight: 700; }
-
+    .sheet-title { font-size: 1.4rem; font-weight: 900; color: var(--text-main); text-align: center; }
+    .sheet-subtitle { font-size: 0.8rem; color: var(--accent-gold); text-align: center; margin-bottom: 20px; font-weight: 700; }
     /* Hot Meals Horizontal Scroll Carousel */
     .horizontal-scroll-container {
       display: flex;
@@ -352,7 +392,6 @@
       scrollbar-width: none;
     }
     .horizontal-scroll-container::-webkit-scrollbar { display: none; }
-
     .food-scroll-card {
       min-width: 140px;
       height: 160px;
@@ -362,47 +401,42 @@
       position: relative;
       flex-shrink: 0;
       overflow: hidden;
-      border: 2px solid #2a2a2a;
+      border: 2px solid var(--card-border);
       cursor: pointer;
       transition: border-color 0.2s;
     }
-
     .food-scroll-card.selected {
-      border-color: #FFD700;
-      box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 12px var(--accent-gold-light);
     }
-
     .food-card-label {
       position: absolute;
       bottom: 0;
       inset-x: 0;
-      background: linear-gradient(to top, #000 80%, transparent);
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 80%, transparent);
       padding: 8px;
       text-align: center;
       font-size: 0.85rem;
       font-weight: 800;
       color: #fff;
     }
-
     /* Special Meal Section Box */
     .special-order-toggle-box {
-      background: #1c1c1c;
-      border: 1px dashed #FFD700;
+      background: var(--card-bg-sub);
+      border: 1px dashed var(--accent-gold);
       border-radius: 14px;
       padding: 14px;
       text-align: center;
       margin-bottom: 20px;
     }
-
     .special-order-toggle-box p {
       font-size: 0.82rem;
-      color: #ddd;
+      color: var(--text-main);
       margin-bottom: 10px;
       font-weight: 600;
     }
-
     .special-ok-btn {
-      background: #FFD700;
+      background: var(--accent-gold);
       color: #000;
       border: none;
       padding: 8px 24px;
@@ -412,26 +446,24 @@
       cursor: pointer;
       text-transform: uppercase;
     }
-
     /* Form Fields inside Sheet */
     .form-group { margin-bottom: 14px; text-align: left; }
-    .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: #aaa; margin-bottom: 6px; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-bottom: 6px; }
     .form-group input, .form-group textarea {
       width: 100%;
-      background: #080808;
-      border: 1.5px solid #282828;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
       border-radius: 10px;
       padding: 10px;
-      color: #fff;
+      color: var(--text-main);
       font-size: 0.85rem;
       outline: none;
     }
-    .form-group input:focus, .form-group textarea:focus { border-color: #FFD700; }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--accent-gold); }
     .form-group textarea { height: 70px; resize: none; }
-
     .submit-order-btn {
       width: 100%;
-      background: #FFD700;
+      background: var(--accent-gold);
       color: #000;
       border: none;
       padding: 14px;
@@ -446,7 +478,6 @@
       gap: 8px;
       margin-top: 10px;
     }
-
     /* Perfume Bottle Size Grid */
     .perfume-size-grid {
       display: grid;
@@ -454,78 +485,69 @@
       gap: 10px;
       margin-bottom: 16px;
     }
-
     .perfume-size-card {
-      background: #080808;
-      border: 1.5px solid #282828;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
       border-radius: 12px;
       padding: 10px 4px;
       text-align: center;
       cursor: pointer;
       transition: all 0.2s;
     }
-
     .perfume-size-card.active {
-      border-color: #FFD700;
-      background: rgba(255, 215, 0, 0.1);
+      border-color: var(--accent-gold);
+      background: var(--accent-gold-light);
     }
-
-    .size-title { font-size: 0.85rem; font-weight: 800; color: #fff; }
-
+    .size-title { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
     /* ==========================================================================
        LOYALTY & REFERRAL SECTION (SHARED/PROFILE)
        ========================================================================== */
     .loyalty-card {
-      background: linear-gradient(135deg, #1f1b04 0%, #0d0d0d 100%);
-      border: 1.5px solid #FFD700;
+      background: var(--card-bg);
+      border: 1.5px solid var(--accent-gold);
       border-radius: 18px;
       padding: 16px;
       margin-bottom: 20px;
+      box-shadow: 0 4px 12px var(--shadow-color);
     }
-
     .loyalty-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
     }
-    .loyalty-title { font-size: 0.95rem; font-weight: 800; color: #FFD700; }
-    .loyalty-badge { font-size: 0.7rem; background: #FFD700; color: #000; font-weight: 900; padding: 3px 8px; border-radius: 10px; }
-
+    .loyalty-title { font-size: 0.95rem; font-weight: 800; color: var(--accent-gold); }
+    .loyalty-badge { font-size: 0.7rem; background: var(--accent-gold); color: #000; font-weight: 900; padding: 3px 8px; border-radius: 10px; }
     .stamps-row {
       display: flex;
       justify-content: space-between;
       margin-top: 10px;
       margin-bottom: 14px;
     }
-
     .stamp-dot {
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: #111;
-      border: 2px dashed #444;
+      background: var(--card-bg-sub);
+      border: 2px dashed var(--input-border);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.85rem;
-      color: #555;
+      color: var(--text-sub);
       font-weight: 800;
     }
-
     .stamp-dot.filled {
-      background: #FFD700;
+      background: var(--accent-gold);
       border-style: solid;
-      border-color: #FFD700;
+      border-color: var(--accent-gold);
       color: #000;
     }
-
     .referral-input-group {
       display: flex;
       gap: 8px;
       margin-top: 10px;
     }
-
     /* ==========================================================================
        SCREEN 2: AI APPEARICH GUIDE
        ========================================================================== */
@@ -537,16 +559,14 @@
       justify-content: center;
       min-height: calc(100vh - 120px);
     }
-
     .ambient-glow {
       position: absolute;
       width: 260px;
       height: 260px;
-      background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, rgba(0,0,0,0) 70%);
+      background: radial-gradient(circle, var(--accent-gold-light) 0%, rgba(0,0,0,0) 70%);
       top: 15%;
       pointer-events: none;
     }
-
     .teaser-image-card {
       position: relative;
       width: 100%;
@@ -555,29 +575,26 @@
       border-radius: 22px;
       overflow: hidden;
       margin-bottom: 24px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(255, 215, 0, 0.2);
-      background: #1a1a1a;
+      box-shadow: 0 15px 35px var(--shadow-color), 0 0 0 2px var(--accent-gold-light);
+      background: var(--card-bg);
       cursor: pointer;
     }
-
     .teaser-image-card img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-
     .image-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, #0d0d0d 10%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%);
+      background: linear-gradient(to top, var(--bg-color) 10%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%);
     }
-
     .ai-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: #ffffff;
-      color: #111111;
+      background: var(--card-bg-sub);
+      color: var(--text-main);
       padding: 6px 14px;
       border-radius: 50px;
       font-size: 11px;
@@ -585,26 +602,25 @@
       text-transform: uppercase;
       letter-spacing: 1.5px;
       margin-bottom: 16px;
+      border: 1px solid var(--card-border);
     }
-
     .ai-title {
       font-size: 2.2rem;
       font-weight: 900;
       line-height: 1.1;
       margin-bottom: 8px;
+      color: var(--text-main);
     }
-    .ai-title span { color: #FFD700; }
-
+    .ai-title span { color: var(--accent-gold); }
     .ai-sub {
       font-size: 0.85rem;
-      color: #aaaaaa;
+      color: var(--text-sub);
       max-width: 300px;
       margin-bottom: 24px;
       line-height: 1.5;
     }
-
     .status-pill-btn {
-      background: #FFD700;
+      background: var(--accent-gold);
       color: #111111;
       border: none;
       padding: 14px 28px;
@@ -614,10 +630,9 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      box-shadow: 0 8px 20px rgba(255, 215, 0, 0.25);
+      box-shadow: 0 8px 20px var(--accent-gold-light);
       cursor: pointer;
     }
-
     .coming-soon-toast {
       position: fixed;
       top: -100px;
@@ -625,11 +640,11 @@
       transform: translateX(-50%);
       width: calc(100% - 32px);
       max-width: 440px;
-      background: #FFD700;
+      background: var(--accent-gold);
       color: #111111;
       padding: 16px;
       border-radius: 18px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 15px 30px var(--shadow-color);
       display: flex;
       align-items: center;
       gap: 12px;
@@ -638,10 +653,9 @@
       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .coming-soon-toast.trigger-fly { top: 20px; opacity: 1; }
-
     .toast-icon-wrap {
       background: #111;
-      color: #FFD700;
+      color: var(--accent-gold);
       width: 40px;
       height: 40px;
       border-radius: 50%;
@@ -651,28 +665,26 @@
       font-size: 1.1rem;
       flex-shrink: 0;
     }
-
     /* ==========================================================================
        SCREEN 3: BOOKINGS / LIVE ORDERS
        ========================================================================== */
     .order-card-track {
-      background: #141414;
-      border: 1.5px solid #282828;
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
       border-radius: 16px;
       padding: 16px;
       margin-bottom: 14px;
+      box-shadow: 0 4px 12px var(--shadow-color);
     }
-
     .track-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 12px;
-      border-bottom: 1px dashed #282828;
+      border-bottom: 1px dashed var(--card-border);
       padding-bottom: 8px;
     }
-
-    .order-id { font-size: 0.85rem; font-weight: 800; color: #fff; }
+    .order-id { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
     
     .status-badge {
       display: inline-flex;
@@ -683,38 +695,34 @@
       padding: 4px 10px;
       border-radius: 20px;
     }
-
     .status-badge.pending {
       background: rgba(255, 193, 7, 0.15);
-      color: #FFC107;
-      border: 1px solid #FFC107;
+      color: #d97706;
+      border: 1px solid #d97706;
     }
-
     .status-badge.verified {
       background: rgba(40, 167, 69, 0.15);
       color: #28a745;
       border: 1px solid #28a745;
     }
-
-    .track-details p { font-size: 0.82rem; color: #ccc; margin-bottom: 4px; }
-
+    .track-details p { font-size: 0.82rem; color: var(--text-sub); margin-bottom: 4px; }
     /* ==========================================================================
        SCREEN 4: PROFILE / AXIS
        ========================================================================== */
     .profile-header-card {
-      background: #141414;
-      border: 1.5px solid #282828;
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
       border-radius: 20px;
       padding: 20px;
       text-align: center;
       margin-bottom: 20px;
+      box-shadow: 0 4px 12px var(--shadow-color);
     }
-
     .profile-avatar {
       width: 70px;
       height: 70px;
       border-radius: 50%;
-      background: #FFD700;
+      background: var(--accent-gold);
       color: #000;
       font-size: 1.8rem;
       font-weight: 900;
@@ -723,10 +731,8 @@
       justify-content: center;
       margin: 0 auto 12px auto;
     }
-
-    .profile-name { font-size: 1.2rem; font-weight: 800; color: #fff; }
-    .profile-phone { font-size: 0.85rem; color: #888; margin-top: 2px; }
-
+    .profile-name { font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
+    .profile-phone { font-size: 0.85rem; color: var(--text-sub); margin-top: 2px; }
     .whatsapp-support-btn {
       width: 100%;
       background: #25D366;
@@ -744,7 +750,6 @@
       margin-bottom: 20px;
       text-decoration: none;
     }
-
     /* ==========================================================================
        BOTTOM PERSISTENT NAVIGATION BAR
        ========================================================================== */
@@ -754,20 +759,19 @@
       left: 0;
       right: 0;
       height: 70px;
-      background: #111111;
-      border-top: 1.5px solid #222222;
+      background: var(--nav-bg);
+      border-top: 1.5px solid var(--nav-border);
       display: flex;
       justify-content: space-around;
       align-items: center;
       z-index: 1000;
     }
-
     .nav-item {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
-      color: #666666;
+      color: var(--text-sub);
       text-decoration: none;
       font-size: 0.72rem;
       font-weight: 700;
@@ -775,39 +779,44 @@
       border: none;
       cursor: pointer;
     }
-
     .nav-item i { font-size: 1.3rem; }
-    .nav-item.active { color: #FFD700; }
+    .nav-item.active { color: var(--accent-gold); }
   </style>
 </head>
 <body>
-
-  <!-- ==========================================================================
-     SCREEN 1: HOME DASHBOARD
-     ========================================================================== -->
-  <div id="screen-home" class="app-screen active">
-    
-    <!-- Header -->
-    <header class="app-header">
+  <!-- Global App Header with Universal Back Button & Theme Switcher -->
+  <header class="app-header" style="max-width: 480px; width: 100%; padding: 20px 16px 0 16px;">
+    <div class="header-left">
+      <button id="globalBackBtn" class="back-btn" onclick="goBack()" title="Back to Home">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
       <div class="brand-logo-wrap">
         <div class="brand-logo-img">A</div>
         <div class="brand-name">
           <span class="logo-appea">APPEA</span><span class="logo-rich">RICH</span>
         </div>
       </div>
-    </header>
+    </div>
+    <!-- Mode Switcher Button -->
+    <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Switch Light/Dark Mode">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+  </header>
 
+  <!-- ==========================================================================
+     SCREEN 1: HOME DASHBOARD
+     ========================================================================== -->
+  <div id="screen-home" class="app-screen active">
+    
     <!-- Dynamic Hero Banner -->
     <div class="hero-banner">
       <div class="hero-greeting" id="heroGreeting">Welcome, Guest!</div>
       <div class="hero-tagline">Appear Rich — Premium Delivery, Delivered with Love.</div>
     </div>
-
     <!-- We Offer This Grid -->
     <div class="section-title">
-      <i class="fa-solid fa-layer-group" style="color:#FFD700;"></i> We Offer This
+      <i class="fa-solid fa-layer-group" style="color:var(--accent-gold);"></i> We Offer This
     </div>
-
     <div class="offerings-grid">
       <!-- Hot Meals Card -->
       <div class="offer-card" onclick="openHotMealsModal()">
@@ -817,7 +826,6 @@
           <div class="offer-card-desc">Fastest Sourced Food</div>
         </div>
       </div>
-
       <!-- Perfumes Card -->
       <div class="offer-card" onclick="openPerfumesModal()">
         <div class="offer-card-bg" style="background-image: url('https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=400&auto=format&fit=cover');"></div>
@@ -827,19 +835,16 @@
         </div>
       </div>
     </div>
-
     <!-- Divider & Inquiry Form -->
     <div class="section-divider"></div>
-
     <div class="inquiry-box">
-      <h4><i class="fa-solid fa-circle-question" style="color:#FFD700;"></i> Need Anything Specific?</h4>
+      <h4><i class="fa-solid fa-circle-question" style="color:var(--accent-gold);"></i> Need Anything Specific?</h4>
       <p>Describe your needs, custom order details, or ask any question directly.</p>
       <div class="inquiry-input-wrap">
         <input type="text" id="customInquiryInput" class="inquiry-input" placeholder="Type your request here...">
         <button class="inquiry-btn" onclick="sendCustomInquiry()">Ask</button>
       </div>
     </div>
-
     <!-- Bottom Quick Reorder Container -->
     <div class="quick-reorder-section">
       <div class="quick-reorder-info">
@@ -852,13 +857,11 @@
       <button class="reorder-btn" onclick="triggerQuickReorder()">Reorder</button>
     </div>
   </div>
-
   <!-- ==========================================================================
      SCREEN 2: AI APPEARICH GUIDE
      ========================================================================== -->
   <div id="screen-ai" class="app-screen">
     <div class="ambient-glow"></div>
-
     <div id="soonToast" class="coming-soon-toast">
       <div class="toast-icon-wrap"><i class="fas fa-bolt"></i></div>
       <div class="toast-info">
@@ -866,39 +869,32 @@
         <p style="font-size:0.78rem;">Our intelligent AI curator is currently running final model training loops.</p>
       </div>
     </div>
-
     <div class="ai-screen-wrap">
       <div class="teaser-image-card" onclick="igniteTeaserToast()">
         <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=cover" alt="AI Matrix">
         <div class="image-overlay"></div>
       </div>
-
       <div class="ai-badge">
         <i class="fas fa-circle-nodes" style="color:#FFA500;"></i> Smart Engine v2.0
       </div>
-
       <h1 class="ai-title">Appearich <br><span>AI Guide</span></h1>
       <p class="ai-sub">Tap anywhere on the teaser card above or below to test the matrix preparation status.</p>
-
       <button class="status-pill-btn" onclick="igniteTeaserToast()">
         <i class="fas fa-robot"></i> Initialize AI Exploration
       </button>
     </div>
   </div>
-
   <!-- ==========================================================================
      SCREEN 3: BOOKINGS / LIVE ORDERS
      ========================================================================== -->
   <div id="screen-bookings" class="app-screen">
     <div class="section-title">
-      <i class="fa-solid fa-receipt" style="color:#FFD700;"></i> Active Bookings & Status
+      <i class="fa-solid fa-receipt" style="color:var(--accent-gold);"></i> Active Bookings & Status
     </div>
-
     <div id="bookingsListContainer">
       <!-- Active orders rendered here -->
     </div>
   </div>
-
   <!-- ==========================================================================
      SCREEN 4: PROFILE / AXIS
      ========================================================================== -->
@@ -908,20 +904,17 @@
       <div class="profile-name" id="profName">Logged-in User</div>
       <div class="profile-phone" id="profPhone">+255 764 519 027</div>
     </div>
-
     <!-- WhatsApp Support Direct Link -->
     <a href="https://wa.me/255764519027?text=Hello%20Appearich%20Help%20Center!%20I%20need%20assistance." target="_blank" class="whatsapp-support-btn">
       <i class="fa-brands fa-whatsapp" style="font-size:1.3rem;"></i> WhatsApp Help Center
     </a>
-
     <!-- Loyalty & Referral Card -->
     <div class="loyalty-card">
       <div class="loyalty-header">
         <span class="loyalty-title"><i class="fa-solid fa-crown"></i> Loyalty Rewards</span>
         <span class="loyalty-badge" id="loyaltyCountBadge">0 / 5 Orders</span>
       </div>
-      <p style="font-size:0.75rem; color:#aaa; margin-bottom:8px;">Complete 5 orders to unlock a special reward offer!</p>
-
+      <p style="font-size:0.75rem; color:var(--text-sub); margin-bottom:8px;">Complete 5 orders to unlock a special reward offer!</p>
       <div class="stamps-row" id="stampsRow">
         <div class="stamp-dot">1</div>
         <div class="stamp-dot">2</div>
@@ -929,22 +922,19 @@
         <div class="stamp-dot">4</div>
         <div class="stamp-dot"><i class="fa-solid fa-gift"></i></div>
       </div>
-
-      <div style="font-size:0.8rem; font-weight:700; color:#fff; margin-top:12px;">Have a Referral Code?</div>
+      <div style="font-size:0.8rem; font-weight:700; color:var(--text-main); margin-top:12px;">Have a Referral Code?</div>
       <div class="referral-input-group">
         <input type="text" id="refCodeInput" class="inquiry-input" placeholder="Enter code for free delivery">
         <button class="inquiry-btn" onclick="applyReferralCode()">Apply</button>
       </div>
     </div>
-
     <div class="section-title" style="margin-top:10px;">
-      <i class="fa-solid fa-history" style="color:#FFD700;"></i> Order History
+      <i class="fa-solid fa-history" style="color:var(--accent-gold);"></i> Order History
     </div>
     <div id="historyListContainer">
       <!-- Verified history appended here -->
     </div>
   </div>
-
   <!-- ==========================================================================
      MODAL SHEET: HOT MEALS FLOW
      ========================================================================== -->
@@ -953,7 +943,6 @@
       <span class="sheet-close" onclick="closeSheet('hotMealsModal')">&times;</span>
       <div class="sheet-title">Hot Meals</div>
       <div class="sheet-subtitle">Select standard meal or request a special pick!</div>
-
       <!-- Horizontal Meal Carousel -->
       <div class="horizontal-scroll-container">
         <!-- Item 1: Chips -->
@@ -972,30 +961,25 @@
           <div class="food-card-label">Soda</div>
         </div>
       </div>
-
       <!-- Special Meal Order Toggle -->
       <div class="special-order-toggle-box">
         <p id="specialToggleText">Need a special order different from this?</p>
         <button class="special-ok-btn" onclick="toggleSpecialMealMode()">OK</button>
       </div>
-
       <!-- Meal Form -->
       <div class="form-group">
         <label for="mealDetails">Order Details & Instructions:</label>
         <textarea id="mealDetails" placeholder="Enter specific instructions (e.g. 2 plates chips, extra sauce)"></textarea>
       </div>
-
       <div class="form-group">
         <label for="mealDeliveryLoc">Delivery Location & Contact Phone:</label>
         <input type="text" id="mealDeliveryLoc" placeholder="e.g., House No, Area Name, Phone Number">
       </div>
-
       <button id="submitMealBtn" class="submit-order-btn" onclick="submitFoodOrder()">
         <i class="fa-solid fa-paper-plane"></i> Place Meal Order
       </button>
     </div>
   </div>
-
   <!-- ==========================================================================
      MODAL SHEET: PERFUMES FLOW
      ========================================================================== -->
@@ -1004,8 +988,7 @@
       <span class="sheet-close" onclick="closeSheet('perfumesModal')">&times;</span>
       <div class="sheet-title">Appearich Perfumes</div>
       <div class="sheet-subtitle">Select size and specify fragrance details</div>
-
-      <label style="font-size:0.8rem; font-weight:700; color:#aaa; display:block; margin-bottom:8px;">1. Select Bottle Size:</label>
+      <label style="font-size:0.8rem; font-weight:700; color:var(--text-sub); display:block; margin-bottom:8px;">1. Select Bottle Size:</label>
       <div class="perfume-size-grid">
         <div class="perfume-size-card active" onclick="selectPerfumeSize(this, '30ml')">
           <div class="size-title">30ml</div>
@@ -1017,23 +1000,20 @@
           <div class="size-title">100ml</div>
         </div>
       </div>
-
       <div class="form-group">
         <label for="perfumeDesc">2. Perfume Name or Description:</label>
         <textarea id="perfumeDesc" placeholder="Enter fragrance name (e.g. Vanilla, 212 VIP) or describe scent preference..."></textarea>
       </div>
-
       <button class="submit-order-btn" onclick="submitPerfumeOrder()">
         <i class="fa-brands fa-whatsapp"></i> Order Perfume via WhatsApp
       </button>
     </div>
   </div>
-
   <!-- ==========================================================================
      PERSISTENT BOTTOM NAVIGATION BAR
      ========================================================================== -->
   <nav class="bottom-nav">
-    <button class="nav-item active" onclick="switchTab('screen-home', this)">
+    <button id="nav-home-btn" class="nav-item active" onclick="switchTab('screen-home', this)">
       <i class="fa-solid fa-house"></i>
       <span>Home</span>
     </button>
@@ -1050,7 +1030,6 @@
       <span>Profile</span>
     </button>
   </nav>
-
   <!-- ==========================================================================
      APPLICATION LOGIC SCRIPT
      ========================================================================== -->
@@ -1060,12 +1039,10 @@
       name: "Alex",
       phone: "+255 764 519 027"
     };
-
     const whatsappPhone = "255764519027";
     let completedOrdersCount = 0;
     let activeOrders = [];
     let completedHistory = [];
-
     // Selected Form Options
     let selectedStandardMeal = "Chips";
     let isSpecialMealMode = false;
@@ -1082,13 +1059,42 @@
       renderBookings();
     });
 
-    // Navigation Switcher
+    // Theme Toggle Logic (White / Black Mode)
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const icon = document.querySelector('#themeToggleBtn i');
+      if (currentTheme === 'dark') {
+        document.documentElement.removeAttribute('data-theme');
+        icon.className = 'fa-solid fa-moon';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        icon.className = 'fa-solid fa-sun';
+      }
+    }
+
+    // Navigation Switcher & Back Button Visibility
     function switchTab(screenId, element) {
       document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
       
       document.getElementById(screenId).classList.add('active');
-      element.classList.add('active');
+      if (element) {
+        element.classList.add('active');
+      }
+
+      // Show Back Button if not on Home screen
+      const backBtn = document.getElementById('globalBackBtn');
+      if (screenId !== 'screen-home') {
+        backBtn.classList.add('visible');
+      } else {
+        backBtn.classList.remove('visible');
+      }
+    }
+
+    // Global Back Button Functionality
+    function goBack() {
+      const homeBtn = document.getElementById('nav-home-btn');
+      switchTab('screen-home', homeBtn);
     }
 
     // Modal Control
@@ -1103,13 +1109,11 @@
       el.classList.add('selected');
       selectedStandardMeal = itemName;
     }
-
     function toggleSpecialMealMode() {
       isSpecialMealMode = !isSpecialMealMode;
       const btn = document.querySelector('.special-ok-btn');
       const submitBtn = document.getElementById('submitMealBtn');
       const toggleText = document.getElementById('specialToggleText');
-
       if (isSpecialMealMode) {
         btn.innerText = "RESET TO STANDARD";
         btn.style.background = "#ff4444";
@@ -1119,7 +1123,7 @@
         document.getElementById('mealDetails').placeholder = "Specify exact food item, custom restaurant, or dish details...";
       } else {
         btn.innerText = "OK";
-        btn.style.background = "#FFD700";
+        btn.style.background = "var(--accent-gold)";
         btn.style.color = "#000";
         toggleText.innerText = "Need a special order different from this?";
         submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Place Meal Order`;
@@ -1138,12 +1142,10 @@
     function submitFoodOrder() {
       const details = document.getElementById('mealDetails').value.trim();
       const location = document.getElementById('mealDeliveryLoc').value.trim();
-
       if (!location) {
         alert("Please provide your delivery location!");
         return;
       }
-
       const orderType = isSpecialMealMode ? "Special Food Order" : `Standard Meal (${selectedStandardMeal})`;
       const newOrder = {
         id: "APR-" + Math.floor(1000 + Math.random() * 9000),
@@ -1153,20 +1155,17 @@
         status: "pending",
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
-
       activeOrders.unshift(newOrder);
       closeSheet('hotMealsModal');
       renderBookings();
       simulateVerification(newOrder.id);
     }
-
     function submitPerfumeOrder() {
       const desc = document.getElementById('perfumeDesc').value.trim();
       if (!desc) {
         alert("Please specify perfume name or description!");
         return;
       }
-
       const msg = encodeURIComponent(`Hi APPEARICH! I would like to order Perfume:\n- Size: ${selectedPerfumeSize}\n- Details: ${desc}`);
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       closeSheet('perfumesModal');
@@ -1179,7 +1178,6 @@
         if (orderIdx !== -1) {
           activeOrders[orderIdx].status = "verified";
           renderBookings();
-
           // Move to persistent history after showing green verification checkmark
           setTimeout(() => {
             const verifiedItem = activeOrders.splice(orderIdx, 1)[0];
@@ -1198,14 +1196,13 @@
       const container = document.getElementById('bookingsListContainer');
       if (activeOrders.length === 0) {
         container.innerHTML = `
-          <div style="text-align:center; padding:40px 20px; color:#666;">
+          <div style="text-align:center; padding:40px 20px; color:var(--text-sub);">
             <i class="fa-solid fa-box-open" style="font-size:2.5rem; margin-bottom:10px;"></i>
             <p style="font-size:0.85rem;">No active orders pending right now.</p>
           </div>
         `;
         return;
       }
-
       container.innerHTML = activeOrders.map(o => `
         <div class="order-card-track">
           <div class="track-header">
@@ -1217,7 +1214,7 @@
           <div class="track-details">
             <p><strong>Instructions:</strong> ${o.details}</p>
             <p><strong>Location:</strong> ${o.location}</p>
-            <p style="font-size:0.75rem; color:#777; margin-top:4px;">Placed at: ${o.timestamp}</p>
+            <p style="font-size:0.75rem; color:var(--text-sub); margin-top:4px;">Placed at: ${o.timestamp}</p>
           </div>
         </div>
       `).join('');
@@ -1227,12 +1224,11 @@
     function renderHistory() {
       const container = document.getElementById('historyListContainer');
       if (completedHistory.length === 0) {
-        container.innerHTML = `<p style="font-size:0.8rem; color:#666;">No past orders logged yet.</p>`;
+        container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub);">No past orders logged yet.</p>`;
         return;
       }
-
       container.innerHTML = completedHistory.map(o => `
-        <div class="order-card-track" style="opacity:0.8;">
+        <div class="order-card-track" style="opacity:0.85;">
           <div class="track-header">
             <span class="order-id">${o.id} - ${o.title}</span>
             <span class="status-badge verified"><i class="fa-solid fa-check-double"></i> Delivered</span>
@@ -1256,7 +1252,6 @@
         }
       });
     }
-
     function applyReferralCode() {
       const code = document.getElementById('refCodeInput').value.trim();
       if (code) {
@@ -1273,7 +1268,6 @@
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       document.getElementById('customInquiryInput').value = '';
     }
-
     function triggerQuickReorder() {
       alert("Reordering your last saved order...");
       openHotMealsModal();
@@ -1283,10 +1277,8 @@
     function igniteTeaserToast() {
       if (animationLock) return;
       animationLock = true;
-
       const toast = document.getElementById("soonToast");
       toast.classList.add("trigger-fly");
-
       setTimeout(() => {
         toast.classList.remove("trigger-fly");
         animationLock = false;
