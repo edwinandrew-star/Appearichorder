@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>APPEARICH - Perfumes</title>
+  <title>APPEARICH - App</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     /* ==========================================================================
@@ -26,8 +26,8 @@
     }
 
     [data-theme="light"] {
-      --bg-color: #ffffff;
-      --surface-color: #f8f9fa;
+      --bg-color: #f4f4f7;
+      --surface-color: #ffffff;
       --card-bg: #ffffff;
       --text-color: #111111;
       --text-sub: #666666;
@@ -57,6 +57,7 @@
       overflow: hidden;
     }
 
+    /* Main App Layout */
     .app-viewport {
       width: 100%;
       height: 100%;
@@ -92,7 +93,7 @@
       color: var(--text-color);
       font-size: 1.2rem;
       cursor: pointer;
-      display: none;
+      display: none; /* Shown dynamically on sub-views */
       padding: 4px 8px;
     }
 
@@ -118,7 +119,7 @@
       cursor: pointer;
     }
 
-    /* Content Area */
+    /* Content Screens Scroll Container */
     .app-content {
       flex: 1;
       overflow-y: auto;
@@ -145,132 +146,139 @@
     }
 
     /* ==========================================================================
-       PERFUME CATALOGUE SCREEN (MATCHING SCREENSHOT)
+       HERO & HOME DASHBOARD
        ========================================================================== */
-    .brand-header-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-      padding-top: 8px;
-    }
-
-    .powered-by-tag {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      color: var(--text-sub);
-    }
-
-    .brand-header-title {
-      font-size: 1.8rem;
-      font-weight: 900;
-      letter-spacing: 0.5px;
-      line-height: 1.1;
-    }
-
-    .badges-group {
-      display: flex;
-      gap: 8px;
-    }
-
-    .circle-badge {
-      width: 54px;
-      height: 54px;
-      border: 1.5px solid #d4af37;
-      border-radius: 50%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-size: 0.55rem;
-      font-weight: 800;
-      color: var(--text-color);
-      line-height: 1.1;
-    }
-
-    /* 2x2 Perfume Card Grid */
-    .catalog-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 24px;
-    }
-
-    .catalog-card {
-      position: relative;
-      height: 180px;
+    /* LOCAL HERO IMAGE 1 */
+    .hero-banner {
+      width: 100%;
+      height: 170px;
       border-radius: 18px;
-      overflow: hidden;
-      cursor: pointer;
-      border: 1px solid var(--border-color);
-      background-size: cover;
-      background-position: center;
+      background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%), 
+                  url('appearich1.jpg') center/cover no-repeat #1a1a1a;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 14px;
+      padding: 18px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 20px;
     }
 
-    .catalog-card::before {
-      content: '';
+    .hero-greeting {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .hero-tagline {
+      font-size: 0.82rem;
+      color: #FFD700;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-color);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .offerings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .offer-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      height: 150px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 12px;
+    }
+
+    .offer-card-bg {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.85) 100%);
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.75);
     }
 
-    .catalog-card-content {
+    /* LOCAL PERFUME CARD IMAGE */
+    .perfumes-card-bg {
+      background-image: url('appearich2.jpg');
+      background-color: #1a1a1a;
+    }
+
+    .meals-card-bg {
+      background-image: url('meals-card.jpg');
+      background-color: #1a1a1a;
+    }
+
+    .offer-card-overlay {
       position: relative;
       z-index: 2;
     }
 
-    .catalog-card-title {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 2px;
-    }
+    .offer-card-title { font-size: 1.1rem; font-weight: 800; color: #fff; }
+    .offer-card-desc { font-size: 0.72rem; color: #FFD700; font-weight: 600; }
 
-    .catalog-card-notes {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #FFD700;
-    }
-
-    /* Floating / Main Place Order Button */
-    .place-order-banner-btn {
-      width: 100%;
-      background: #000000;
-      color: #ffffff;
-      border: 2px solid #FFD700;
+    /* Inquiry Section */
+    .inquiry-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
       padding: 16px;
-      border-radius: 30px;
-      font-size: 0.95rem;
-      font-weight: 900;
-      letter-spacing: 1px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-      margin-top: auto;
+      margin-bottom: 20px;
     }
 
-    [data-theme="light"] .place-order-banner-btn {
-      background: #000000;
-      color: #ffffff;
+    .inquiry-box h4 { font-size: 0.9rem; margin-bottom: 4px; color: var(--text-color); }
+    .inquiry-box p { font-size: 0.78rem; color: var(--text-sub); margin-bottom: 10px; }
+
+    .inquiry-input-wrap { display: flex; gap: 8px; }
+    .inquiry-input {
+      flex: 1;
+      background: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: var(--text-color);
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .inquiry-btn {
+      background: #FFD700;
+      color: #000;
+      border: none;
+      padding: 0 16px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
     }
 
     /* ==========================================================================
-       MODAL OVERLAY & POPUP STYLING (EXACT DESIGN MATCH)
+       MODAL OVERLAY & POPUP STYLING (MATCHING IMAGE SCREENSHOT)
        ========================================================================== */
     .modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(4px);
       justify-content: center;
       align-items: center;
@@ -324,6 +332,7 @@
       margin-bottom: 20px;
     }
 
+    /* Bottle Size Grid - Matches Screenshot */
     .perfume-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -401,18 +410,23 @@
     }
 
     /* ==========================================================================
-       AI EXPLORER & SERVER PANEL
+       AI EXPLORER SCREEN
        ========================================================================== */
+    /* LOCAL AI HERO IMAGE */
     .ai-hero-card {
       width: 100%;
-      height: 200px;
+      height: 220px;
       border-radius: 20px;
       overflow: hidden;
       margin-bottom: 20px;
+      position: relative;
       border: 1px solid var(--border-color);
       background: url('appearich-ai.jpg') center/cover no-repeat #1a1a1a;
     }
 
+    /* ==========================================================================
+       BOOKINGS / SERVER PANEL
+       ========================================================================== */
     .order-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -439,7 +453,9 @@
       color: #25D366;
     }
 
-    /* Bottom Nav Bar */
+    /* ==========================================================================
+       BOTTOM NAVIGATION BAR
+       ========================================================================== */
     .bottom-nav {
       position: absolute;
       bottom: 0;
@@ -475,7 +491,7 @@
 
   <div class="app-viewport">
     
-    <!-- Top App Navigation Header -->
+    <!-- Top Navigation Header -->
     <header class="top-header">
       <div class="header-left">
         <button id="backBtn" class="back-btn" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i></button>
@@ -488,87 +504,65 @@
       </button>
     </header>
 
-    <!-- App Screen Area -->
+    <!-- Scrollable Screen Area -->
     <main class="app-content">
 
-      <!-- SCREEN 1: PERFUME CATALOGUE HOME -->
+      <!-- SCREEN 1: HOME DASHBOARD -->
       <section id="screen-home" class="app-screen active">
-        
-        <!-- Header Branding & Quality Badges -->
-        <div class="brand-header-section">
-          <div>
-            <div class="powered-by-tag">POWERED BY</div>
-            <div class="brand-header-title">
-              APPEA<span style="color:#FFD700;">RICH</span>
+        <!-- Local Image: appearich1.jpg -->
+        <div class="hero-banner">
+          <div class="hero-greeting">Welcome!</div>
+          <div class="hero-tagline">Appear Rich — Premium Delivery</div>
+        </div>
+
+        <div class="section-title">
+          <i class="fa-solid fa-grip-vertical" style="color:#FFD700;"></i> We Offer This
+        </div>
+
+        <div class="offerings-grid">
+          <!-- Hot Meals -->
+          <div class="offer-card" onclick="openInquiryWhatsApp('Hot Meals Request')">
+            <div class="offer-card-bg meals-card-bg"></div>
+            <div class="offer-card-overlay">
+              <div class="offer-card-title">Hot Meals</div>
+              <div class="offer-card-desc">Fast Sourced Food</div>
             </div>
           </div>
-          <div class="badges-group">
-            <div class="circle-badge">
-              <span>100%</span>
-              <span>ORIGINAL</span>
-            </div>
-            <div class="circle-badge">
-              <span>FAST</span>
-              <span>DELIVERY</span>
+
+          <!-- Perfumes -->
+          <div class="offer-card" onclick="openPerfumeModal()">
+            <!-- Local Image: appearich2.jpg -->
+            <div class="offer-card-bg perfumes-card-bg"></div>
+            <div class="offer-card-overlay">
+              <div class="offer-card-title">Perfumes</div>
+              <div class="offer-card-desc">Luxury Fragrances</div>
             </div>
           </div>
         </div>
 
-        <!-- 2x2 Perfume Grid -->
-        <div class="catalog-grid">
-          
-          <!-- Vanilla -->
-          <div class="catalog-card" style="background-image: url('vanilla.jpg'), url('appearich1.jpg');" onclick="quickSelectPerfume('Vanilla')">
-            <div class="catalog-card-content">
-              <div class="catalog-card-title">Vanilla</div>
-              <div class="catalog-card-notes">Woody • Vanilla • Amber</div>
-            </div>
+        <div class="inquiry-box">
+          <h4>Need Anything Specific?</h4>
+          <p>Describe your needs or custom requests directly.</p>
+          <div class="inquiry-input-wrap">
+            <input type="text" id="customInquiryInput" class="inquiry-input" placeholder="Type your request here...">
+            <button class="inquiry-btn" onclick="sendInquiry()">Ask</button>
           </div>
-
-          <!-- Sugar Candy -->
-          <div class="catalog-card" style="background-image: url('sugar-candy.jpg'), url('appearich2.jpg');" onclick="quickSelectPerfume('Sugar Candy')">
-            <div class="catalog-card-content">
-              <div class="catalog-card-title">Sugar Candy</div>
-              <div class="catalog-card-notes">Floral • Sweet</div>
-            </div>
-          </div>
-
-          <!-- 212 VIP -->
-          <div class="catalog-card" style="background-image: url('212-vip.jpg'), url('appearich1.jpg');" onclick="quickSelectPerfume('212 VIP')">
-            <div class="catalog-card-content">
-              <div class="catalog-card-title">212 VIP</div>
-              <div class="catalog-card-notes">Fresh • Sea Salt</div>
-            </div>
-          </div>
-
-          <!-- Tag Sunset -->
-          <div class="catalog-card" style="background-image: url('tag-sunset.jpg'), url('appearich2.jpg');" onclick="quickSelectPerfume('Tag Sunset')">
-            <div class="catalog-card-content">
-              <div class="catalog-card-title">Tag Sunset</div>
-              <div class="catalog-card-notes">Rich Spices</div>
-            </div>
-          </div>
-
         </div>
-
-        <!-- Place Your Order Button -->
-        <button class="place-order-banner-btn" onclick="openPerfumeModal()">
-          <i class="fa-solid fa-wand-magic-sparkles" style="color:#FFD700;"></i> PLACE YOUR ORDER
-        </button>
       </section>
 
       <!-- SCREEN 2: AI GUIDE -->
       <section id="screen-ai" class="app-screen">
+        <!-- Local Image: appearich-ai.jpg -->
         <div class="ai-hero-card"></div>
         <div class="section-title">Appearich AI Guide</div>
         <p style="font-size:0.85rem; color:var(--text-sub); line-height:1.5;">
-          Our AI assistant recommendation system is currently preparing smart fragrance matching based on your personal preferences.
+          Our AI assistant recommendation system is currently preparing smart fragrance matching and dish pairings.
         </p>
       </section>
 
       <!-- SCREEN 3: BOOKINGS / SERVER PANEL -->
       <section id="screen-bookings" class="app-screen">
-        <div class="section-title" style="margin-bottom:12px;"><i class="fa-solid fa-server" style="color:#FFD700;"></i> Server Orders Panel</div>
+        <div class="section-title"><i class="fa-solid fa-server" style="color:#FFD700;"></i> Server Orders Panel</div>
         <div id="ordersContainer">
           <!-- Dynamic Orders populated here -->
         </div>
@@ -576,7 +570,7 @@
 
       <!-- SCREEN 4: PROFILE -->
       <section id="screen-profile" class="app-screen">
-        <div class="section-title" style="margin-bottom:12px;">My Profile</div>
+        <div class="section-title">My Profile</div>
         <div style="background:var(--card-bg); padding:16px; border-radius:14px; border:1px solid var(--border-color);">
           <h3 style="margin-bottom:4px;">App Customer</h3>
           <p style="font-size:0.8rem; color:var(--text-sub);">Phone: +255 764 519 027</p>
@@ -585,7 +579,7 @@
 
     </main>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- BOTTOM NAV BAR -->
     <nav class="bottom-nav">
       <button class="nav-item active" onclick="switchTab('screen-home', this)">
         <i class="fa-solid fa-house"></i>
@@ -607,7 +601,7 @@
   </div>
 
   <!-- ==========================================================================
-     ORDER MODAL POPUP
+     PERFUME MODAL (EXACT DESIGN MATCH FROM YOUR SCREENSHOT)
      ========================================================================== -->
   <div id="perfumeModal" class="modal-overlay">
     <div class="modal-card">
@@ -618,14 +612,17 @@
 
       <label class="input-label">1. Select Size:</label>
       <div class="perfume-grid">
+        <!-- 30ml Card -->
         <div class="perfume-card selected" onclick="selectSize(this, '30ml', '25,000/=')">
           <div class="size-ml">30ml</div>
           <div class="price-tag">25,000/=</div>
         </div>
+        <!-- 50ml Card -->
         <div class="perfume-card" onclick="selectSize(this, '50ml', '35,000/=')">
           <div class="size-ml">50ml</div>
           <div class="price-tag">35,000/=</div>
         </div>
+        <!-- 100ml Card -->
         <div class="perfume-card" onclick="selectSize(this, '100ml', '55,000/=')">
           <div class="size-ml">100ml</div>
           <div class="price-tag">55,000/=</div>
@@ -694,15 +691,10 @@
       }
     }
 
-    // Modal & Quick-Select Functions
+    // Modal Handling
     function openPerfumeModal() {
       document.getElementById('perfumeModal').classList.add('active');
       document.getElementById('backBtn').style.display = 'block';
-    }
-
-    function quickSelectPerfume(name) {
-      document.getElementById('perfumeInput').value = name;
-      openPerfumeModal();
     }
 
     function closePerfumeModal() {
@@ -735,16 +727,21 @@
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
 
-      // 1. Log to server panel
+      // 1. Log order to local server state (Viewable under Bookings tab)
       ordersList.unshift(newOrder);
       renderOrders();
 
-      // 2. Redirect to WhatsApp
+      // 2. Format & Launch WhatsApp Message
       const message = encodeURIComponent(`*NEW PERFUME ORDER*\n• Size: ${activeSize}\n• Price: ${activePrice}\n• Details: ${details}`);
       window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
 
       closePerfumeModal();
       document.getElementById('perfumeInput').value = '';
+    }
+
+    function openInquiryWhatsApp(topic) {
+      const msg = encodeURIComponent(`Hi APPEARICH! I would like to place a request regarding: ${topic}`);
+      window.open(`https://wa.me/${whatsappNumber}?text=${msg}`, '_blank');
     }
 
     function renderOrders() {
@@ -765,6 +762,14 @@
           <span style="font-size:0.7rem; color:var(--text-sub); display:block; margin-top:6px;">Logged at ${o.time}</span>
         </div>
       `).join('');
+    }
+
+    function sendInquiry() {
+      const input = document.getElementById('customInquiryInput').value.trim();
+      if (!input) return;
+      const msg = encodeURIComponent(`Hi APPEARICH! Custom Request: ${input}`);
+      window.open(`https://wa.me/${whatsappNumber}?text=${msg}`, '_blank');
+      document.getElementById('customInquiryInput').value = '';
     }
 
     renderOrders();
