@@ -94,6 +94,8 @@
       align-items: center;
       gap: 12px;
     }
+
+    /* FORCED ALWAYS-VISIBLE BACK BUTTON */
     .back-btn {
       background: var(--card-bg-sub);
       border: 1px solid var(--card-border);
@@ -101,15 +103,13 @@
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      display: none;
+      display: flex !important; /* Force visible everywhere */
       align-items: center;
       justify-content: center;
       font-size: 1rem;
       cursor: pointer;
     }
-    .back-btn.visible {
-      display: flex;
-    }
+
     .brand-logo-wrap {
       display: flex;
       align-items: center;
@@ -475,6 +475,7 @@
       gap: 12px;
       overflow-x: auto;
       padding: 4px 4px 12px 4px;
+      margin-top: 16px;
       margin-bottom: 16px;
       scrollbar-width: thin;
     }
@@ -817,7 +818,7 @@
     }
     .track-header {
       display: flex;
-      justify-content: space-between;
+      justify-space-between;
       align-items: center;
       margin-bottom: 12px;
       border-bottom: 1px dashed var(--card-border);
@@ -1066,7 +1067,7 @@
       </div>
     </div>
     <div class="ai-screen-wrap">
-      <!-- UPDATED AI Guide Hero Image path to hero-ai.jpg -->
+      <!-- AI Guide Hero Image -->
       <div class="teaser-image-card" onclick="igniteTeaserToast()">
         <img src="images/hero-ai.jpg" alt="AI Neural Guide">
         <div class="image-overlay"></div>
@@ -1139,7 +1140,8 @@
     <div class="sheet-content full-screen">
       <span class="sheet-close" onclick="closeSheet('hotMealsModal')">&times;</span>
       <div class="sheet-title">Hot Meals</div>
-      <div class="sheet-subtitle">Select standard meal or request a special pick!</div>
+      
+      <!-- Subtitle words removed as requested -->
 
       <!-- Hot Meals Carousel with complete text visibility -->
       <div class="horizontal-scroll-container">
@@ -1319,13 +1321,6 @@
       
       if (element) {
         element.classList.add('active');
-      }
-
-      const backBtn = document.getElementById('globalBackBtn');
-      if (screenId !== 'screen-home') {
-        backBtn.classList.add('visible');
-      } else {
-        backBtn.classList.remove('visible');
       }
     }
 
