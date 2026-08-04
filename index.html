@@ -104,7 +104,6 @@
       align-items: center;
       gap: 12px;
     }
-
     .back-btn {
       background: var(--card-bg-sub);
       border: 1px solid var(--card-border);
@@ -118,7 +117,6 @@
       font-size: 1rem;
       cursor: pointer;
     }
-
     .brand-logo-wrap {
       display: flex;
       align-items: center;
@@ -158,7 +156,6 @@
       font-size: 1rem;
       cursor: pointer;
     }
-
     /* ==========================================================================
        HERO SECTION (HOME)
        ========================================================================== */
@@ -541,7 +538,6 @@
       align-items: center;
       justify-content: center;
     }
-
     /* Form Fields inside Sheet */
     .form-row {
       display: flex;
@@ -567,6 +563,33 @@
       color: var(--accent-gold);
       font-weight: bold;
       margin-left: 4px;
+    }
+
+    /* Dynamic Pricing & Surcharge Summary Card */
+    .calc-box {
+      background: var(--card-bg-sub);
+      border: 1.5px dashed var(--accent-gold);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+    .calc-row.highlight {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: var(--text-main);
+      border-top: 1px solid var(--card-border);
+      padding-top: 8px;
+      margin-top: 6px;
+    }
+    .calc-row .amount-bold {
+      color: var(--accent-gold);
     }
 
     /* Payment Box Section */
@@ -618,7 +641,6 @@
       gap: 8px;
       margin-top: 8px;
     }
-
     /* Perfume Bottle Size Grid */
     .price-grid {
       display: grid;
@@ -922,7 +944,6 @@
   </style>
 </head>
 <body>
-
   <!-- FIXED Global Header with Back Button & Theme Switcher -->
   <header class="app-header">
     <div class="header-left">
@@ -950,7 +971,6 @@
       <div class="hero-greeting" id="heroGreeting">Welcome, Guest!</div>
       <div class="hero-tagline">Appear Rich — Premium Delivery, Delivered with Love.</div>
     </div>
-
     <!-- We Offer This Grid -->
     <div class="section-title">
       <i class="fa-solid fa-layer-group" style="color:var(--accent-gold);"></i> We Offer This
@@ -964,7 +984,6 @@
           <div class="offer-card-desc">Fastest Sourced Food</div>
         </div>
       </div>
-
       <!-- Perfumes Card -->
       <div class="offer-card" onclick="switchTab('screen-perfumes')">
         <div class="offer-card-bg" style="background-image: url('images/appearich-perfume1.jpg');"></div>
@@ -974,7 +993,6 @@
         </div>
       </div>
     </div>
-
     <div class="section-divider"></div>
     <div class="inquiry-box">
       <h4><i class="fa-solid fa-circle-question" style="color:var(--accent-gold);"></i> Need Anything Specific?</h4>
@@ -984,7 +1002,6 @@
         <button class="inquiry-btn" onclick="sendCustomInquiry()">Ask</button>
       </div>
     </div>
-
     <div class="quick-reorder-section">
       <div class="quick-reorder-info">
         <div class="quick-reorder-icon"><i class="fa-solid fa-rotate-right"></i></div>
@@ -1004,7 +1021,6 @@
     <div class="section-title">
       <i class="fa-solid fa-spray-can-sparkles" style="color:var(--accent-gold);"></i> Scent Hub Offerings
     </div>
-
     <main class="perfumes-grid">
       <div class="perfume-card" style="background-image: url('images/appearich-perfume1.jpg');" onclick="openProductModal('Appearich Signature')">
         <div class="perfume-card-overlay">
@@ -1012,21 +1028,18 @@
           <div class="perfume-card-sub">Luxury • Premium Scent</div>
         </div>
       </div>
-
       <div class="perfume-card" style="background-image: url('images/appearich-perfume2.jpg');" onclick="openProductModal('Sugar Candy')">
         <div class="perfume-card-overlay">
           <div class="perfume-card-title">Sugar Candy</div>
           <div class="perfume-card-sub">Floral • Sweet</div>
         </div>
       </div>
-
       <div class="perfume-card" style="background-image: url('images/appearich-perfume3.jpg');" onclick="openProductModal('212 VIP')">
         <div class="perfume-card-overlay">
           <div class="perfume-card-title">212 VIP</div>
           <div class="perfume-card-sub">Fresh • Sea Salt</div>
         </div>
       </div>
-
       <div class="perfume-card" style="background-image: url('images/appearich-perfume4.jpg');" onclick="openProductModal('Tag Sunset')">
         <div class="perfume-card-overlay">
           <div class="perfume-card-title">Tag Sunset</div>
@@ -1034,7 +1047,6 @@
         </div>
       </div>
     </main>
-
     <div class="action-container">
       <button onclick="openOrderModal()" class="order-main-btn">
         <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -1090,11 +1102,9 @@
       <div class="profile-name" id="profName">Logged-in User</div>
       <div class="profile-phone" id="profPhone">+255 764 519 027</div>
     </div>
-
     <a href="https://wa.me/255764519027?text=Hello%20Appearich%20Help%20Center!%20I%20need%20assistance." target="_blank" class="whatsapp-support-btn">
       <i class="fa-brands fa-whatsapp" style="font-size:1.3rem;"></i> WhatsApp Help Center
     </a>
-
     <div class="loyalty-card">
       <div class="loyalty-header">
         <span class="loyalty-title"><i class="fa-solid fa-crown"></i> Loyalty Rewards</span>
@@ -1109,7 +1119,6 @@
         <div class="stamp-dot"><i class="fa-solid fa-gift"></i></div>
       </div>
     </div>
-
     <div class="section-title" style="margin-top:10px;">
       <i class="fa-solid fa-history" style="color:var(--accent-gold);"></i> Order History
     </div>
@@ -1117,7 +1126,7 @@
   </div>
 
   <!-- ==========================================================================
-     FULL-SCREEN MODAL: HOT MEALS FLOW (CLEANED UP & AUTO-REMEMBERED LOCATION)
+     FULL-SCREEN MODAL: HOT MEALS FLOW WITH DYNAMIC PRICES & NIGHT SURCHARGE
      ========================================================================== -->
   <div id="hotMealsModal" class="modal-overlay">
     <div class="sheet-content full-screen">
@@ -1143,6 +1152,18 @@
         </div>
       </div>
 
+      <!-- Dynamic Price & Quantity Input Inputs -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="mealUnitPrice">Price Per Item (TZS):</label>
+          <input type="number" id="mealUnitPrice" placeholder="e.g. 3000" oninput="calculateOrderTotal()">
+        </div>
+        <div class="form-group">
+          <label for="mealQuantity">Quantity:</label>
+          <input type="number" id="mealQuantity" value="1" min="1" oninput="calculateOrderTotal()">
+        </div>
+      </div>
+
       <div class="form-group">
         <label for="mealDetails">Order Details & Instructions:</label>
         <textarea id="mealDetails" placeholder="Enter specific instructions (e.g. 2 plates chips, extra sauce)"></textarea>
@@ -1159,10 +1180,29 @@
           <input type="text" id="mealRoomLoc" placeholder="e.g. Room 104">
         </div>
       </div>
-
       <div class="form-group">
         <label for="mealPhoneNum">Contact Phone Number:</label>
         <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
+      </div>
+
+      <!-- Price Breakdown Card -->
+      <div class="calc-box">
+        <div class="calc-row">
+          <span>Items Total Amount:</span>
+          <span id="calcTotalItemCost">0 TZS</span>
+        </div>
+        <div class="calc-row">
+          <span>Required Initial Deposit (25%):</span>
+          <span id="calcBaseDeposit">0 TZS</span>
+        </div>
+        <div class="calc-row" id="nightSurchargeRow" style="display:none; color: #dc3545; font-weight: 700;">
+          <span>Late Night Surcharge (+40%):</span>
+          <span id="calcNightSurcharge">0 TZS</span>
+        </div>
+        <div class="calc-row highlight">
+          <span>Total Amount You Should Pay Now:</span>
+          <span id="calcFinalPayable" class="amount-bold">0 TZS</span>
+        </div>
       </div>
 
       <!-- Lipa Namba Payment Container -->
@@ -1195,7 +1235,6 @@
       <span class="sheet-close" onclick="closeSheet('perfumesModal')">&times;</span>
       <div class="sheet-title">Place Your Order</div>
       <div class="sheet-subtitle">Select your bottle size & perfume details</div>
-
       <label style="font-size:0.8rem; color:var(--text-main); font-weight:600; display:block; margin-bottom:6px;">1. Select Size:</label>
       <div class="price-grid">
         <div class="price-card active" onclick="selectPerfumeSize(this, '30ml (25,000/= TZS)')">
@@ -1211,12 +1250,10 @@
           <div class="size-price">55,000/=</div>
         </div>
       </div>
-
       <div class="form-group">
         <label for="perfumeDesc">2. Perfume Name or Description:</label>
         <textarea id="perfumeDesc" placeholder="Enter perfume name (e.g., Appearich Signature, 212 VIP) or describe what scent you want..."></textarea>
       </div>
-
       <button class="submit-order-btn" onclick="submitPerfumeOrder()">
         <i class="fa-brands fa-whatsapp"></i> Send Order on WhatsApp
       </button>
@@ -1257,10 +1294,14 @@
     let completedOrdersCount = 0;
     let activeOrders = [];
     let completedHistory = [];
-
     let selectedStandardMeal = "Chips";
     let selectedPerfumeSize = "30ml (25,000/= TZS)";
     let animationLock = false;
+
+    // Calculation State Variables
+    let computedItemTotal = 0;
+    let computedPayableTotal = 0;
+    let isLateNightOrder = false;
 
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('heroGreeting').innerText = `Welcome, ${loggedInUser.name}!`;
@@ -1269,22 +1310,18 @@
       document.getElementById('profPhone').innerText = loggedInUser.phone;
       
       document.getElementById('mealPhoneNum').value = loggedInUser.phone;
-
-      // Auto load saved location from previous orders if available!
       loadSavedUserLocation();
       
       updateLoyaltyUI();
       renderBookings();
     });
 
-    // Helper: Loads saved room and block location from local storage
     function loadSavedUserLocation() {
       const savedBlock = localStorage.getItem('appearich_user_block');
       const savedRoom = localStorage.getItem('appearich_user_room');
       
       if (savedBlock) document.getElementById('mealBlockLoc').value = savedBlock;
       if (savedRoom) document.getElementById('mealRoomLoc').value = savedRoom;
-
       if (savedBlock || savedRoom) {
         document.getElementById('locSavedTag').innerText = "(Auto-Filled)";
       }
@@ -1320,25 +1357,58 @@
     }
 
     function openHotMealsModal() { 
-      // Ensure saved location is loaded whenever modal is opened
       loadSavedUserLocation();
+      calculateOrderTotal(); // Trigger automatic fee assessment when sheet opens
       document.getElementById('hotMealsModal').classList.add('active'); 
     }
-    
+
+    /* Calculation Handler for 25% Deposit & 40% Night Surcharge */
+    function calculateOrderTotal() {
+      const unitPrice = parseFloat(document.getElementById('mealUnitPrice').value) || 0;
+      const quantity = parseInt(document.getElementById('mealQuantity').value) || 1;
+
+      // Base total calculation
+      computedItemTotal = unitPrice * quantity;
+
+      // Time Check for Night Surcharge (>= 23:00 or early morning < 05:00)
+      const currentHour = new Date().getHours();
+      isLateNightOrder = (currentHour >= 23 || currentHour < 5);
+
+      // Base payable rate is 25% of the total amount
+      const baseDeposit = computedItemTotal * 0.25;
+      
+      // Calculate night fee (+40% surcharge of total amount if after 23:00)
+      const nightSurcharge = isLateNightOrder ? (computedItemTotal * 0.40) : 0;
+
+      // Total payable sum
+      computedPayableTotal = baseDeposit + nightSurcharge;
+
+      // UI Text updates
+      document.getElementById('calcTotalItemCost').innerText = `${computedItemTotal.toLocaleString()} TZS`;
+      document.getElementById('calcBaseDeposit').innerText = `${baseDeposit.toLocaleString()} TZS`;
+
+      const surchargeRow = document.getElementById('nightSurchargeRow');
+      if (isLateNightOrder) {
+        surchargeRow.style.display = 'flex';
+        document.getElementById('calcNightSurcharge').innerText = `${nightSurcharge.toLocaleString()} TZS`;
+      } else {
+        surchargeRow.style.display = 'none';
+      }
+
+      document.getElementById('calcFinalPayable').innerText = `${computedPayableTotal.toLocaleString()} TZS`;
+    }
+
     function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
     function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
-
     function openProductModal(name) {
       document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
       openOrderModal();
     }
-
     function selectFoodItem(el, itemName) {
       document.querySelectorAll('.food-scroll-card').forEach(c => c.classList.remove('selected'));
       el.classList.add('selected');
       selectedStandardMeal = itemName;
     }
-
     function selectPerfumeSize(el, sizePrice) {
       document.querySelectorAll('#perfumesModal .price-card').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
@@ -1346,12 +1416,18 @@
     }
 
     function submitFoodOrder() {
+      const unitPrice = parseFloat(document.getElementById('mealUnitPrice').value) || 0;
+      const quantity = parseInt(document.getElementById('mealQuantity').value) || 1;
       const details = document.getElementById('mealDetails').value.trim();
       const block = document.getElementById('mealBlockLoc').value.trim();
       const room = document.getElementById('mealRoomLoc').value.trim();
       const phone = document.getElementById('mealPhoneNum').value.trim();
       const payer = document.getElementById('payerName').value.trim();
 
+      if (unitPrice <= 0) {
+        alert("Please enter a valid price for the item!");
+        return;
+      }
       if (!block || !room) {
         alert("Please fill in both Block/Location and Room Number!");
         return;
@@ -1365,36 +1441,48 @@
         return;
       }
 
-      // SAVE location in localStorage so user doesn't have to re-type next time!
+      // Save user location
       localStorage.setItem('appearich_user_block', block);
       localStorage.setItem('appearich_user_room', room);
 
-      const orderType = `Standard Meal (${selectedStandardMeal})`;
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
+
+      // Construct dynamic message based on time & payment breakdown
+      let nightFeeNote = isLateNightOrder 
+        ? `\n🌙 *Night Surcharge (40%):* +${(computedItemTotal * 0.40).toLocaleString()} TZS` 
+        : "";
 
       const whatsappText = `🍔 *NEW APPEARICH MEAL ORDER*\n` +
         `----------------------------------------\n` +
         `🆔 *Order ID:* ${orderId}\n` +
-        `🍽️ *Item:* ${orderType}\n` +
+        `🍽️ *Item:* ${selectedStandardMeal} (x${quantity})\n` +
+        `💰 *Unit Price:* ${unitPrice.toLocaleString()} TZS\n` +
+        `💵 *Items Total:* ${computedItemTotal.toLocaleString()} TZS\n` +
+        `----------------------------------------\n` +
+        `📊 *Deposit Payable (25%):* ${(computedItemTotal * 0.25).toLocaleString()} TZS` +
+        `${nightFeeNote}\n` +
+        `💳 *TOTAL AMOUNT TO PAY NOW:* ${computedPayableTotal.toLocaleString()} TZS\n` +
+        `----------------------------------------\n` +
         `📝 *Instructions:* ${details || "None"}\n` +
         `📍 *Location:* ${block}, Room ${room}\n` +
         `📞 *Phone:* ${phone}\n` +
-        `💳 *Payer Name:* ${payer}\n` +
+        `👤 *Payer Name:* ${payer}\n` +
         `⏰ *Time Placed:* ${currentTime}\n` +
         `----------------------------------------\n` +
-        `Payment made to Lipa Namba 37247619 (EdwinAndrew).`;
+        `Payment sent to Lipa Namba 37247619 (EdwinAndrew).`;
 
       window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`, '_blank');
 
       const newOrder = {
         id: orderId,
-        title: orderType,
-        details: details || "No extra instructions",
+        title: `${selectedStandardMeal} (x${quantity})`,
+        details: `Paid: ${computedPayableTotal.toLocaleString()} TZS (Total: ${computedItemTotal.toLocaleString()} TZS)` + (isLateNightOrder ? " [Night Fee Included]" : ""),
         location: `${block}, Room ${room}`,
         status: "pending",
         timestamp: currentTime
       };
+
       activeOrders.unshift(newOrder);
       closeSheet('hotMealsModal');
       renderBookings();
@@ -1450,7 +1538,7 @@
               : `<span class="status-badge verified"><i class="fa-solid fa-circle-check"></i> Verified</span>`}
           </div>
           <div class="track-details">
-            <p><strong>Instructions:</strong> ${o.details}</p>
+            <p><strong>Payment Info:</strong> ${o.details}</p>
             <p><strong>Location:</strong> ${o.location}</p>
             <p style="font-size:0.75rem; color:var(--text-sub); margin-top:4px;">Placed at: ${o.timestamp}</p>
           </div>
