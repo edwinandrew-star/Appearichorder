@@ -1,14 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>APPEARICH - Premium Service & Scent Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>APPEARICH - Perfumes</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     /* ==========================================================================
-       GLOBAL RESET & THEME STYLING
+       THEME VARIABLES & FULLSCREEN RESET
        ========================================================================== */
+    :root {
+      --bg-color: #0d0d0d;
+      --surface-color: #161616;
+      --card-bg: #1c1c1c;
+      --text-color: #ffffff;
+      --text-sub: #aaaaaa;
+      --border-color: #2a2a2a;
+      --accent-color: #FFD700;
+      --accent-dark: #d4af37;
+      --modal-bg: #ffffff;
+      --modal-text: #111111;
+      --modal-card-bg: #f5f5f7;
+      --modal-card-border: #e5e5ea;
+      --nav-bg: #111111;
+    }
+
+    [data-theme="light"] {
+      --bg-color: #ffffff;
+      --surface-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --text-color: #111111;
+      --text-sub: #666666;
+      --border-color: #e0e0e0;
+      --accent-color: #d4af37;
+      --accent-dark: #b38f24;
+      --modal-bg: #ffffff;
+      --modal-text: #111111;
+      --modal-card-bg: #f5f5f7;
+      --modal-card-border: #e5e5ea;
+      --nav-bg: #ffffff;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -17,720 +49,344 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    body {
-      background: #0d0d0d;
-      color: #ffffff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-bottom: 80px;
-      overflow-x: hidden;
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      background: var(--bg-color);
+      color: var(--text-color);
+      overflow: hidden;
     }
 
-    /* Screen Views Manager */
+    .app-viewport {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ==========================================================================
+       TOP APP HEADER & BACK BUTTON
+       ========================================================================== */
+    .top-header {
+      height: 60px;
+      background: var(--surface-color);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 900;
+      flex-shrink: 0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: none;
+      padding: 4px 8px;
+    }
+
+    .brand-title {
+      font-size: 1.4rem;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+    }
+    .brand-title .appea { color: var(--text-color); }
+    .brand-title .rich { color: #FFD700; }
+
+    .theme-toggle-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Content Area */
+    .app-content {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+    }
+
     .app-screen {
       display: none;
       width: 100%;
-      max-width: 480px;
-      min-height: calc(100vh - 80px);
-      padding: 20px 16px;
-      flex-direction: column;
-      position: relative;
-      animation: fadeIn 0.3s ease-in-out;
+      min-height: 100%;
+      padding: 16px;
+      padding-bottom: 90px;
+      animation: fadeIn 0.25s ease-in-out;
     }
 
     .app-screen.active {
       display: flex;
+      flex-direction: column;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+      from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     /* ==========================================================================
-       HEADER & HERO SECTION (HOME)
+       PERFUME CATALOGUE SCREEN (MATCHING SCREENSHOT)
        ========================================================================== */
-    .app-header {
+    .brand-header-section {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      width: 100%;
+      margin-bottom: 24px;
+      padding-top: 8px;
     }
 
-    .brand-logo-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .powered-by-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--text-sub);
     }
 
-    .brand-logo-img {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      background: #FFD700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      color: #000;
-      font-size: 1.2rem;
-      border: 2px solid #d99b00;
-    }
-
-    .brand-name {
+    .brand-header-title {
       font-size: 1.8rem;
       font-weight: 900;
-      letter-spacing: 1px;
-    }
-    .brand-name .logo-appea { color: #ffffff; }
-    .brand-name .logo-rich { color: #FFD700; }
-
-    .hero-banner {
-      width: 100%;
-      height: 160px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%), 
-                  url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=cover') center/cover;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 18px;
-      border: 1px solid rgba(255, 215, 0, 0.3);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      margin-bottom: 24px;
-    }
-
-    .hero-greeting {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: #ffffff;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-    }
-
-    .hero-tagline {
-      font-size: 0.85rem;
-      color: #FFD700;
-      font-weight: 600;
-      margin-top: 4px;
       letter-spacing: 0.5px;
+      line-height: 1.1;
     }
 
-    /* ==========================================================================
-       SECTION: WE OFFER THIS
-       ========================================================================== */
-    .section-title {
-      font-size: 1.1rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: #ffffff;
-      margin-bottom: 14px;
+    .badges-group {
       display: flex;
-      align-items: center;
       gap: 8px;
     }
 
-    .offerings-grid {
+    .circle-badge {
+      width: 54px;
+      height: 54px;
+      border: 1.5px solid #d4af37;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 0.55rem;
+      font-weight: 800;
+      color: var(--text-color);
+      line-height: 1.1;
+    }
+
+    /* 2x2 Perfume Card Grid */
+    .catalog-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
       margin-bottom: 24px;
     }
 
-    .offer-card {
-      background: #181818;
-      border-radius: 18px;
-      height: 160px;
+    .catalog-card {
       position: relative;
+      height: 180px;
+      border-radius: 18px;
       overflow: hidden;
-      border: 1.5px solid #282828;
       cursor: pointer;
-      transition: all 0.25s ease;
+      border: 1px solid var(--border-color);
+      background-size: cover;
+      background-position: center;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
       padding: 14px;
     }
 
-    .offer-card:hover, .offer-card:active {
-      transform: translateY(-3px);
-      border-color: #FFD700;
-      box-shadow: 0 8px 20px rgba(255, 215, 0, 0.2);
-    }
-
-    .offer-card-bg {
+    .catalog-card::before {
+      content: '';
       position: absolute;
       inset: 0;
-      background-size: cover;
-      background-position: center;
-      filter: brightness(0.7);
-      transition: transform 0.4s ease;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.85) 100%);
     }
 
-    .offer-card:hover .offer-card-bg {
-      transform: scale(1.06);
-    }
-
-    .offer-card-overlay {
+    .catalog-card-content {
       position: relative;
       z-index: 2;
     }
 
-    .offer-card-title {
+    .catalog-card-title {
       font-size: 1.15rem;
       font-weight: 800;
       color: #ffffff;
+      margin-bottom: 2px;
     }
 
-    .offer-card-desc {
+    .catalog-card-notes {
       font-size: 0.72rem;
+      font-weight: 700;
       color: #FFD700;
-      margin-top: 2px;
-      font-weight: 600;
     }
 
-    /* Horizontal Line & Inquiry Section */
-    .section-divider {
+    /* Floating / Main Place Order Button */
+    .place-order-banner-btn {
       width: 100%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #FFD700, transparent);
-      margin: 10px 0 24px 0;
-    }
-
-    .inquiry-box {
-      background: #141414;
-      border: 1px solid #2a2a2a;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 24px;
-    }
-
-    .inquiry-box h4 {
-      font-size: 0.95rem;
+      background: #000000;
       color: #ffffff;
-      margin-bottom: 6px;
-    }
-
-    .inquiry-box p {
-      font-size: 0.8rem;
-      color: #aaaaaa;
-      margin-bottom: 12px;
-      line-height: 1.4;
-    }
-
-    .inquiry-input-wrap {
-      display: flex;
-      gap: 8px;
-    }
-
-    .inquiry-input {
-      flex: 1;
-      background: #000;
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 10px 12px;
-      color: #fff;
-      font-size: 0.85rem;
-      outline: none;
-    }
-    .inquiry-input:focus { border-color: #FFD700; }
-
-    .inquiry-btn {
-      background: #FFD700;
-      color: #000;
-      border: none;
-      padding: 0 16px;
-      border-radius: 10px;
-      font-weight: 800;
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
-
-    /* Bottom Quick Reorder Container */
-    .quick-reorder-section {
-      background: #181818;
-      border-radius: 16px;
-      padding: 14px;
-      border: 1px solid #282828;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-
-    .quick-reorder-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .quick-reorder-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(255, 215, 0, 0.15);
-      color: #FFD700;
+      border: 2px solid #FFD700;
+      padding: 16px;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: 1px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      margin-top: auto;
     }
 
-    .reorder-text-main { font-size: 0.9rem; font-weight: 700; }
-    .reorder-text-sub { font-size: 0.75rem; color: #888; }
-
-    .reorder-btn {
-      background: transparent;
-      border: 1px solid #FFD700;
-      color: #FFD700;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      cursor: pointer;
+    [data-theme="light"] .place-order-banner-btn {
+      background: #000000;
+      color: #ffffff;
     }
 
     /* ==========================================================================
-       MODALS & CREATIVE SHEETS (HOT MEALS & PERFUMES)
+       MODAL OVERLAY & POPUP STYLING (EXACT DESIGN MATCH)
        ========================================================================== */
     .modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
       justify-content: center;
-      align-items: flex-end;
+      align-items: center;
       z-index: 2000;
+      padding: 16px;
     }
 
     .modal-overlay.active { display: flex; }
 
-    .sheet-content {
-      background: #141414;
-      border: 2px solid #333;
-      border-top-left-radius: 24px;
-      border-top-right-radius: 24px;
+    .modal-card {
+      background: var(--modal-bg);
+      color: var(--modal-text);
       width: 100%;
-      max-width: 480px;
-      max-height: 88vh;
-      overflow-y: auto;
+      max-width: 400px;
+      border-radius: 20px;
       padding: 24px 20px;
       position: relative;
-      animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
     }
 
-    .sheet-close {
+    .modal-close-btn {
       position: absolute;
       top: 16px;
       right: 18px;
       font-size: 1.4rem;
-      color: #888;
+      color: #8e8e93;
       cursor: pointer;
+      border: none;
+      background: none;
     }
 
-    .sheet-title { font-size: 1.4rem; font-weight: 900; color: #fff; text-align: center; }
-    .sheet-subtitle { font-size: 0.8rem; color: #FFD700; text-align: center; margin-bottom: 20px; font-weight: 700; }
-
-    /* Hot Meals Horizontal Scroll Carousel */
-    .horizontal-scroll-container {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      padding-bottom: 12px;
-      margin-bottom: 20px;
-      scrollbar-width: none;
-    }
-    .horizontal-scroll-container::-webkit-scrollbar { display: none; }
-
-    .food-scroll-card {
-      min-width: 140px;
-      height: 160px;
-      border-radius: 16px;
-      background-size: cover;
-      background-position: center;
-      position: relative;
-      flex-shrink: 0;
-      overflow: hidden;
-      border: 2px solid #2a2a2a;
-      cursor: pointer;
-      transition: border-color 0.2s;
-    }
-
-    .food-scroll-card.selected {
-      border-color: #FFD700;
-      box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
-    }
-
-    .food-card-label {
-      position: absolute;
-      bottom: 0;
-      inset-x: 0;
-      background: linear-gradient(to top, #000 80%, transparent);
-      padding: 8px;
+    .modal-header-title {
       text-align: center;
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: #fff;
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #1c1c1e;
     }
 
-    /* Special Meal Section Box */
-    .special-order-toggle-box {
-      background: #1c1c1c;
-      border: 1px dashed #FFD700;
-      border-radius: 14px;
-      padding: 14px;
+    .modal-header-subtitle {
       text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .special-order-toggle-box p {
       font-size: 0.82rem;
-      color: #ddd;
-      margin-bottom: 10px;
-      font-weight: 600;
+      color: #d4af37;
+      font-weight: 700;
+      margin-top: 2px;
+      margin-bottom: 20px;
     }
 
-    .special-ok-btn {
-      background: #FFD700;
-      color: #000;
-      border: none;
-      padding: 8px 24px;
-      border-radius: 20px;
-      font-weight: 900;
-      font-size: 0.8rem;
-      cursor: pointer;
-      text-transform: uppercase;
-    }
-
-    /* Form Fields inside Sheet */
-    .form-group { margin-bottom: 14px; text-align: left; }
-    .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: #aaa; margin-bottom: 6px; }
-    .form-group input, .form-group textarea {
-      width: 100%;
-      background: #080808;
-      border: 1.5px solid #282828;
-      border-radius: 10px;
-      padding: 10px;
-      color: #fff;
-      font-size: 0.85rem;
-      outline: none;
-    }
-    .form-group input:focus, .form-group textarea:focus { border-color: #FFD700; }
-    .form-group textarea { height: 70px; resize: none; }
-
-    .submit-order-btn {
-      width: 100%;
-      background: #FFD700;
-      color: #000;
-      border: none;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 900;
-      font-size: 0.95rem;
-      letter-spacing: 0.5px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    /* Perfume Bottle Size Grid */
-    .perfume-size-grid {
+    .perfume-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .perfume-size-card {
-      background: #080808;
-      border: 1.5px solid #282828;
-      border-radius: 12px;
-      padding: 10px 4px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .perfume-size-card.active {
-      border-color: #FFD700;
-      background: rgba(255, 215, 0, 0.1);
-    }
-
-    .size-title { font-size: 0.85rem; font-weight: 800; color: #fff; }
-
-    /* ==========================================================================
-       LOYALTY & REFERRAL SECTION (SHARED/PROFILE)
-       ========================================================================== */
-    .loyalty-card {
-      background: linear-gradient(135deg, #1f1b04 0%, #0d0d0d 100%);
-      border: 1.5px solid #FFD700;
-      border-radius: 18px;
-      padding: 16px;
       margin-bottom: 20px;
     }
 
-    .loyalty-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .loyalty-title { font-size: 0.95rem; font-weight: 800; color: #FFD700; }
-    .loyalty-badge { font-size: 0.7rem; background: #FFD700; color: #000; font-weight: 900; padding: 3px 8px; border-radius: 10px; }
-
-    .stamps-row {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-      margin-bottom: 14px;
-    }
-
-    .stamp-dot {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: #111;
-      border: 2px dashed #444;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.85rem;
-      color: #555;
-      font-weight: 800;
-    }
-
-    .stamp-dot.filled {
-      background: #FFD700;
-      border-style: solid;
-      border-color: #FFD700;
-      color: #000;
-    }
-
-    .referral-input-group {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    /* ==========================================================================
-       SCREEN 2: AI APPEARICH GUIDE
-       ========================================================================== */
-    .ai-screen-wrap {
+    .perfume-card {
+      background: var(--modal-card-bg);
+      border: 1.5px solid var(--modal-card-border);
+      border-radius: 14px;
+      padding: 14px 4px;
       text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: calc(100vh - 120px);
-    }
-
-    .ambient-glow {
-      position: absolute;
-      width: 260px;
-      height: 260px;
-      background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, rgba(0,0,0,0) 70%);
-      top: 15%;
-      pointer-events: none;
-    }
-
-    .teaser-image-card {
-      position: relative;
-      width: 100%;
-      max-width: 360px;
-      height: 230px;
-      border-radius: 22px;
-      overflow: hidden;
-      margin-bottom: 24px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(255, 215, 0, 0.2);
-      background: #1a1a1a;
       cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    .teaser-image-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .perfume-card.selected {
+      background: #fff9e6;
+      border-color: #1c1c1e;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
-    .image-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, #0d0d0d 10%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%);
-    }
-
-    .ai-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #ffffff;
-      color: #111111;
-      padding: 6px 14px;
-      border-radius: 50px;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-bottom: 16px;
-    }
-
-    .ai-title {
-      font-size: 2.2rem;
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 8px;
-    }
-    .ai-title span { color: #FFD700; }
-
-    .ai-sub {
-      font-size: 0.85rem;
-      color: #aaaaaa;
-      max-width: 300px;
-      margin-bottom: 24px;
-      line-height: 1.5;
-    }
-
-    .status-pill-btn {
-      background: #FFD700;
-      color: #111111;
-      border: none;
-      padding: 14px 28px;
-      border-radius: 16px;
-      font-weight: 800;
+    .perfume-card .size-ml {
       font-size: 0.9rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 8px 20px rgba(255, 215, 0, 0.25);
-      cursor: pointer;
+      font-weight: 900;
+      color: #1c1c1e;
     }
 
-    .coming-soon-toast {
-      position: fixed;
-      top: -100px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 32px);
-      max-width: 440px;
-      background: #FFD700;
-      color: #111111;
-      padding: 16px;
-      border-radius: 18px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      z-index: 3000;
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .coming-soon-toast.trigger-fly { top: 20px; opacity: 1; }
-
-    .toast-icon-wrap {
-      background: #111;
-      color: #FFD700;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
-
-    /* ==========================================================================
-       SCREEN 3: BOOKINGS / LIVE ORDERS
-       ========================================================================== */
-    .order-card-track {
-      background: #141414;
-      border: 1.5px solid #282828;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 14px;
-    }
-
-    .track-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      border-bottom: 1px dashed #282828;
-      padding-bottom: 8px;
-    }
-
-    .order-id { font-size: 0.85rem; font-weight: 800; color: #fff; }
-    
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.75rem;
+    .perfume-card .price-tag {
+      font-size: 0.78rem;
       font-weight: 800;
-      padding: 4px 10px;
-      border-radius: 20px;
+      color: #d4af37;
+      margin-top: 4px;
     }
 
-    .status-badge.pending {
-      background: rgba(255, 193, 7, 0.15);
-      color: #FFC107;
-      border: 1px solid #FFC107;
+    .input-label {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #1c1c1e;
+      margin-bottom: 8px;
+      display: block;
     }
 
-    .status-badge.verified {
-      background: rgba(40, 167, 69, 0.15);
-      color: #28a745;
-      border: 1px solid #28a745;
-    }
-
-    .track-details p { font-size: 0.82rem; color: #ccc; margin-bottom: 4px; }
-
-    /* ==========================================================================
-       SCREEN 4: PROFILE / AXIS
-       ========================================================================== */
-    .profile-header-card {
-      background: #141414;
-      border: 1.5px solid #282828;
-      border-radius: 20px;
-      padding: 20px;
-      text-align: center;
+    .perfume-textarea {
+      width: 100%;
+      height: 90px;
+      background: var(--modal-card-bg);
+      border: 1px solid var(--modal-card-border);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 0.85rem;
+      color: #1c1c1e;
+      outline: none;
+      resize: none;
       margin-bottom: 20px;
     }
+    .perfume-textarea::placeholder { color: #8e8e93; }
 
-    .profile-avatar {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: #FFD700;
-      color: #000;
-      font-size: 1.8rem;
-      font-weight: 900;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 12px auto;
-    }
-
-    .profile-name { font-size: 1.2rem; font-weight: 800; color: #fff; }
-    .profile-phone { font-size: 0.85rem; color: #888; margin-top: 2px; }
-
-    .whatsapp-support-btn {
+    .whatsapp-submit-btn {
       width: 100%;
       background: #25D366;
-      color: #fff;
+      color: #ffffff;
       border: none;
       padding: 14px;
       border-radius: 14px;
@@ -741,21 +397,57 @@
       justify-content: center;
       gap: 10px;
       cursor: pointer;
-      margin-bottom: 20px;
-      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
     }
 
     /* ==========================================================================
-       BOTTOM PERSISTENT NAVIGATION BAR
+       AI EXPLORER & SERVER PANEL
        ========================================================================== */
+    .ai-hero-card {
+      width: 100%;
+      height: 200px;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+      background: url('appearich-ai.jpg') center/cover no-repeat #1a1a1a;
+    }
+
+    .order-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+    }
+
+    .status-tag {
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 10px;
+      background: rgba(37, 211, 102, 0.15);
+      color: #25D366;
+    }
+
+    /* Bottom Nav Bar */
     .bottom-nav {
-      position: fixed;
+      position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 70px;
-      background: #111111;
-      border-top: 1.5px solid #222222;
+      height: 65px;
+      background: var(--nav-bg);
+      border-top: 1px solid var(--border-color);
       display: flex;
       justify-content: space-around;
       align-items: center;
@@ -766,532 +458,316 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-      color: #666666;
-      text-decoration: none;
-      font-size: 0.72rem;
-      font-weight: 700;
+      gap: 3px;
+      color: var(--text-sub);
       background: none;
       border: none;
+      font-size: 0.7rem;
+      font-weight: 700;
       cursor: pointer;
     }
 
-    .nav-item i { font-size: 1.3rem; }
+    .nav-item i { font-size: 1.25rem; }
     .nav-item.active { color: #FFD700; }
   </style>
 </head>
 <body>
 
-  <!-- ==========================================================================
-     SCREEN 1: HOME DASHBOARD
-     ========================================================================== -->
-  <div id="screen-home" class="app-screen active">
+  <div class="app-viewport">
     
-    <!-- Header -->
-    <header class="app-header">
-      <div class="brand-logo-wrap">
-        <div class="brand-logo-img">A</div>
-        <div class="brand-name">
-          <span class="logo-appea">APPEA</span><span class="logo-rich">RICH</span>
+    <!-- Top App Navigation Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <button id="backBtn" class="back-btn" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="brand-title" onclick="switchTab('screen-home', null)">
+          <span class="appea">APPEA</span><span class="rich">RICH</span>
         </div>
       </div>
+      <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeIcon">
+        <i class="fa-solid fa-moon"></i>
+      </button>
     </header>
 
-    <!-- Dynamic Hero Banner -->
-    <div class="hero-banner">
-      <div class="hero-greeting" id="heroGreeting">Welcome, Guest!</div>
-      <div class="hero-tagline">Appear Rich — Premium Delivery, Delivered with Love.</div>
-    </div>
+    <!-- App Screen Area -->
+    <main class="app-content">
 
-    <!-- We Offer This Grid -->
-    <div class="section-title">
-      <i class="fa-solid fa-layer-group" style="color:#FFD700;"></i> We Offer This
-    </div>
-
-    <div class="offerings-grid">
-      <!-- Hot Meals Card -->
-      <div class="offer-card" onclick="openHotMealsModal()">
-        <div class="offer-card-bg" style="background-image: url('https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=400&auto=format&fit=cover');"></div>
-        <div class="offer-card-overlay">
-          <div class="offer-card-title">Hot Meals</div>
-          <div class="offer-card-desc">Fastest Sourced Food</div>
+      <!-- SCREEN 1: PERFUME CATALOGUE HOME -->
+      <section id="screen-home" class="app-screen active">
+        
+        <!-- Header Branding & Quality Badges -->
+        <div class="brand-header-section">
+          <div>
+            <div class="powered-by-tag">POWERED BY</div>
+            <div class="brand-header-title">
+              APPEA<span style="color:#FFD700;">RICH</span>
+            </div>
+          </div>
+          <div class="badges-group">
+            <div class="circle-badge">
+              <span>100%</span>
+              <span>ORIGINAL</span>
+            </div>
+            <div class="circle-badge">
+              <span>FAST</span>
+              <span>DELIVERY</span>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <!-- Perfumes Card -->
-      <div class="offer-card" onclick="openPerfumesModal()">
-        <div class="offer-card-bg" style="background-image: url('https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=400&auto=format&fit=cover');"></div>
-        <div class="offer-card-overlay">
-          <div class="offer-card-title">Perfumes</div>
-          <div class="offer-card-desc">Luxury Fragrances</div>
+        <!-- 2x2 Perfume Grid -->
+        <div class="catalog-grid">
+          
+          <!-- Vanilla -->
+          <div class="catalog-card" style="background-image: url('vanilla.jpg'), url('appearich1.jpg');" onclick="quickSelectPerfume('Vanilla')">
+            <div class="catalog-card-content">
+              <div class="catalog-card-title">Vanilla</div>
+              <div class="catalog-card-notes">Woody • Vanilla • Amber</div>
+            </div>
+          </div>
+
+          <!-- Sugar Candy -->
+          <div class="catalog-card" style="background-image: url('sugar-candy.jpg'), url('appearich2.jpg');" onclick="quickSelectPerfume('Sugar Candy')">
+            <div class="catalog-card-content">
+              <div class="catalog-card-title">Sugar Candy</div>
+              <div class="catalog-card-notes">Floral • Sweet</div>
+            </div>
+          </div>
+
+          <!-- 212 VIP -->
+          <div class="catalog-card" style="background-image: url('212-vip.jpg'), url('appearich1.jpg');" onclick="quickSelectPerfume('212 VIP')">
+            <div class="catalog-card-content">
+              <div class="catalog-card-title">212 VIP</div>
+              <div class="catalog-card-notes">Fresh • Sea Salt</div>
+            </div>
+          </div>
+
+          <!-- Tag Sunset -->
+          <div class="catalog-card" style="background-image: url('tag-sunset.jpg'), url('appearich2.jpg');" onclick="quickSelectPerfume('Tag Sunset')">
+            <div class="catalog-card-content">
+              <div class="catalog-card-title">Tag Sunset</div>
+              <div class="catalog-card-notes">Rich Spices</div>
+            </div>
+          </div>
+
         </div>
-      </div>
-    </div>
 
-    <!-- Divider & Inquiry Form -->
-    <div class="section-divider"></div>
+        <!-- Place Your Order Button -->
+        <button class="place-order-banner-btn" onclick="openPerfumeModal()">
+          <i class="fa-solid fa-wand-magic-sparkles" style="color:#FFD700;"></i> PLACE YOUR ORDER
+        </button>
+      </section>
 
-    <div class="inquiry-box">
-      <h4><i class="fa-solid fa-circle-question" style="color:#FFD700;"></i> Need Anything Specific?</h4>
-      <p>Describe your needs, custom order details, or ask any question directly.</p>
-      <div class="inquiry-input-wrap">
-        <input type="text" id="customInquiryInput" class="inquiry-input" placeholder="Type your request here...">
-        <button class="inquiry-btn" onclick="sendCustomInquiry()">Ask</button>
-      </div>
-    </div>
+      <!-- SCREEN 2: AI GUIDE -->
+      <section id="screen-ai" class="app-screen">
+        <div class="ai-hero-card"></div>
+        <div class="section-title">Appearich AI Guide</div>
+        <p style="font-size:0.85rem; color:var(--text-sub); line-height:1.5;">
+          Our AI assistant recommendation system is currently preparing smart fragrance matching based on your personal preferences.
+        </p>
+      </section>
 
-    <!-- Bottom Quick Reorder Container -->
-    <div class="quick-reorder-section">
-      <div class="quick-reorder-info">
-        <div class="quick-reorder-icon"><i class="fa-solid fa-rotate-right"></i></div>
-        <div>
-          <div class="reorder-text-main">Quick Reorder</div>
-          <div class="reorder-text-sub">Repeat your last saved order instantly</div>
+      <!-- SCREEN 3: BOOKINGS / SERVER PANEL -->
+      <section id="screen-bookings" class="app-screen">
+        <div class="section-title" style="margin-bottom:12px;"><i class="fa-solid fa-server" style="color:#FFD700;"></i> Server Orders Panel</div>
+        <div id="ordersContainer">
+          <!-- Dynamic Orders populated here -->
         </div>
-      </div>
-      <button class="reorder-btn" onclick="triggerQuickReorder()">Reorder</button>
-    </div>
+      </section>
+
+      <!-- SCREEN 4: PROFILE -->
+      <section id="screen-profile" class="app-screen">
+        <div class="section-title" style="margin-bottom:12px;">My Profile</div>
+        <div style="background:var(--card-bg); padding:16px; border-radius:14px; border:1px solid var(--border-color);">
+          <h3 style="margin-bottom:4px;">App Customer</h3>
+          <p style="font-size:0.8rem; color:var(--text-sub);">Phone: +255 764 519 027</p>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" onclick="switchTab('screen-home', this)">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('screen-ai', this)">
+        <i class="fa-solid fa-robot"></i>
+        <span>AI Guide</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('screen-bookings', this)">
+        <i class="fa-solid fa-receipt"></i>
+        <span>Bookings</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('screen-profile', this)">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </button>
+    </nav>
   </div>
 
   <!-- ==========================================================================
-     SCREEN 2: AI APPEARICH GUIDE
+     ORDER MODAL POPUP
      ========================================================================== -->
-  <div id="screen-ai" class="app-screen">
-    <div class="ambient-glow"></div>
+  <div id="perfumeModal" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closePerfumeModal()">&times;</button>
+      
+      <div class="modal-header-title">Place Your Order</div>
+      <div class="modal-header-subtitle">Select your bottle size & perfume details</div>
 
-    <div id="soonToast" class="coming-soon-toast">
-      <div class="toast-icon-wrap"><i class="fas fa-bolt"></i></div>
-      <div class="toast-info">
-        <h4 style="font-weight:900; text-transform:uppercase;">Coming Soon!</h4>
-        <p style="font-size:0.78rem;">Our intelligent AI curator is currently running final model training loops.</p>
+      <label class="input-label">1. Select Size:</label>
+      <div class="perfume-grid">
+        <div class="perfume-card selected" onclick="selectSize(this, '30ml', '25,000/=')">
+          <div class="size-ml">30ml</div>
+          <div class="price-tag">25,000/=</div>
+        </div>
+        <div class="perfume-card" onclick="selectSize(this, '50ml', '35,000/=')">
+          <div class="size-ml">50ml</div>
+          <div class="price-tag">35,000/=</div>
+        </div>
+        <div class="perfume-card" onclick="selectSize(this, '100ml', '55,000/=')">
+          <div class="size-ml">100ml</div>
+          <div class="price-tag">55,000/=</div>
+        </div>
       </div>
-    </div>
 
-    <div class="ai-screen-wrap">
-      <div class="teaser-image-card" onclick="igniteTeaserToast()">
-        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=cover" alt="AI Matrix">
-        <div class="image-overlay"></div>
-      </div>
+      <label class="input-label" for="perfumeInput">2. Perfume Name or Description:</label>
+      <textarea id="perfumeInput" class="perfume-textarea" placeholder="Enter perfume name (e.g., Vanilla, 212 VIP) or describe what scent you want..."></textarea>
 
-      <div class="ai-badge">
-        <i class="fas fa-circle-nodes" style="color:#FFA500;"></i> Smart Engine v2.0
-      </div>
-
-      <h1 class="ai-title">Appearich <br><span>AI Guide</span></h1>
-      <p class="ai-sub">Tap anywhere on the teaser card above or below to test the matrix preparation status.</p>
-
-      <button class="status-pill-btn" onclick="igniteTeaserToast()">
-        <i class="fas fa-robot"></i> Initialize AI Exploration
+      <button class="whatsapp-submit-btn" onclick="submitPerfumeOrder()">
+        <i class="fa-brands fa-whatsapp" style="font-size:1.2rem;"></i> Send Order on WhatsApp
       </button>
     </div>
   </div>
 
-  <!-- ==========================================================================
-     SCREEN 3: BOOKINGS / LIVE ORDERS
-     ========================================================================== -->
-  <div id="screen-bookings" class="app-screen">
-    <div class="section-title">
-      <i class="fa-solid fa-receipt" style="color:#FFD700;"></i> Active Bookings & Status
-    </div>
-
-    <div id="bookingsListContainer">
-      <!-- Active orders rendered here -->
-    </div>
-  </div>
-
-  <!-- ==========================================================================
-     SCREEN 4: PROFILE / AXIS
-     ========================================================================== -->
-  <div id="screen-profile" class="app-screen">
-    <div class="profile-header-card">
-      <div class="profile-avatar" id="profAvatar">U</div>
-      <div class="profile-name" id="profName">Logged-in User</div>
-      <div class="profile-phone" id="profPhone">+255 764 519 027</div>
-    </div>
-
-    <!-- WhatsApp Support Direct Link -->
-    <a href="https://wa.me/255764519027?text=Hello%20Appearich%20Help%20Center!%20I%20need%20assistance." target="_blank" class="whatsapp-support-btn">
-      <i class="fa-brands fa-whatsapp" style="font-size:1.3rem;"></i> WhatsApp Help Center
-    </a>
-
-    <!-- Loyalty & Referral Card -->
-    <div class="loyalty-card">
-      <div class="loyalty-header">
-        <span class="loyalty-title"><i class="fa-solid fa-crown"></i> Loyalty Rewards</span>
-        <span class="loyalty-badge" id="loyaltyCountBadge">0 / 5 Orders</span>
-      </div>
-      <p style="font-size:0.75rem; color:#aaa; margin-bottom:8px;">Complete 5 orders to unlock a special reward offer!</p>
-
-      <div class="stamps-row" id="stampsRow">
-        <div class="stamp-dot">1</div>
-        <div class="stamp-dot">2</div>
-        <div class="stamp-dot">3</div>
-        <div class="stamp-dot">4</div>
-        <div class="stamp-dot"><i class="fa-solid fa-gift"></i></div>
-      </div>
-
-      <div style="font-size:0.8rem; font-weight:700; color:#fff; margin-top:12px;">Have a Referral Code?</div>
-      <div class="referral-input-group">
-        <input type="text" id="refCodeInput" class="inquiry-input" placeholder="Enter code for free delivery">
-        <button class="inquiry-btn" onclick="applyReferralCode()">Apply</button>
-      </div>
-    </div>
-
-    <div class="section-title" style="margin-top:10px;">
-      <i class="fa-solid fa-history" style="color:#FFD700;"></i> Order History
-    </div>
-    <div id="historyListContainer">
-      <!-- Verified history appended here -->
-    </div>
-  </div>
-
-  <!-- ==========================================================================
-     MODAL SHEET: HOT MEALS FLOW
-     ========================================================================== -->
-  <div id="hotMealsModal" class="modal-overlay">
-    <div class="sheet-content">
-      <span class="sheet-close" onclick="closeSheet('hotMealsModal')">&times;</span>
-      <div class="sheet-title">Hot Meals</div>
-      <div class="sheet-subtitle">Select standard meal or request a special pick!</div>
-
-      <!-- Horizontal Meal Carousel -->
-      <div class="horizontal-scroll-container">
-        <!-- Item 1: Chips -->
-        <div class="food-scroll-card selected" onclick="selectFoodItem(this, 'Chips')">
-          <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" style="width:100%; height:100%; object-fit:cover;">
-          <div class="food-card-label">Chips</div>
-        </div>
-        <!-- Item 2: Mishikaki -->
-        <div class="food-scroll-card" onclick="selectFoodItem(this, 'Mishikaki')">
-          <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=300&auto=format&fit=cover" style="width:100%; height:100%; object-fit:cover;">
-          <div class="food-card-label">Mishikaki</div>
-        </div>
-        <!-- Item 3: Soda -->
-        <div class="food-scroll-card" onclick="selectFoodItem(this, 'Soda')">
-          <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=300&auto=format&fit=cover" style="width:100%; height:100%; object-fit:cover;">
-          <div class="food-card-label">Soda</div>
-        </div>
-      </div>
-
-      <!-- Special Meal Order Toggle -->
-      <div class="special-order-toggle-box">
-        <p id="specialToggleText">Need a special order different from this?</p>
-        <button class="special-ok-btn" onclick="toggleSpecialMealMode()">OK</button>
-      </div>
-
-      <!-- Meal Form -->
-      <div class="form-group">
-        <label for="mealDetails">Order Details & Instructions:</label>
-        <textarea id="mealDetails" placeholder="Enter specific instructions (e.g. 2 plates chips, extra sauce)"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="mealDeliveryLoc">Delivery Location & Contact Phone:</label>
-        <input type="text" id="mealDeliveryLoc" placeholder="e.g., House No, Area Name, Phone Number">
-      </div>
-
-      <button id="submitMealBtn" class="submit-order-btn" onclick="submitFoodOrder()">
-        <i class="fa-solid fa-paper-plane"></i> Place Meal Order
-      </button>
-    </div>
-  </div>
-
-  <!-- ==========================================================================
-     MODAL SHEET: PERFUMES FLOW
-     ========================================================================== -->
-  <div id="perfumesModal" class="modal-overlay">
-    <div class="sheet-content">
-      <span class="sheet-close" onclick="closeSheet('perfumesModal')">&times;</span>
-      <div class="sheet-title">Appearich Perfumes</div>
-      <div class="sheet-subtitle">Select size and specify fragrance details</div>
-
-      <label style="font-size:0.8rem; font-weight:700; color:#aaa; display:block; margin-bottom:8px;">1. Select Bottle Size:</label>
-      <div class="perfume-size-grid">
-        <div class="perfume-size-card active" onclick="selectPerfumeSize(this, '30ml')">
-          <div class="size-title">30ml</div>
-        </div>
-        <div class="perfume-size-card" onclick="selectPerfumeSize(this, '50ml')">
-          <div class="size-title">50ml</div>
-        </div>
-        <div class="perfume-size-card" onclick="selectPerfumeSize(this, '100ml')">
-          <div class="size-title">100ml</div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="perfumeDesc">2. Perfume Name or Description:</label>
-        <textarea id="perfumeDesc" placeholder="Enter fragrance name (e.g. Vanilla, 212 VIP) or describe scent preference..."></textarea>
-      </div>
-
-      <button class="submit-order-btn" onclick="submitPerfumeOrder()">
-        <i class="fa-brands fa-whatsapp"></i> Order Perfume via WhatsApp
-      </button>
-    </div>
-  </div>
-
-  <!-- ==========================================================================
-     PERSISTENT BOTTOM NAVIGATION BAR
-     ========================================================================== -->
-  <nav class="bottom-nav">
-    <button class="nav-item active" onclick="switchTab('screen-home', this)">
-      <i class="fa-solid fa-house"></i>
-      <span>Home</span>
-    </button>
-    <button class="nav-item" onclick="switchTab('screen-ai', this)">
-      <i class="fa-solid fa-robot"></i>
-      <span>AI Guide</span>
-    </button>
-    <button class="nav-item" onclick="switchTab('screen-bookings', this)">
-      <i class="fa-solid fa-briefcase"></i>
-      <span>Bookings</span>
-    </button>
-    <button class="nav-item" onclick="switchTab('screen-profile', this)">
-      <i class="fa-solid fa-user"></i>
-      <span>Profile</span>
-    </button>
-  </nav>
-
-  <!-- ==========================================================================
-     APPLICATION LOGIC SCRIPT
-     ========================================================================== -->
+  <!-- JavaScript Logic -->
   <script>
-    // State Variables
-    const loggedInUser = {
-      name: "Alex",
-      phone: "+255 764 519 027"
-    };
+    const whatsappNumber = "255764519027";
+    let activeSize = "30ml";
+    let activePrice = "25,000/=";
+    let ordersList = [];
+    let navigationHistory = ['screen-home'];
 
-    const whatsappPhone = "255764519027";
-    let completedOrdersCount = 0;
-    let activeOrders = [];
-    let completedHistory = [];
+    // Theme Toggle
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const target = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', target);
+      document.getElementById('themeIcon').innerHTML = target === 'dark' 
+        ? '<i class="fa-solid fa-moon"></i>' 
+        : '<i class="fa-solid fa-sun"></i>';
+    }
 
-    // Selected Form Options
-    let selectedStandardMeal = "Chips";
-    let isSpecialMealMode = false;
-    let selectedPerfumeSize = "30ml";
-    let animationLock = false;
-
-    // Initialization
-    window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('heroGreeting').innerText = `Welcome, ${loggedInUser.name}!`;
-      document.getElementById('profName').innerText = loggedInUser.name;
-      document.getElementById('profAvatar').innerText = loggedInUser.name.charAt(0).toUpperCase();
-      document.getElementById('profPhone').innerText = loggedInUser.phone;
-      updateLoyaltyUI();
-      renderBookings();
-    });
-
-    // Navigation Switcher
-    function switchTab(screenId, element) {
+    // Tab Navigation Switcher
+    function switchTab(screenId, el) {
       document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      
+
       document.getElementById(screenId).classList.add('active');
-      element.classList.add('active');
-    }
+      if (el) el.classList.add('active');
 
-    // Modal Control
-    function openHotMealsModal() { document.getElementById('hotMealsModal').classList.add('active'); }
-    function openPerfumesModal() { document.getElementById('perfumesModal').classList.add('active'); }
-    function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
-
-    // Food Selection Logic
-    function selectFoodItem(el, itemName) {
-      if (isSpecialMealMode) return;
-      document.querySelectorAll('.food-scroll-card').forEach(c => c.classList.remove('selected'));
-      el.classList.add('selected');
-      selectedStandardMeal = itemName;
-    }
-
-    function toggleSpecialMealMode() {
-      isSpecialMealMode = !isSpecialMealMode;
-      const btn = document.querySelector('.special-ok-btn');
-      const submitBtn = document.getElementById('submitMealBtn');
-      const toggleText = document.getElementById('specialToggleText');
-
-      if (isSpecialMealMode) {
-        btn.innerText = "RESET TO STANDARD";
-        btn.style.background = "#ff4444";
-        btn.style.color = "#fff";
-        toggleText.innerText = "Special Mode Active: Dedicated Runner Fee Applies";
-        submitBtn.innerHTML = `<i class="fa-solid fa-star"></i> Describe & Order Special Meal`;
-        document.getElementById('mealDetails').placeholder = "Specify exact food item, custom restaurant, or dish details...";
+      if (screenId !== 'screen-home') {
+        document.getElementById('backBtn').style.display = 'block';
+        if (navigationHistory[navigationHistory.length - 1] !== screenId) {
+          navigationHistory.push(screenId);
+        }
       } else {
-        btn.innerText = "OK";
-        btn.style.background = "#FFD700";
-        btn.style.color = "#000";
-        toggleText.innerText = "Need a special order different from this?";
-        submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Place Meal Order`;
-        document.getElementById('mealDetails').placeholder = "Enter specific instructions (e.g. 2 plates chips, extra sauce)";
+        document.getElementById('backBtn').style.display = 'none';
+        navigationHistory = ['screen-home'];
       }
     }
 
-    // Perfume Size Selection
-    function selectPerfumeSize(el, size) {
-      document.querySelectorAll('.perfume-size-card').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-      selectedPerfumeSize = size;
+    // Back Button Handling
+    function goBack() {
+      if (document.getElementById('perfumeModal').classList.contains('active')) {
+        closePerfumeModal();
+        return;
+      }
+      
+      if (navigationHistory.length > 1) {
+        navigationHistory.pop();
+        const previousScreen = navigationHistory[navigationHistory.length - 1];
+        switchTab(previousScreen, null);
+      } else {
+        switchTab('screen-home', null);
+      }
     }
 
-    // Process Orders & Bookings
-    function submitFoodOrder() {
-      const details = document.getElementById('mealDetails').value.trim();
-      const location = document.getElementById('mealDeliveryLoc').value.trim();
+    // Modal & Quick-Select Functions
+    function openPerfumeModal() {
+      document.getElementById('perfumeModal').classList.add('active');
+      document.getElementById('backBtn').style.display = 'block';
+    }
 
-      if (!location) {
-        alert("Please provide your delivery location!");
+    function quickSelectPerfume(name) {
+      document.getElementById('perfumeInput').value = name;
+      openPerfumeModal();
+    }
+
+    function closePerfumeModal() {
+      document.getElementById('perfumeModal').classList.remove('active');
+      if (navigationHistory[navigationHistory.length - 1] === 'screen-home') {
+        document.getElementById('backBtn').style.display = 'none';
+      }
+    }
+
+    function selectSize(element, size, price) {
+      document.querySelectorAll('.perfume-card').forEach(c => c.classList.remove('selected'));
+      element.classList.add('selected');
+      activeSize = size;
+      activePrice = price;
+    }
+
+    // Dual WhatsApp + Server Panel Order Submission
+    function submitPerfumeOrder() {
+      const details = document.getElementById('perfumeInput').value.trim();
+      if (!details) {
+        alert("Please enter a perfume name or scent description.");
         return;
       }
 
-      const orderType = isSpecialMealMode ? "Special Food Order" : `Standard Meal (${selectedStandardMeal})`;
       const newOrder = {
         id: "APR-" + Math.floor(1000 + Math.random() * 9000),
-        title: orderType,
-        details: details || "No extra instructions",
-        location: location,
-        status: "pending",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        item: `Perfume (${activeSize})`,
+        price: activePrice,
+        details: details,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
 
-      activeOrders.unshift(newOrder);
-      closeSheet('hotMealsModal');
-      renderBookings();
-      simulateVerification(newOrder.id);
+      // 1. Log to server panel
+      ordersList.unshift(newOrder);
+      renderOrders();
+
+      // 2. Redirect to WhatsApp
+      const message = encodeURIComponent(`*NEW PERFUME ORDER*\n• Size: ${activeSize}\n• Price: ${activePrice}\n• Details: ${details}`);
+      window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+
+      closePerfumeModal();
+      document.getElementById('perfumeInput').value = '';
     }
 
-    function submitPerfumeOrder() {
-      const desc = document.getElementById('perfumeDesc').value.trim();
-      if (!desc) {
-        alert("Please specify perfume name or description!");
+    function renderOrders() {
+      const container = document.getElementById('ordersContainer');
+      if (ordersList.length === 0) {
+        container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-sub);">No active server bookings yet.</p>`;
         return;
       }
 
-      const msg = encodeURIComponent(`Hi APPEARICH! I would like to order Perfume:\n- Size: ${selectedPerfumeSize}\n- Details: ${desc}`);
-      window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
-      closeSheet('perfumesModal');
-    }
-
-    // Simulate Order Verification Lifecycle (Pending -> Green Check -> History)
-    function simulateVerification(orderId) {
-      setTimeout(() => {
-        const orderIdx = activeOrders.findIndex(o => o.id === orderId);
-        if (orderIdx !== -1) {
-          activeOrders[orderIdx].status = "verified";
-          renderBookings();
-
-          // Move to persistent history after showing green verification checkmark
-          setTimeout(() => {
-            const verifiedItem = activeOrders.splice(orderIdx, 1)[0];
-            completedHistory.unshift(verifiedItem);
-            completedOrdersCount++;
-            updateLoyaltyUI();
-            renderBookings();
-            renderHistory();
-          }, 3000);
-        }
-      }, 3500);
-    }
-
-    // Render Active Bookings
-    function renderBookings() {
-      const container = document.getElementById('bookingsListContainer');
-      if (activeOrders.length === 0) {
-        container.innerHTML = `
-          <div style="text-align:center; padding:40px 20px; color:#666;">
-            <i class="fa-solid fa-box-open" style="font-size:2.5rem; margin-bottom:10px;"></i>
-            <p style="font-size:0.85rem;">No active orders pending right now.</p>
+      container.innerHTML = ordersList.map(o => `
+        <div class="order-card">
+          <div class="order-header">
+            <strong>${o.id} - ${o.item}</strong>
+            <span class="status-tag">Sent to Admin</span>
           </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = activeOrders.map(o => `
-        <div class="order-card-track">
-          <div class="track-header">
-            <span class="order-id">${o.id} - ${o.title}</span>
-            ${o.status === 'pending' 
-              ? `<span class="status-badge pending"><i class="fa-solid fa-clock"></i> Pending</span>`
-              : `<span class="status-badge verified"><i class="fa-solid fa-circle-check"></i> Verified</span>`}
-          </div>
-          <div class="track-details">
-            <p><strong>Instructions:</strong> ${o.details}</p>
-            <p><strong>Location:</strong> ${o.location}</p>
-            <p style="font-size:0.75rem; color:#777; margin-top:4px;">Placed at: ${o.timestamp}</p>
-          </div>
+          <p style="font-size:0.82rem; margin-top:4px;"><strong>Price:</strong> ${o.price}</p>
+          <p style="font-size:0.82rem; color:var(--text-sub);"><strong>Details:</strong> ${o.details}</p>
+          <span style="font-size:0.7rem; color:var(--text-sub); display:block; margin-top:6px;">Logged at ${o.time}</span>
         </div>
       `).join('');
     }
 
-    // Render History in Profile
-    function renderHistory() {
-      const container = document.getElementById('historyListContainer');
-      if (completedHistory.length === 0) {
-        container.innerHTML = `<p style="font-size:0.8rem; color:#666;">No past orders logged yet.</p>`;
-        return;
-      }
-
-      container.innerHTML = completedHistory.map(o => `
-        <div class="order-card-track" style="opacity:0.8;">
-          <div class="track-header">
-            <span class="order-id">${o.id} - ${o.title}</span>
-            <span class="status-badge verified"><i class="fa-solid fa-check-double"></i> Delivered</span>
-          </div>
-          <div class="track-details">
-            <p style="font-size:0.8rem;">${o.details}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Loyalty System Update
-    function updateLoyaltyUI() {
-      document.getElementById('loyaltyCountBadge').innerText = `${completedOrdersCount} / 5 Orders`;
-      const stamps = document.querySelectorAll('.stamp-dot');
-      stamps.forEach((stamp, idx) => {
-        if (idx < completedOrdersCount) {
-          stamp.classList.add('filled');
-        } else {
-          stamp.classList.remove('filled');
-        }
-      });
-    }
-
-    function applyReferralCode() {
-      const code = document.getElementById('refCodeInput').value.trim();
-      if (code) {
-        alert(`Referral code "${code}" applied successfully! Free delivery unlocked on your next order.`);
-        document.getElementById('refCodeInput').value = '';
-      }
-    }
-
-    // Custom Inquiry & Quick Reorder
-    function sendCustomInquiry() {
-      const val = document.getElementById('customInquiryInput').value.trim();
-      if (!val) return;
-      const msg = encodeURIComponent(`Hi APPEARICH! Custom Inquiry: "${val}"`);
-      window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
-      document.getElementById('customInquiryInput').value = '';
-    }
-
-    function triggerQuickReorder() {
-      alert("Reordering your last saved order...");
-      openHotMealsModal();
-    }
-
-    // AI Teaser Interaction
-    function igniteTeaserToast() {
-      if (animationLock) return;
-      animationLock = true;
-
-      const toast = document.getElementById("soonToast");
-      toast.classList.add("trigger-fly");
-
-      setTimeout(() => {
-        toast.classList.remove("trigger-fly");
-        animationLock = false;
-      }, 3500);
-    }
+    renderOrders();
   </script>
 </body>
 </html>
