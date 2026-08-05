@@ -4,7 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>APPEARICH - Premium Service & Scent Hub</title>
+  
+  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Supabase JS Client Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     /* ==========================================================================
        THEME VARIABLES & GLOBAL RESET
@@ -62,6 +68,33 @@
       padding-bottom: 80px;
       overflow-x: hidden;
     }
+
+    /* SPLASH / STARTUP SCREEN */
+    .splash-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    .splash-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .splash-logo {
+      max-width: 180px;
+      height: auto;
+      animation: pulseLogo 1.5s infinite ease-in-out;
+    }
+    @keyframes pulseLogo {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    /* MAIN APP SCREENS */
     .app-screen {
       display: none;
       width: 100%;
@@ -77,6 +110,8 @@
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* APP HEADER */
     .app-header {
       position: fixed;
       top: 0;
@@ -108,18 +143,11 @@
       cursor: pointer;
     }
     .brand-logo-wrap { display: flex; align-items: center; gap: 10px; }
-    .brand-logo-img {
+    .brand-logo-img-custom {
       width: 42px;
       height: 42px;
-      border-radius: 10px;
-      background: var(--accent-gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      color: #000;
-      font-size: 1.2rem;
-      border: 2px solid var(--accent-gold);
+      object-fit: contain;
+      border-radius: 8px;
     }
     .brand-name { font-size: 1.8rem; font-weight: 900; letter-spacing: 1px; }
     .brand-name .logo-appea { color: var(--text-main); }
@@ -371,8 +399,8 @@
       margin-bottom: 16px;
     }
     .sheet-title { font-size: 1.4rem; font-weight: 900; color: var(--text-main); text-align: center; }
-
-    /* Vertical-Scroll Food Selection Grid */
+    .sheet-subtitle { font-size: 0.82rem; color: var(--text-sub); text-align: center; margin-bottom: 16px; }
+    
     .food-selection-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -395,10 +423,7 @@
       flex-direction: column;
       justify-content: flex-end;
     }
-    .food-selection-card.selected {
-      border-color: var(--accent-gold);
-      box-shadow: 0 0 10px var(--accent-gold-light);
-    }
+    .food-selection-card:active { transform: scale(0.97); }
     .food-selection-card img {
       position: absolute;
       inset: 0;
@@ -419,8 +444,7 @@
     }
     .food-name-text { font-size: 0.82rem; font-weight: 800; color: #ffffff; }
     .food-price-text { font-size: 0.72rem; color: var(--accent-gold); font-weight: 700; }
-
-    /* Selected Items Vertical List */
+    
     .selected-items-box {
       background: var(--card-bg-sub);
       border: 1px solid var(--card-border);
@@ -448,7 +472,16 @@
       font-weight: bold;
       text-align: center;
     }
-
+    .night-tag {
+      background: #e74c3c;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 4px;
+      text-transform: uppercase;
+    }
     .calculation-summary-box {
       background: var(--card-bg-sub);
       border: 1.5px solid var(--accent-gold);
@@ -489,8 +522,7 @@
     .form-group input:focus, .form-group textarea:focus { border-color: var(--accent-gold); }
     .form-group textarea { height: 65px; resize: none; }
     .saved-loc-badge { font-size: 0.72rem; color: var(--accent-gold); font-weight: bold; margin-left: 4px; }
-
-    /* Payment Styles */
+    
     .payment-selection-box {
       background: var(--card-bg-sub);
       border: 1.5px solid var(--card-border);
@@ -537,7 +569,7 @@
     }
     .mobile-unfold-box.active { display: block; }
     .lipa-tag { background: var(--accent-gold); color: #000; font-weight: 900; padding: 2px 6px; border-radius: 6px; }
-
+    
     .submit-order-btn {
       width: 100%;
       background: #25D366;
@@ -568,6 +600,7 @@
     .price-card:hover, .price-card.active { border-color: var(--accent-gold); background: var(--accent-gold-light); }
     .size-title { font-size: 0.8rem; color: var(--text-main); font-weight: bold; }
     .size-price { font-size: 0.75rem; font-weight: bold; color: var(--accent-gold); margin-top: 2px; }
+    
     .loyalty-card {
       background: var(--card-bg);
       border: 1.5px solid var(--accent-gold);
@@ -594,6 +627,7 @@
       font-weight: 800;
     }
     .stamp-dot.filled { background: var(--accent-gold); border-style: solid; border-color: var(--accent-gold); color: #000; }
+    
     .ai-screen-wrap {
       text-align: center;
       display: flex;
@@ -688,6 +722,7 @@
       font-size: 1.1rem;
       flex-shrink: 0;
     }
+    
     .order-card-track {
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
@@ -702,6 +737,7 @@
     .status-badge.pending { background: rgba(255, 193, 7, 0.15); color: #d97706; border: 1px solid #d97706; }
     .status-badge.verified { background: rgba(40, 167, 69, 0.15); color: #28a745; border: 1px solid #28a745; }
     .track-details p { font-size: 0.82rem; color: var(--text-sub); margin-bottom: 4px; }
+    
     .profile-header-card {
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
@@ -743,6 +779,8 @@
       margin-bottom: 20px;
       text-decoration: none;
     }
+    
+    /* BOTTOM NAVIGATION */
     .bottom-nav {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -769,17 +807,24 @@
     }
     .nav-item i { font-size: 1.3rem; }
     .nav-item.active { color: var(--accent-gold); }
+    .nav-item.logout-item { color: #e74c3c; }
   </style>
 </head>
 <body>
-  <!-- FIXED Header -->
+
+  <!-- STARTUP / SPLASH SCREEN OVERLAY -->
+  <div id="appSplashScreen" class="splash-screen">
+    <img src="images/appearich-logo.png" alt="APPEARICH" class="splash-logo">
+  </div>
+
+  <!-- FIXED HEADER -->
   <header class="app-header">
     <div class="header-left">
       <button id="globalBackBtn" class="back-btn" onclick="goBack()" title="Back to Home">
         <i class="fa-solid fa-arrow-left"></i>
       </button>
       <div class="brand-logo-wrap">
-        <div class="brand-logo-img">A</div>
+        <img src="images/appearich-logo1.png" alt="APPEARICH" class="brand-logo-img-custom">
         <div class="brand-name">
           <span class="logo-appea">APPEA</span><span class="logo-rich">RICH</span>
         </div>
@@ -947,12 +992,10 @@
       <div class="modal-sticky-header">
         <div class="sheet-title">Hot Meals</div>
       </div>
-
       <div style="font-size: 0.82rem; font-weight:800; color:var(--text-main); margin-bottom:4px;">
         <i class="fa-solid fa-plus-circle" style="color:var(--accent-gold);"></i> Tap to Add Available Items:
       </div>
-
-      <!-- Item Options Grid (Horizontal to Vertical Grid) -->
+      
       <div class="food-selection-grid">
         <div class="food-selection-card" onclick="addItemToOrder('Chipsi Mayai', 3000)">
           <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" alt="Chipsi Mayai">
@@ -998,18 +1041,15 @@
         </div>
       </div>
 
-      <!-- Vertical Dynamic Selected List Container -->
       <div id="selectedItemsContainer" class="selected-items-box">
         <p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet. Click an item above to add to order.</p>
       </div>
 
-      <!-- Single Overall Order Description Textarea -->
       <div class="form-group">
         <label for="mealDetails">Overall Order Description / Special Instructions:</label>
         <textarea id="mealDetails" placeholder="Describe your full meal request (e.g., extra chili, salt level, soft chips, specific soda flavor)..."></textarea>
       </div>
 
-      <!-- Summary Box -->
       <div class="calculation-summary-box">
         <div class="calc-row">
           <span>Items Subtotal:</span>
@@ -1028,7 +1068,6 @@
         </div>
       </div>
 
-      <!-- Location Inputs -->
       <div class="form-row">
         <div class="form-group">
           <label for="mealBlockLoc">Block / Location: <span id="locSavedTag" class="saved-loc-badge"></span></label>
@@ -1045,7 +1084,6 @@
         <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
       </div>
 
-      <!-- Payment Selector -->
       <div class="payment-selection-box">
         <label style="font-size:0.82rem; font-weight:800; color:var(--text-main);">Select Payment Method:</label>
         <div class="payment-options-grid">
@@ -1058,8 +1096,6 @@
             <span>Mobile Money</span>
           </div>
         </div>
-
-        <!-- Mobile Money Dynamic Unfold Area -->
         <div id="mobileUnfoldArea" class="mobile-unfold-box">
           <p style="font-size:0.82rem; color:var(--text-main); line-height:1.4; margin-bottom:10px;">
             Pay via Voda Lipa Namba: <span class="lipa-tag">37247619</span><br>
@@ -1072,7 +1108,6 @@
         </div>
       </div>
 
-      <!-- WhatsApp Order Button -->
       <button id="submitMealBtn" class="submit-order-btn" onclick="submitFoodOrder()">
         <i class="fa-brands fa-whatsapp"></i> Send Order via WhatsApp
       </button>
@@ -1110,7 +1145,7 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAVIGATION -->
+  <!-- BOTTOM NAVIGATION WITH LOGOUT BUTTON -->
   <nav class="bottom-nav">
     <button id="nav-home-btn" class="nav-item active" onclick="switchTab('screen-home', this)">
       <i class="fa-solid fa-house"></i>
@@ -1128,15 +1163,31 @@
       <i class="fa-solid fa-user"></i>
       <span>Profile</span>
     </button>
+    <button class="nav-item logout-item" onclick="handleLogout()">
+      <i class="fa-solid fa-right-from-bracket"></i>
+      <span>Logout</span>
+    </button>
   </nav>
 
   <!-- LOGIC SCRIPT -->
   <script>
-    const loggedInUser = { name: "Alex", phone: "+255 764 519 027" };
+    /* ==========================================================================
+       SUPABASE CONFIGURATION & INITIALIZATION
+       ========================================================================== */
+    const SUPABASE_URL = "https://YOUR_SUPABASE_PROJECT_ID.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    
+    // Initialize Supabase client
+    const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+    let loggedInUser = { id: null, name: "Alex", phone: "+255 764 519 027" };
     const whatsappPhone = "255764519027";
-    let completedOrdersCount = 0;
-    let activeOrders = [];
-    let completedHistory = [];
+    
+    // Persistent Storage State Hydration
+    let completedOrdersCount = parseInt(localStorage.getItem('appearich_loyalty_count')) || 0;
+    let activeOrders = JSON.parse(localStorage.getItem('appearich_active_orders')) || [];
+    let completedHistory = JSON.parse(localStorage.getItem('appearich_completed_history')) || [];
+    
     let selectedPerfumeSize = "30ml (25,000/= TZS)";
     let animationLock = false;
     let calculatedSubtotal = 0;
@@ -1146,7 +1197,24 @@
     let selectedPaymentType = 'cash';
     let selectedFoodItems = [];
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', async () => {
+      // Hide Splash Screen after 2 seconds
+      setTimeout(() => {
+        const splash = document.getElementById('appSplashScreen');
+        if (splash) splash.classList.add('hidden');
+      }, 2000);
+
+      // Check for active Supabase user session
+      if (supabase) {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session && session.user) {
+          loggedInUser.id = session.user.id;
+          loggedInUser.name = session.user.user_metadata?.name || session.user.email.split('@')[0];
+          loggedInUser.phone = session.user.user_metadata?.phone || loggedInUser.phone;
+          await fetchUserOrdersFromSupabase();
+        }
+      }
+
       document.getElementById('heroGreeting').innerText = `Welcome, ${loggedInUser.name}!`;
       document.getElementById('profName').innerText = loggedInUser.name;
       document.getElementById('profAvatar').innerText = loggedInUser.name.charAt(0).toUpperCase();
@@ -1156,8 +1224,76 @@
       loadSavedUserLocation();
       updateLoyaltyUI();
       renderBookings();
+      renderHistory();
       renderSelectedItems();
     });
+
+    /* ==========================================================================
+       SUPABASE DATA HELPERS
+       ========================================================================== */
+    async function fetchUserOrdersFromSupabase() {
+      if (!supabase || !loggedInUser.id) return;
+      try {
+        const { data, error } = await supabase
+          .from('orders')
+          .select('*')
+          .eq('user_id', loggedInUser.id)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        if (data) {
+          activeOrders = data.filter(o => o.status !== 'delivered');
+          completedHistory = data.filter(o => o.status === 'delivered');
+          completedOrdersCount = completedHistory.length;
+          saveStateToLocalStorage();
+        }
+      } catch (err) {
+        console.warn('Supabase order sync error (using local storage fallback):', err.message);
+      }
+    }
+
+    async function saveOrderToSupabase(orderData) {
+      if (!supabase || !loggedInUser.id) return;
+      try {
+        await supabase.from('orders').insert([
+          {
+            user_id: loggedInUser.id,
+            order_id: orderData.id,
+            title: orderData.title,
+            details: orderData.details,
+            location: orderData.location,
+            status: orderData.status
+          }
+        ]);
+      } catch (err) {
+        console.warn('Supabase save error (saved locally):', err.message);
+      }
+    }
+
+    /* ==========================================================================
+       LOGOUT HANDLER
+       ========================================================================== */
+    async function handleLogout() {
+      if (confirm("Are you sure you want to log out of APPEARICH?")) {
+        if (supabase) {
+          await supabase.auth.signOut();
+        }
+        localStorage.removeItem('appearich_active_orders');
+        localStorage.removeItem('appearich_completed_history');
+        localStorage.removeItem('appearich_loyalty_count');
+        alert("You have logged out successfully.");
+        location.reload();
+      }
+    }
+
+    /* ==========================================================================
+       CORE APP & UI LOGIC
+       ========================================================================== */
+    function saveStateToLocalStorage() {
+      localStorage.setItem('appearich_loyalty_count', completedOrdersCount);
+      localStorage.setItem('appearich_active_orders', JSON.stringify(activeOrders));
+      localStorage.setItem('appearich_completed_history', JSON.stringify(completedHistory));
+    }
 
     function loadSavedUserLocation() {
       const savedBlock = localStorage.getItem('appearich_user_block');
@@ -1214,13 +1350,11 @@
       selectedPerfumeSize = sizePrice;
     }
 
-    // Payment Selection Toggle
     function selectPaymentMethod(type) {
       selectedPaymentType = type;
       const btnCash = document.getElementById('payOptCash');
       const btnMobile = document.getElementById('payOptMobile');
       const unfoldBox = document.getElementById('mobileUnfoldArea');
-
       if (type === 'mobile') {
         btnMobile.classList.add('active');
         btnCash.classList.remove('active');
@@ -1232,7 +1366,6 @@
       }
     }
 
-    // Dynamic Food Addition
     function addItemToOrder(name, unitPrice) {
       const existing = selectedFoodItems.find(item => item.name === name);
       if (existing) {
@@ -1281,7 +1414,6 @@
 
     function recalculateMealTotal() {
       calculatedSubtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
-
       const currentHour = new Date().getHours();
       if (currentHour >= 23) {
         surchargePercent = 40;
@@ -1290,10 +1422,8 @@
         surchargePercent = 25;
         document.getElementById('nightBadgeSlot').innerHTML = '';
       }
-
       calculatedSurcharge = Math.round(calculatedSubtotal * (surchargePercent / 100));
       calculatedGrandTotal = calculatedSubtotal + calculatedSurcharge;
-
       document.getElementById('surchargeRateText').innerText = surchargePercent + "%";
       document.getElementById('displaySubtotal').innerText = calculatedSubtotal.toLocaleString() + " TZS";
       document.getElementById('displaySurcharge').innerText = calculatedSurcharge.toLocaleString() + " TZS";
@@ -1305,7 +1435,6 @@
         alert("Please select at least one item before placing your order!");
         return;
       }
-
       const details = document.getElementById('mealDetails').value.trim();
       const block = document.getElementById('mealBlockLoc').value.trim();
       const room = document.getElementById('mealRoomLoc').value.trim();
@@ -1316,12 +1445,10 @@
         alert("Please fill in both Block/Location and Room Number!");
         return;
       }
-
       if (!phone) {
         alert("Please provide a contact phone number!");
         return;
       }
-
       if (selectedPaymentType === 'mobile' && !payer) {
         alert("Tafadhali weka jina la namba iliyotumika kufanya malipo!");
         return;
@@ -1333,7 +1460,7 @@
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
       const itemsSummaryText = selectedFoodItems.map(i => `${i.name} (${i.qty}x @ ${i.unitPrice.toLocaleString()} TZS)`).join("\n• ");
-
+      
       let paymentDetailsMsg = selectedPaymentType === 'cash' 
         ? `💵 *Payment Method:* Cash / Cash on Delivery` 
         : `💳 *Payment Method:* Mobile Money (Lipa Namba 37247619 - Edwin Andrew)\n👤 *Jina la Namba iliyotumika:* ${payer}`;
@@ -1365,6 +1492,9 @@
       };
 
       activeOrders.unshift(newOrder);
+      saveStateToLocalStorage();
+      saveOrderToSupabase(newOrder);
+      
       selectedFoodItems = [];
       closeSheet('hotMealsModal');
       renderBookings();
@@ -1387,11 +1517,16 @@
         const orderIdx = activeOrders.findIndex(o => o.id === orderId);
         if (orderIdx !== -1) {
           activeOrders[orderIdx].status = "verified";
+          saveStateToLocalStorage();
           renderBookings();
+
           setTimeout(() => {
             const verifiedItem = activeOrders.splice(orderIdx, 1)[0];
+            verifiedItem.status = "delivered";
             completedHistory.unshift(verifiedItem);
             completedOrdersCount++;
+            
+            saveStateToLocalStorage();
             updateLoyaltyUI();
             renderBookings();
             renderHistory();
