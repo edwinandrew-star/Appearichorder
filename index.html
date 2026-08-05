@@ -2,11 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>APPEARICH - Premium Service & Scent Hub</title>
+
+  <!-- PWA Capabilities -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="APPEARICH">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Embedded Web App Manifest -->
+  <link rel="manifest" href='data:application/manifest+json,{
+    "name": "APPEARICH Service Hub",
+    "short_name": "APPEARICH",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#000000",
+    "icons": [
+      {
+        "src": "images/appearich-hero.jpg",
+        "sizes": "192x192",
+        "type": "image/jpeg"
+      },
+      {
+        "src": "images/appearich-hero.jpg",
+        "sizes": "512x512",
+        "type": "image/jpeg"
+      }
+    ]
+  }'>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <style>
     /* ==========================================================================
        THEME VARIABLES & GLOBAL RESET
@@ -65,6 +96,23 @@
       padding-bottom: 80px;
       overflow-x: hidden;
     }
+
+    /* FULL BLACK OPENING / SPLASH BRANDING */
+    .brand-logo-img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%; /* Rounded circle layout to eliminate square box outline */
+      background: #000000; /* Pure black background on load */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: var(--accent-gold);
+      font-size: 1.2rem;
+      border: 1.5px solid var(--accent-gold);
+      box-shadow: 0 0 10px rgba(0,0,0,0.8);
+    }
+
     .app-screen {
       display: none;
       width: 100%;
@@ -112,19 +160,6 @@
     }
     .back-btn.show { display: flex !important; }
     .brand-logo-wrap { display: flex; align-items: center; gap: 10px; }
-    .brand-logo-img {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      background: var(--accent-gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      color: #000;
-      font-size: 1.2rem;
-      border: 2px solid var(--accent-gold);
-    }
     .brand-name { font-size: 1.8rem; font-weight: 900; letter-spacing: 1px; }
     .brand-name .logo-appea { color: var(--text-main); }
     .brand-name .logo-rich { color: var(--accent-gold); }
@@ -142,6 +177,19 @@
       font-size: 1rem;
       cursor: pointer;
     }
+
+    /* AUTHENTICATION SCREEN STYLES */
+    .auth-container {
+      background: #000000;
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px 20px;
+      box-shadow: 0 10px 30px var(--shadow-color);
+      margin-top: 10px;
+    }
+    .auth-title { font-size: 1.5rem; font-weight: 900; color: #ffffff; margin-bottom: 6px; text-align: center; }
+    .auth-sub { font-size: 0.85rem; color: #aaaaaa; text-align: center; margin-bottom: 20px; }
+
     .hero-banner {
       width: 100%;
       height: 160px;
@@ -808,8 +856,28 @@
     </button>
   </header>
 
+  <!-- SCREEN 0: LOGIN / AUTHENTICATION -->
+  <div id="screen-auth" class="app-screen active">
+    <div class="auth-container">
+      <div class="auth-title">Welcome to Appearich</div>
+      <div class="auth-sub">Enter your details to register or access your app portal</div>
+      <div class="form-group">
+        <label for="authNameInput">Full Name:</label>
+        <input type="text" id="authNameInput" placeholder="Enter your full name">
+      </div>
+      <div class="form-group">
+        <label for="authPhoneInput">Phone Number:</label>
+        <input type="tel" id="authPhoneInput" placeholder="e.g. 0764519027">
+      </div>
+      <button class="order-main-btn" style="margin-top:15px;" onclick="handleLoginSubmit()">
+        <span>CONTINUE TO HUB</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
   <!-- SCREEN 1: HOME -->
-  <div id="screen-home" class="app-screen active">
+  <div id="screen-home" class="app-screen">
     <div class="hero-banner">
       <div class="hero-greeting" id="heroGreeting">Welcome, Guest!</div>
       <div class="hero-tagline">Appear Rich — Premium Delivery, Delivered with Love.</div>
@@ -955,7 +1023,6 @@
       <i class="fa-solid fa-history" style="color:var(--accent-gold);"></i> Order History
     </div>
     <div id="historyListContainer"></div>
-
     <button class="logout-btn" onclick="handleLogout()">
       <i class="fa-solid fa-right-from-bracket"></i>
       <span>Logout</span>
@@ -1138,16 +1205,29 @@
 
   <!-- LOGIC SCRIPT -->
   <script>
+    // --- PWA SERVICE WORKER REGISTRATION ---
+    if ('serviceWorker' in navigator) {
+      const swCode = `
+        const CACHE_NAME = 'appearich-cache-v1';
+        self.addEventListener('install', (e) => {
+          e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(['./'])));
+        });
+        self.addEventListener('fetch', (e) => {
+          e.respondWith(caches.match(e.request).then((res) => res || fetch(e.request)));
+        });
+      `;
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+    }
+
     // --- SUPABASE CONFIGURATION ---
-    const SUPABASE_URL = "https://zudqubbglwphfxaviqsg.supabase.co/rest/v1/";
+    const SUPABASE_URL = "https://zudqubbglwphfxaviqsg.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE";
     let supabase = null;
-
-    if (SUPABASE_URL !== "https://zudqubbglwphfxaviqsg.supabase.co/rest/v1/" && SUPABASE_ANON_KEY !== "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE") {
+    if (SUPABASE_URL !== "https://zudqubbglwphfxaviqsg.supabase.co" && SUPABASE_ANON_KEY !== "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE") {
       supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }
 
-    // Dynamic logged in user state
     let loggedInUser = {
       name: localStorage.getItem('appearich_user_name') || '',
       phone: localStorage.getItem('appearich_user_phone') || ''
@@ -1167,23 +1247,29 @@
     let selectedFoodItems = [];
 
     window.addEventListener('DOMContentLoaded', async () => {
-      // Verification: Require logged in user. If not logged in, redirect to index.html
-      const localSession = localStorage.getItem('appearich_user_session');
-      
-      if (!localSession && !loggedInUser.name) {
-        if (supabase) {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (!session) {
-            window.location.href = 'index.html';
-            return;
-          }
-        } else {
-          window.location.href = 'index.html';
-          return;
-        }
+      if (loggedInUser.name) {
+        initPortalSession();
+      } else {
+        switchTab('screen-auth');
       }
+    });
 
-      // Populate interface with registered user details
+    function handleLoginSubmit() {
+      const name = document.getElementById('authNameInput').value.trim();
+      const phone = document.getElementById('authPhoneInput').value.trim();
+      if (!name || !phone) {
+        alert("Please provide both name and phone number to continue.");
+        return;
+      }
+      localStorage.setItem('appearich_user_session', 'true');
+      localStorage.setItem('appearich_user_name', name);
+      localStorage.setItem('appearich_user_phone', phone);
+      loggedInUser.name = name;
+      loggedInUser.phone = phone;
+      initPortalSession();
+    }
+
+    function initPortalSession() {
       const displayName = loggedInUser.name || "User";
       document.getElementById('heroGreeting').innerText = `Welcome, ${displayName}!`;
       document.getElementById('profName').innerText = displayName;
@@ -1195,21 +1281,19 @@
       updateLoyaltyUI();
       renderBookings();
       renderSelectedItems();
-    });
+
+      switchTab('screen-home', document.getElementById('nav-home-btn'));
+    }
 
     async function handleLogout() {
-      // Clear Local Storage items
       localStorage.removeItem('appearich_user_session');
       localStorage.removeItem('appearich_user_name');
       localStorage.removeItem('appearich_user_phone');
-
-      // Clear Supabase Session if client exists
+      loggedInUser = { name: '', phone: '' };
       if (supabase) {
         await supabase.auth.signOut();
       }
-
-      // Redirect user to index.html login/splash screen
-      window.location.href = 'index.html';
+      switchTab('screen-auth');
     }
 
     function loadSavedUserLocation() {
@@ -1242,9 +1326,8 @@
       if (targetScreen) targetScreen.classList.add('active');
       if (element) element.classList.add('active');
 
-      // Toggle Header Back Arrow Visibility
       const backBtn = document.getElementById('globalBackBtn');
-      if (screenId !== 'screen-home') {
+      if (screenId !== 'screen-home' && screenId !== 'screen-auth') {
         backBtn.classList.add('show');
       } else {
         backBtn.classList.remove('show');
@@ -1366,7 +1449,6 @@
       const room = document.getElementById('mealRoomLoc').value.trim();
       const phone = document.getElementById('mealPhoneNum').value.trim();
       const payer = document.getElementById('payerName').value.trim();
-
       if (!block || !room) {
         alert("Please fill in both Block/Location and Room Number!");
         return;
@@ -1379,18 +1461,14 @@
         alert("Tafadhali weka jina la namba iliyotumika kufanya malipo!");
         return;
       }
-
       localStorage.setItem('appearich_user_block', block);
       localStorage.setItem('appearich_user_room', room);
-
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
       const itemsSummaryText = selectedFoodItems.map(i => `${i.name} (${i.qty}x @ ${i.unitPrice.toLocaleString()} TZS)`).join("\n• ");
-
       let paymentDetailsMsg = selectedPaymentType === 'cash' 
         ? `💵 *Payment Method:* Cash / Cash on Delivery` 
         : `💳 *Payment Method:* Mobile Money (Lipa Namba 37247619 - Edwin Andrew)\n👤 *Jina la Namba iliyotumika:* ${payer}`;
-
       const whatsappText = `🍔 *NEW APPEARICH MEAL ORDER*\n` +
         `----------------------------------------\n` +
         `🆔 *Order ID:* ${orderId}\n` +
@@ -1405,9 +1483,7 @@
         `${paymentDetailsMsg}\n` +
         `⏰ *Time Placed:* ${currentTime}\n` +
         `----------------------------------------`;
-
       window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`, '_blank');
-
       const newOrder = {
         id: orderId,
         user_name: loggedInUser.name,
@@ -1417,12 +1493,9 @@
         status: "pending",
         timestamp: currentTime
       };
-
-      // Save to Supabase DB if enabled
       if (supabase) {
         await supabase.from('orders').insert([newOrder]);
       }
-
       activeOrders.unshift(newOrder);
       selectedFoodItems = [];
       closeSheet('hotMealsModal');
@@ -1518,7 +1591,6 @@
     async function sendCustomInquiry() {
       const val = document.getElementById('customInquiryInput').value.trim();
       if (!val) return;
-
       if (supabase) {
         await supabase.from('inquiries').insert([{
           user_name: loggedInUser.name,
@@ -1526,7 +1598,6 @@
           timestamp: new Date().toISOString()
         }]);
       }
-
       const msg = encodeURIComponent(`Hi APPEARICH! Custom Inquiry from ${loggedInUser.name}: "${val}"`);
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       document.getElementById('customInquiryInput').value = '';
