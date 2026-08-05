@@ -15,23 +15,6 @@
        THEME VARIABLES & GLOBAL RESET
        ========================================================================== */
     :root {
-      --bg-color: #f8f9fa;
-      --card-bg: #ffffff;
-      --card-bg-sub: #f1f3f5;
-      --card-border: #e9ecef;
-      --text-main: #111111;
-      --text-sub: #666666;
-      --accent-gold: #d4af37;
-      --accent-gold-light: rgba(212, 175, 55, 0.15);
-      --nav-bg: #ffffff;
-      --nav-border: #e9ecef;
-      --input-bg: #f1f3f5;
-      --input-border: #ced4da;
-      --modal-bg: #ffffff;
-      --overlay-bg: rgba(0, 0, 0, 0.5);
-      --shadow-color: rgba(0, 0, 0, 0.08);
-    }
-    [data-theme="dark"] {
       --bg-color: #0d0d0d;
       --card-bg: #181818;
       --card-bg-sub: #141414;
@@ -47,6 +30,23 @@
       --modal-bg: #141414;
       --overlay-bg: rgba(0, 0, 0, 0.85);
       --shadow-color: rgba(0, 0, 0, 0.5);
+    }
+    [data-theme="light"] {
+      --bg-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --card-bg-sub: #f1f3f5;
+      --card-border: #e9ecef;
+      --text-main: #111111;
+      --text-sub: #666666;
+      --accent-gold: #d4af37;
+      --accent-gold-light: rgba(212, 175, 55, 0.15);
+      --nav-bg: #ffffff;
+      --nav-border: #e9ecef;
+      --input-bg: #f1f3f5;
+      --input-border: #ced4da;
+      --modal-bg: #ffffff;
+      --overlay-bg: rgba(0, 0, 0, 0.5);
+      --shadow-color: rgba(0, 0, 0, 0.08);
     }
     * {
       box-sizing: border-box;
@@ -67,20 +67,27 @@
       padding-bottom: 80px;
       overflow-x: hidden;
     }
-    /* SPLASH / STARTUP SCREEN */
+
+    /* SPLASH / STARTUP SCREEN FIXED */
     .splash-screen {
       position: fixed;
-      inset: 0;
-      background: var(--bg-color);
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #0d0d0d;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 9999;
+      z-index: 99999;
+      opacity: 1;
+      visibility: visible;
       transition: opacity 0.5s ease, visibility 0.5s ease;
     }
     .splash-screen.hidden {
       opacity: 0;
       visibility: hidden;
+      pointer-events: none;
     }
     .splash-logo {
       max-width: 180px;
@@ -91,6 +98,7 @@
       0%, 100% { transform: scale(1); opacity: 0.9; }
       50% { transform: scale(1.08); opacity: 1; }
     }
+
     /* MAIN APP SCREENS */
     .app-screen {
       display: none;
@@ -107,6 +115,7 @@
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
     /* APP HEADER */
     .app-header {
       position: fixed;
@@ -811,6 +820,7 @@
   <div id="appSplashScreen" class="splash-screen">
     <img src="images/appearich-logo.png" alt="APPEARICH" class="splash-logo">
   </div>
+
   <!-- FIXED HEADER -->
   <header class="app-header">
     <div class="header-left">
@@ -825,9 +835,10 @@
       </div>
     </div>
     <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Switch Light/Dark Mode">
-      <i class="fa-solid fa-moon"></i>
+      <i class="fa-solid fa-sun"></i>
     </button>
   </header>
+
   <!-- SCREEN 1: HOME -->
   <div id="screen-home" class="app-screen active">
     <div class="hero-banner">
@@ -873,6 +884,7 @@
       <button class="reorder-btn" onclick="triggerQuickReorder()">Reorder</button>
     </div>
   </div>
+
   <!-- SCREEN 2: PERFUMES -->
   <div id="screen-perfumes" class="app-screen">
     <div class="section-title">
@@ -937,6 +949,7 @@
       </button>
     </div>
   </div>
+
   <!-- SCREEN 4: BOOKINGS -->
   <div id="screen-bookings" class="app-screen">
     <div class="section-title">
@@ -944,6 +957,7 @@
     </div>
     <div id="bookingsListContainer"></div>
   </div>
+
   <!-- SCREEN 5: PROFILE -->
   <div id="screen-profile" class="app-screen">
     <div class="profile-header-card">
@@ -973,6 +987,7 @@
     </div>
     <div id="historyListContainer"></div>
   </div>
+
   <!-- HOT MEALS MODAL -->
   <div id="hotMealsModal" class="modal-overlay">
     <div class="sheet-content full-screen">
@@ -1096,6 +1111,7 @@
       </button>
     </div>
   </div>
+
   <!-- PERFUME ORDER MODAL -->
   <div id="perfumesModal" class="modal-overlay">
     <div class="sheet-content">
@@ -1126,7 +1142,8 @@
       </button>
     </div>
   </div>
-  <!-- BOTTOM NAVIGATION WITH LOGOUT BUTTON -->
+
+  <!-- BOTTOM NAVIGATION -->
   <nav class="bottom-nav">
     <button id="nav-home-btn" class="nav-item active" onclick="switchTab('screen-home', this)">
       <i class="fa-solid fa-house"></i>
@@ -1149,23 +1166,47 @@
       <span>Logout</span>
     </button>
   </nav>
-  <!-- LOGIC SCRIPT -->
+
+  <!-- FAILSAFE LOGIC SCRIPT -->
   <script>
-    /* ==========================================================================
-       SUPABASE CONFIGURATION & INITIALIZATION
-       ========================================================================== */
+    // Robust Hide Splash Helper
+    function hideSplashScreen() {
+      const splash = document.getElementById('appSplashScreen');
+      if (splash && !splash.classList.contains('hidden')) {
+        splash.classList.add('hidden');
+      }
+    }
+
+    // Direct Safety Timer (Guarantees Splash Screen hides even if errors occur)
+    setTimeout(hideSplashScreen, 1500);
+
+    /* SUPABASE CONFIGURATION */
     const SUPABASE_URL = "https://zudqubbglwphfxaviqsg.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE";
     
-    // Initialize Supabase client
-    const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+    let supabase = null;
+    try {
+      if (window.supabase && typeof window.supabase.createClient === 'function') {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    } catch(e) {
+      console.warn("Supabase init bypassed:", e);
+    }
+
     let loggedInUser = { id: null, name: "Alex", phone: "+255 764 519 027" };
     const whatsappPhone = "255764519027";
     
     // Persistent Storage State Hydration
     let completedOrdersCount = parseInt(localStorage.getItem('appearich_loyalty_count')) || 0;
-    let activeOrders = JSON.parse(localStorage.getItem('appearich_active_orders')) || [];
-    let completedHistory = JSON.parse(localStorage.getItem('appearich_completed_history')) || [];
+    let activeOrders = [];
+    let completedHistory = [];
+    
+    try {
+      activeOrders = JSON.parse(localStorage.getItem('appearich_active_orders')) || [];
+      completedHistory = JSON.parse(localStorage.getItem('appearich_completed_history')) || [];
+    } catch(e) {
+      console.warn("Storage load fallbacks:", e);
+    }
     
     let selectedPerfumeSize = "30ml (25,000/= TZS)";
     let animationLock = false;
@@ -1175,22 +1216,25 @@
     let surchargePercent = 25;
     let selectedPaymentType = 'cash';
     let selectedFoodItems = [];
+
     window.addEventListener('DOMContentLoaded', async () => {
-      // Hide Splash Screen after 2 seconds
-      setTimeout(() => {
-        const splash = document.getElementById('appSplashScreen');
-        if (splash) splash.classList.add('hidden');
-      }, 2000);
-      // Check for active Supabase user session
+      hideSplashScreen();
+      
+      // Check Supabase Auth safely
       if (supabase) {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session && session.user) {
-          loggedInUser.id = session.user.id;
-          loggedInUser.name = session.user.user_metadata?.name || session.user.email.split('@')[0];
-          loggedInUser.phone = session.user.user_metadata?.phone || loggedInUser.phone;
-          await fetchUserOrdersFromSupabase();
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session && session.user) {
+            loggedInUser.id = session.user.id;
+            loggedInUser.name = session.user.user_metadata?.name || session.user.email.split('@')[0];
+            loggedInUser.phone = session.user.user_metadata?.phone || loggedInUser.phone;
+            await fetchUserOrdersFromSupabase();
+          }
+        } catch(err) {
+          console.warn('Auth check fallback:', err);
         }
       }
+
       document.getElementById('heroGreeting').innerText = `Welcome, ${loggedInUser.name}!`;
       document.getElementById('profName').innerText = loggedInUser.name;
       document.getElementById('profAvatar').innerText = loggedInUser.name.charAt(0).toUpperCase();
@@ -1203,9 +1247,8 @@
       renderHistory();
       renderSelectedItems();
     });
-    /* ==========================================================================
-       SUPABASE DATA HELPERS
-       ========================================================================== */
+
+    /* DATA & INTERACTION FUNCTIONS */
     async function fetchUserOrdersFromSupabase() {
       if (!supabase || !loggedInUser.id) return;
       try {
@@ -1222,9 +1265,10 @@
           saveStateToLocalStorage();
         }
       } catch (err) {
-        console.warn('Supabase order sync error (using local storage fallback):', err.message);
+        console.warn('Supabase sync warning:', err.message);
       }
     }
+
     async function saveOrderToSupabase(orderData) {
       if (!supabase || !loggedInUser.id) return;
       try {
@@ -1239,16 +1283,14 @@
           }
         ]);
       } catch (err) {
-        console.warn('Supabase save error (saved locally):', err.message);
+        console.warn('Supabase save error:', err.message);
       }
     }
-    /* ==========================================================================
-       LOGOUT HANDLER
-       ========================================================================== */
+
     async function handleLogout() {
       if (confirm("Are you sure you want to log out of APPEARICH?")) {
         if (supabase) {
-          await supabase.auth.signOut();
+          try { await supabase.auth.signOut(); } catch(e){}
         }
         localStorage.removeItem('appearich_active_orders');
         localStorage.removeItem('appearich_completed_history');
@@ -1257,14 +1299,13 @@
         location.reload();
       }
     }
-    /* ==========================================================================
-       CORE APP & UI LOGIC
-       ========================================================================== */
+
     function saveStateToLocalStorage() {
       localStorage.setItem('appearich_loyalty_count', completedOrdersCount);
       localStorage.setItem('appearich_active_orders', JSON.stringify(activeOrders));
       localStorage.setItem('appearich_completed_history', JSON.stringify(completedHistory));
     }
+
     function loadSavedUserLocation() {
       const savedBlock = localStorage.getItem('appearich_user_block');
       const savedRoom = localStorage.getItem('appearich_user_room');
@@ -1274,17 +1315,19 @@
         document.getElementById('locSavedTag').innerText = "(Auto-Filled)";
       }
     }
+
     function toggleTheme() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const icon = document.querySelector('#themeToggleBtn i');
-      if (currentTheme === 'dark') {
+      if (currentTheme === 'light') {
         document.documentElement.removeAttribute('data-theme');
-        icon.className = 'fa-solid fa-moon';
-      } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
         icon.className = 'fa-solid fa-sun';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        icon.className = 'fa-solid fa-moon';
       }
     }
+
     function switchTab(screenId, element) {
       document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1292,26 +1335,31 @@
       if (targetScreen) targetScreen.classList.add('active');
       if (element) element.classList.add('active');
     }
+
     function goBack() {
       const homeBtn = document.getElementById('nav-home-btn');
       switchTab('screen-home', homeBtn);
     }
+
     function openHotMealsModal() { 
       loadSavedUserLocation();
       renderSelectedItems();
       document.getElementById('hotMealsModal').classList.add('active'); 
     }
+
     function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
     function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
     function openProductModal(name) {
       document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
       openOrderModal();
     }
+
     function selectPerfumeSize(el, sizePrice) {
       document.querySelectorAll('#perfumesModal .price-card').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
       selectedPerfumeSize = sizePrice;
     }
+
     function selectPaymentMethod(type) {
       selectedPaymentType = type;
       const btnCash = document.getElementById('payOptCash');
@@ -1327,6 +1375,7 @@
         unfoldBox.classList.remove('active');
       }
     }
+
     function addItemToOrder(name, unitPrice) {
       const existing = selectedFoodItems.find(item => item.name === name);
       if (existing) {
@@ -1336,6 +1385,7 @@
       }
       renderSelectedItems();
     }
+
     function updateItemQty(index, newQty) {
       const qty = parseInt(newQty) || 1;
       if (qty <= 0) {
@@ -1345,10 +1395,12 @@
       }
       renderSelectedItems();
     }
+
     function removeItem(index) {
       selectedFoodItems.splice(index, 1);
       renderSelectedItems();
     }
+
     function renderSelectedItems() {
       const container = document.getElementById('selectedItemsContainer');
       if (selectedFoodItems.length === 0) {
@@ -1369,6 +1421,7 @@
       }
       recalculateMealTotal();
     }
+
     function recalculateMealTotal() {
       calculatedSubtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
       const currentHour = new Date().getHours();
@@ -1386,6 +1439,7 @@
       document.getElementById('displaySurcharge').innerText = calculatedSurcharge.toLocaleString() + " TZS";
       document.getElementById('displayGrandTotal').innerText = calculatedGrandTotal.toLocaleString() + " TZS";
     }
+
     function submitFoodOrder() {
       if (selectedFoodItems.length === 0) {
         alert("Please select at least one item before placing your order!");
@@ -1449,6 +1503,7 @@
       renderBookings();
       simulateVerification(newOrder.id);
     }
+
     function submitPerfumeOrder() {
       const desc = document.getElementById('perfumeDesc').value.trim();
       if (!desc) {
@@ -1459,6 +1514,7 @@
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       closeSheet('perfumesModal');
     }
+
     function simulateVerification(orderId) {
       setTimeout(() => {
         const orderIdx = activeOrders.findIndex(o => o.id === orderId);
@@ -1480,6 +1536,7 @@
         }
       }, 3500);
     }
+
     function renderBookings() {
       const container = document.getElementById('bookingsListContainer');
       if (activeOrders.length === 0) {
@@ -1507,6 +1564,7 @@
         </div>
       `).join('');
     }
+
     function renderHistory() {
       const container = document.getElementById('historyListContainer');
       if (completedHistory.length === 0) {
@@ -1525,6 +1583,7 @@
         </div>
       `).join('');
     }
+
     function updateLoyaltyUI() {
       document.getElementById('loyaltyCountBadge').innerText = `${completedOrdersCount} / 5 Orders`;
       const stamps = document.querySelectorAll('.stamp-dot');
@@ -1533,6 +1592,7 @@
         else stamp.classList.remove('filled');
       });
     }
+
     function sendCustomInquiry() {
       const val = document.getElementById('customInquiryInput').value.trim();
       if (!val) return;
@@ -1540,7 +1600,9 @@
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       document.getElementById('customInquiryInput').value = '';
     }
+
     function triggerQuickReorder() { openHotMealsModal(); }
+
     function igniteTeaserToast() {
       if (animationLock) return;
       animationLock = true;
