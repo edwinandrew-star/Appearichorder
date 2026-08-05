@@ -4,10 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>APPEARICH - Premium Service & Scent Hub</title>
-  
-  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
   <!-- Supabase JS Client Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -15,23 +12,6 @@
        THEME VARIABLES & GLOBAL RESET
        ========================================================================== */
     :root {
-      --bg-color: #0d0d0d;
-      --card-bg: #181818;
-      --card-bg-sub: #141414;
-      --card-border: #282828;
-      --text-main: #ffffff;
-      --text-sub: #aaaaaa;
-      --accent-gold: #FFD700;
-      --accent-gold-light: rgba(255, 215, 0, 0.15);
-      --nav-bg: #111111;
-      --nav-border: #222222;
-      --input-bg: #000000;
-      --input-border: #333333;
-      --modal-bg: #141414;
-      --overlay-bg: rgba(0, 0, 0, 0.85);
-      --shadow-color: rgba(0, 0, 0, 0.5);
-    }
-    [data-theme="light"] {
       --bg-color: #f8f9fa;
       --card-bg: #ffffff;
       --card-bg-sub: #f1f3f5;
@@ -47,6 +27,23 @@
       --modal-bg: #ffffff;
       --overlay-bg: rgba(0, 0, 0, 0.5);
       --shadow-color: rgba(0, 0, 0, 0.08);
+    }
+    [data-theme="dark"] {
+      --bg-color: #0d0d0d;
+      --card-bg: #181818;
+      --card-bg-sub: #141414;
+      --card-border: #282828;
+      --text-main: #ffffff;
+      --text-sub: #aaaaaa;
+      --accent-gold: #FFD700;
+      --accent-gold-light: rgba(255, 215, 0, 0.15);
+      --nav-bg: #111111;
+      --nav-border: #222222;
+      --input-bg: #000000;
+      --input-border: #333333;
+      --modal-bg: #141414;
+      --overlay-bg: rgba(0, 0, 0, 0.85);
+      --shadow-color: rgba(0, 0, 0, 0.5);
     }
     * {
       box-sizing: border-box;
@@ -67,39 +64,6 @@
       padding-bottom: 80px;
       overflow-x: hidden;
     }
-
-    /* SPLASH / STARTUP SCREEN FIXED */
-    .splash-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: #0d0d0d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 99999;
-      opacity: 1;
-      visibility: visible;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
-    }
-    .splash-screen.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-    .splash-logo {
-      max-width: 180px;
-      height: auto;
-      animation: pulseLogo 1.5s infinite ease-in-out;
-    }
-    @keyframes pulseLogo {
-      0%, 100% { transform: scale(1); opacity: 0.9; }
-      50% { transform: scale(1.08); opacity: 1; }
-    }
-
-    /* MAIN APP SCREENS */
     .app-screen {
       display: none;
       width: 100%;
@@ -115,8 +79,6 @@
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    /* APP HEADER */
     .app-header {
       position: fixed;
       top: 0;
@@ -141,18 +103,25 @@
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      display: flex;
+      display: flex !important;
       align-items: center;
       justify-content: center;
       font-size: 1rem;
       cursor: pointer;
     }
     .brand-logo-wrap { display: flex; align-items: center; gap: 10px; }
-    .brand-logo-img-custom {
+    .brand-logo-img {
       width: 42px;
       height: 42px;
-      object-fit: contain;
-      border-radius: 8px;
+      border-radius: 10px;
+      background: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #000;
+      font-size: 1.2rem;
+      border: 2px solid var(--accent-gold);
     }
     .brand-name { font-size: 1.8rem; font-weight: 900; letter-spacing: 1px; }
     .brand-name .logo-appea { color: var(--text-main); }
@@ -404,8 +373,7 @@
       margin-bottom: 16px;
     }
     .sheet-title { font-size: 1.4rem; font-weight: 900; color: var(--text-main); text-align: center; }
-    .sheet-subtitle { font-size: 0.82rem; color: var(--text-sub); text-align: center; margin-bottom: 16px; }
-    
+    /* Vertical-Scroll Food Selection Grid */
     .food-selection-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -428,7 +396,10 @@
       flex-direction: column;
       justify-content: flex-end;
     }
-    .food-selection-card:active { transform: scale(0.97); }
+    .food-selection-card.selected {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 10px var(--accent-gold-light);
+    }
     .food-selection-card img {
       position: absolute;
       inset: 0;
@@ -449,7 +420,7 @@
     }
     .food-name-text { font-size: 0.82rem; font-weight: 800; color: #ffffff; }
     .food-price-text { font-size: 0.72rem; color: var(--accent-gold); font-weight: 700; }
-    
+    /* Selected Items Vertical List */
     .selected-items-box {
       background: var(--card-bg-sub);
       border: 1px solid var(--card-border);
@@ -476,16 +447,6 @@
       color: var(--text-main);
       font-weight: bold;
       text-align: center;
-    }
-    .night-tag {
-      background: #e74c3c;
-      color: #fff;
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-left: 4px;
-      text-transform: uppercase;
     }
     .calculation-summary-box {
       background: var(--card-bg-sub);
@@ -527,7 +488,7 @@
     .form-group input:focus, .form-group textarea:focus { border-color: var(--accent-gold); }
     .form-group textarea { height: 65px; resize: none; }
     .saved-loc-badge { font-size: 0.72rem; color: var(--accent-gold); font-weight: bold; margin-left: 4px; }
-    
+    /* Payment Styles */
     .payment-selection-box {
       background: var(--card-bg-sub);
       border: 1.5px solid var(--card-border);
@@ -574,7 +535,6 @@
     }
     .mobile-unfold-box.active { display: block; }
     .lipa-tag { background: var(--accent-gold); color: #000; font-weight: 900; padding: 2px 6px; border-radius: 6px; }
-    
     .submit-order-btn {
       width: 100%;
       background: #25D366;
@@ -592,6 +552,25 @@
       gap: 8px;
       margin-top: 8px;
     }
+    .logout-btn {
+      width: 100%;
+      background: #dc3545;
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+      margin-bottom: 30px;
+      transition: background 0.2s ease;
+    }
+    .logout-btn:hover { background: #c82333; }
     .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
     .price-card {
       background: var(--input-bg);
@@ -605,7 +584,6 @@
     .price-card:hover, .price-card.active { border-color: var(--accent-gold); background: var(--accent-gold-light); }
     .size-title { font-size: 0.8rem; color: var(--text-main); font-weight: bold; }
     .size-price { font-size: 0.75rem; font-weight: bold; color: var(--accent-gold); margin-top: 2px; }
-    
     .loyalty-card {
       background: var(--card-bg);
       border: 1.5px solid var(--accent-gold);
@@ -632,7 +610,6 @@
       font-weight: 800;
     }
     .stamp-dot.filled { background: var(--accent-gold); border-style: solid; border-color: var(--accent-gold); color: #000; }
-    
     .ai-screen-wrap {
       text-align: center;
       display: flex;
@@ -727,7 +704,6 @@
       font-size: 1.1rem;
       flex-shrink: 0;
     }
-    
     .order-card-track {
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
@@ -742,7 +718,6 @@
     .status-badge.pending { background: rgba(255, 193, 7, 0.15); color: #d97706; border: 1px solid #d97706; }
     .status-badge.verified { background: rgba(40, 167, 69, 0.15); color: #28a745; border: 1px solid #28a745; }
     .track-details p { font-size: 0.82rem; color: var(--text-sub); margin-bottom: 4px; }
-    
     .profile-header-card {
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
@@ -784,8 +759,6 @@
       margin-bottom: 20px;
       text-decoration: none;
     }
-    
-    /* BOTTOM NAVIGATION */
     .bottom-nav {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -812,33 +785,26 @@
     }
     .nav-item i { font-size: 1.3rem; }
     .nav-item.active { color: var(--accent-gold); }
-    .nav-item.logout-item { color: #e74c3c; }
   </style>
 </head>
 <body>
-  <!-- STARTUP / SPLASH SCREEN OVERLAY -->
-  <div id="appSplashScreen" class="splash-screen">
-    <img src="images/appearich-logo.png" alt="APPEARICH" class="splash-logo">
-  </div>
-
-  <!-- FIXED HEADER -->
+  <!-- FIXED Header -->
   <header class="app-header">
     <div class="header-left">
       <button id="globalBackBtn" class="back-btn" onclick="goBack()" title="Back to Home">
         <i class="fa-solid fa-arrow-left"></i>
       </button>
       <div class="brand-logo-wrap">
-        <img src="images/appearich-logo1.png" alt="APPEARICH" class="brand-logo-img-custom">
+        <div class="brand-logo-img">A</div>
         <div class="brand-name">
           <span class="logo-appea">APPEA</span><span class="logo-rich">RICH</span>
         </div>
       </div>
     </div>
     <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Switch Light/Dark Mode">
-      <i class="fa-solid fa-sun"></i>
+      <i class="fa-solid fa-moon"></i>
     </button>
   </header>
-
   <!-- SCREEN 1: HOME -->
   <div id="screen-home" class="app-screen active">
     <div class="hero-banner">
@@ -884,7 +850,6 @@
       <button class="reorder-btn" onclick="triggerQuickReorder()">Reorder</button>
     </div>
   </div>
-
   <!-- SCREEN 2: PERFUMES -->
   <div id="screen-perfumes" class="app-screen">
     <div class="section-title">
@@ -949,7 +914,6 @@
       </button>
     </div>
   </div>
-
   <!-- SCREEN 4: BOOKINGS -->
   <div id="screen-bookings" class="app-screen">
     <div class="section-title">
@@ -957,7 +921,6 @@
     </div>
     <div id="bookingsListContainer"></div>
   </div>
-
   <!-- SCREEN 5: PROFILE -->
   <div id="screen-profile" class="app-screen">
     <div class="profile-header-card">
@@ -986,8 +949,12 @@
       <i class="fa-solid fa-history" style="color:var(--accent-gold);"></i> Order History
     </div>
     <div id="historyListContainer"></div>
-  </div>
 
+    <!-- LOGOUT BUTTON AT THE BOTTOM -->
+    <button class="logout-btn" onclick="handleLogout()">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </button>
+  </div>
   <!-- HOT MEALS MODAL -->
   <div id="hotMealsModal" class="modal-overlay">
     <div class="sheet-content full-screen">
@@ -999,7 +966,7 @@
       <div style="font-size: 0.82rem; font-weight:800; color:var(--text-main); margin-bottom:4px;">
         <i class="fa-solid fa-plus-circle" style="color:var(--accent-gold);"></i> Tap to Add Available Items:
       </div>
-      
+      <!-- Item Options Grid (Horizontal to Vertical Grid) -->
       <div class="food-selection-grid">
         <div class="food-selection-card" onclick="addItemToOrder('Chipsi Mayai', 3000)">
           <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" alt="Chipsi Mayai">
@@ -1044,13 +1011,16 @@
           </div>
         </div>
       </div>
+      <!-- Vertical Dynamic Selected List Container -->
       <div id="selectedItemsContainer" class="selected-items-box">
         <p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet. Click an item above to add to order.</p>
       </div>
+      <!-- Single Overall Order Description Textarea -->
       <div class="form-group">
         <label for="mealDetails">Overall Order Description / Special Instructions:</label>
         <textarea id="mealDetails" placeholder="Describe your full meal request (e.g., extra chili, salt level, soft chips, specific soda flavor)..."></textarea>
       </div>
+      <!-- Summary Box -->
       <div class="calculation-summary-box">
         <div class="calc-row">
           <span>Items Subtotal:</span>
@@ -1068,6 +1038,7 @@
           <strong id="displayGrandTotal" style="color:var(--accent-gold);">0 TZS</strong>
         </div>
       </div>
+      <!-- Location Inputs -->
       <div class="form-row">
         <div class="form-group">
           <label for="mealBlockLoc">Block / Location: <span id="locSavedTag" class="saved-loc-badge"></span></label>
@@ -1083,6 +1054,7 @@
         <label for="mealPhoneNum">Contact Phone Number:</label>
         <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
       </div>
+      <!-- Payment Selector -->
       <div class="payment-selection-box">
         <label style="font-size:0.82rem; font-weight:800; color:var(--text-main);">Select Payment Method:</label>
         <div class="payment-options-grid">
@@ -1095,6 +1067,7 @@
             <span>Mobile Money</span>
           </div>
         </div>
+        <!-- Mobile Money Dynamic Unfold Area -->
         <div id="mobileUnfoldArea" class="mobile-unfold-box">
           <p style="font-size:0.82rem; color:var(--text-main); line-height:1.4; margin-bottom:10px;">
             Pay via Voda Lipa Namba: <span class="lipa-tag">37247619</span><br>
@@ -1106,12 +1079,12 @@
           </div>
         </div>
       </div>
+      <!-- WhatsApp Order Button -->
       <button id="submitMealBtn" class="submit-order-btn" onclick="submitFoodOrder()">
         <i class="fa-brands fa-whatsapp"></i> Send Order via WhatsApp
       </button>
     </div>
   </div>
-
   <!-- PERFUME ORDER MODAL -->
   <div id="perfumesModal" class="modal-overlay">
     <div class="sheet-content">
@@ -1142,7 +1115,6 @@
       </button>
     </div>
   </div>
-
   <!-- BOTTOM NAVIGATION -->
   <nav class="bottom-nav">
     <button id="nav-home-btn" class="nav-item active" onclick="switchTab('screen-home', this)">
@@ -1161,53 +1133,43 @@
       <i class="fa-solid fa-user"></i>
       <span>Profile</span>
     </button>
-    <button class="nav-item logout-item" onclick="handleLogout()">
-      <i class="fa-solid fa-right-from-bracket"></i>
-      <span>Logout</span>
-    </button>
   </nav>
-
-  <!-- FAILSAFE LOGIC SCRIPT -->
+  <!-- LOGIC SCRIPT -->
   <script>
-    // Robust Hide Splash Helper
-    function hideSplashScreen() {
-      const splash = document.getElementById('appSplashScreen');
-      if (splash && !splash.classList.contains('hidden')) {
-        splash.classList.add('hidden');
-      }
-    }
-
-    // Direct Safety Timer (Guarantees Splash Screen hides even if errors occur)
-    setTimeout(hideSplashScreen, 1500);
-
-    /* SUPABASE CONFIGURATION */
-    const SUPABASE_URL = "https://zudqubbglwphfxaviqsg.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE";
+    /* ==========================================================================
+       SUPABASE INITIALIZATION & ACTIVITY LOGGER
+       ========================================================================== */
+    const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
     
-    let supabase = null;
-    try {
-      if (window.supabase && typeof window.supabase.createClient === 'function') {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Create Supabase Client instance
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Global Activity Logging Helper
+    async function logActivity(actionType, details = {}) {
+      try {
+        const payload = {
+          user_name: loggedInUser.name,
+          user_phone: loggedInUser.phone,
+          action: actionType,
+          details: details,
+          created_at: new Date().toISOString()
+        };
+        const { error } = await supabaseClient.from('activity_logs').insert([payload]);
+        if (error) console.error("Supabase Log Error:", error);
+      } catch (err) {
+        console.warn("Failed to log activity to Supabase:", err);
       }
-    } catch(e) {
-      console.warn("Supabase init bypassed:", e);
     }
 
-    let loggedInUser = { id: null, name: "Alex", phone: "+255 764 519 027" };
+    /* ==========================================================================
+       APP GLOBAL VARIABLES
+       ========================================================================== */
+    const loggedInUser = { name: "Alex", phone: "+255 764 519 027" };
     const whatsappPhone = "255764519027";
-    
-    // Persistent Storage State Hydration
-    let completedOrdersCount = parseInt(localStorage.getItem('appearich_loyalty_count')) || 0;
+    let completedOrdersCount = 0;
     let activeOrders = [];
     let completedHistory = [];
-    
-    try {
-      activeOrders = JSON.parse(localStorage.getItem('appearich_active_orders')) || [];
-      completedHistory = JSON.parse(localStorage.getItem('appearich_completed_history')) || [];
-    } catch(e) {
-      console.warn("Storage load fallbacks:", e);
-    }
-    
     let selectedPerfumeSize = "30ml (25,000/= TZS)";
     let animationLock = false;
     let calculatedSubtotal = 0;
@@ -1217,24 +1179,7 @@
     let selectedPaymentType = 'cash';
     let selectedFoodItems = [];
 
-    window.addEventListener('DOMContentLoaded', async () => {
-      hideSplashScreen();
-      
-      // Check Supabase Auth safely
-      if (supabase) {
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session && session.user) {
-            loggedInUser.id = session.user.id;
-            loggedInUser.name = session.user.user_metadata?.name || session.user.email.split('@')[0];
-            loggedInUser.phone = session.user.user_metadata?.phone || loggedInUser.phone;
-            await fetchUserOrdersFromSupabase();
-          }
-        } catch(err) {
-          console.warn('Auth check fallback:', err);
-        }
-      }
-
+    window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('heroGreeting').innerText = `Welcome, ${loggedInUser.name}!`;
       document.getElementById('profName').innerText = loggedInUser.name;
       document.getElementById('profAvatar').innerText = loggedInUser.name.charAt(0).toUpperCase();
@@ -1244,67 +1189,11 @@
       loadSavedUserLocation();
       updateLoyaltyUI();
       renderBookings();
-      renderHistory();
       renderSelectedItems();
+
+      // Log App Launch / Session Start to Supabase
+      logActivity("app_opened", { timestamp: new Date().toLocaleString() });
     });
-
-    /* DATA & INTERACTION FUNCTIONS */
-    async function fetchUserOrdersFromSupabase() {
-      if (!supabase || !loggedInUser.id) return;
-      try {
-        const { data, error } = await supabase
-          .from('orders')
-          .select('*')
-          .eq('user_id', loggedInUser.id)
-          .order('created_at', { ascending: false });
-        if (error) throw error;
-        if (data) {
-          activeOrders = data.filter(o => o.status !== 'delivered');
-          completedHistory = data.filter(o => o.status === 'delivered');
-          completedOrdersCount = completedHistory.length;
-          saveStateToLocalStorage();
-        }
-      } catch (err) {
-        console.warn('Supabase sync warning:', err.message);
-      }
-    }
-
-    async function saveOrderToSupabase(orderData) {
-      if (!supabase || !loggedInUser.id) return;
-      try {
-        await supabase.from('orders').insert([
-          {
-            user_id: loggedInUser.id,
-            order_id: orderData.id,
-            title: orderData.title,
-            details: orderData.details,
-            location: orderData.location,
-            status: orderData.status
-          }
-        ]);
-      } catch (err) {
-        console.warn('Supabase save error:', err.message);
-      }
-    }
-
-    async function handleLogout() {
-      if (confirm("Are you sure you want to log out of APPEARICH?")) {
-        if (supabase) {
-          try { await supabase.auth.signOut(); } catch(e){}
-        }
-        localStorage.removeItem('appearich_active_orders');
-        localStorage.removeItem('appearich_completed_history');
-        localStorage.removeItem('appearich_loyalty_count');
-        alert("You have logged out successfully.");
-        location.reload();
-      }
-    }
-
-    function saveStateToLocalStorage() {
-      localStorage.setItem('appearich_loyalty_count', completedOrdersCount);
-      localStorage.setItem('appearich_active_orders', JSON.stringify(activeOrders));
-      localStorage.setItem('appearich_completed_history', JSON.stringify(completedHistory));
-    }
 
     function loadSavedUserLocation() {
       const savedBlock = localStorage.getItem('appearich_user_block');
@@ -1319,13 +1208,16 @@
     function toggleTheme() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const icon = document.querySelector('#themeToggleBtn i');
-      if (currentTheme === 'light') {
+      let newTheme = 'light';
+      if (currentTheme === 'dark') {
         document.documentElement.removeAttribute('data-theme');
-        icon.className = 'fa-solid fa-sun';
-      } else {
-        document.documentElement.setAttribute('data-theme', 'light');
         icon.className = 'fa-solid fa-moon';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        icon.className = 'fa-solid fa-sun';
+        newTheme = 'dark';
       }
+      logActivity("toggle_theme", { theme: newTheme });
     }
 
     function switchTab(screenId, element) {
@@ -1334,6 +1226,8 @@
       const targetScreen = document.getElementById(screenId);
       if (targetScreen) targetScreen.classList.add('active');
       if (element) element.classList.add('active');
+
+      logActivity("navigate_screen", { target_screen: screenId });
     }
 
     function goBack() {
@@ -1345,10 +1239,16 @@
       loadSavedUserLocation();
       renderSelectedItems();
       document.getElementById('hotMealsModal').classList.add('active'); 
+      logActivity("open_modal", { modal_name: "Hot Meals" });
     }
 
-    function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
+    function openOrderModal() { 
+      document.getElementById('perfumesModal').classList.add('active'); 
+      logActivity("open_modal", { modal_name: "Perfume Order" });
+    }
+
     function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
+
     function openProductModal(name) {
       document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
       openOrderModal();
@@ -1360,6 +1260,7 @@
       selectedPerfumeSize = sizePrice;
     }
 
+    // Payment Selection Toggle
     function selectPaymentMethod(type) {
       selectedPaymentType = type;
       const btnCash = document.getElementById('payOptCash');
@@ -1376,6 +1277,7 @@
       }
     }
 
+    // Dynamic Food Addition
     function addItemToOrder(name, unitPrice) {
       const existing = selectedFoodItems.find(item => item.name === name);
       if (existing) {
@@ -1467,7 +1369,6 @@
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
       const itemsSummaryText = selectedFoodItems.map(i => `${i.name} (${i.qty}x @ ${i.unitPrice.toLocaleString()} TZS)`).join("\n• ");
-      
       let paymentDetailsMsg = selectedPaymentType === 'cash' 
         ? `💵 *Payment Method:* Cash / Cash on Delivery` 
         : `💳 *Payment Method:* Mobile Money (Lipa Namba 37247619 - Edwin Andrew)\n👤 *Jina la Namba iliyotumika:* ${payer}`;
@@ -1485,6 +1386,16 @@
         `${paymentDetailsMsg}\n` +
         `⏰ *Time Placed:* ${currentTime}\n` +
         `----------------------------------------`;
+      
+      // Log Meal Order Activity to Supabase
+      logActivity("place_meal_order", {
+        order_id: orderId,
+        items: selectedFoodItems,
+        grand_total: calculatedGrandTotal,
+        payment_method: selectedPaymentType,
+        location: `${block}, Room ${room}`
+      });
+
       window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`, '_blank');
       const newOrder = {
         id: orderId,
@@ -1495,9 +1406,6 @@
         timestamp: currentTime
       };
       activeOrders.unshift(newOrder);
-      saveStateToLocalStorage();
-      saveOrderToSupabase(newOrder);
-      
       selectedFoodItems = [];
       closeSheet('hotMealsModal');
       renderBookings();
@@ -1510,6 +1418,13 @@
         alert("Please enter a perfume name or describe the scent you want!");
         return;
       }
+
+      // Log Perfume Order Activity to Supabase
+      logActivity("place_perfume_order", {
+        size: selectedPerfumeSize,
+        description: desc
+      });
+
       const msg = encodeURIComponent(`Hi APPEARICH! I would like to place an order:\n\n- Preferred Size: ${selectedPerfumeSize}\n- Perfume Details: "${desc}"`);
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       closeSheet('perfumesModal');
@@ -1520,18 +1435,19 @@
         const orderIdx = activeOrders.findIndex(o => o.id === orderId);
         if (orderIdx !== -1) {
           activeOrders[orderIdx].status = "verified";
-          saveStateToLocalStorage();
           renderBookings();
+
+          logActivity("order_status_verified", { order_id: orderId });
+
           setTimeout(() => {
             const verifiedItem = activeOrders.splice(orderIdx, 1)[0];
-            verifiedItem.status = "delivered";
             completedHistory.unshift(verifiedItem);
             completedOrdersCount++;
-            
-            saveStateToLocalStorage();
             updateLoyaltyUI();
             renderBookings();
             renderHistory();
+
+            logActivity("order_delivered", { order_id: orderId });
           }, 3000);
         }
       }, 3500);
@@ -1596,22 +1512,40 @@
     function sendCustomInquiry() {
       const val = document.getElementById('customInquiryInput').value.trim();
       if (!val) return;
+
+      logActivity("send_custom_inquiry", { query: val });
+
       const msg = encodeURIComponent(`Hi APPEARICH! Custom Inquiry: "${val}"`);
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       document.getElementById('customInquiryInput').value = '';
     }
 
-    function triggerQuickReorder() { openHotMealsModal(); }
+    function triggerQuickReorder() { 
+      logActivity("trigger_quick_reorder");
+      openHotMealsModal(); 
+    }
 
     function igniteTeaserToast() {
       if (animationLock) return;
       animationLock = true;
+      logActivity("ai_guide_explore_clicked");
       const toast = document.getElementById("soonToast");
       toast.classList.add("trigger-fly");
       setTimeout(() => {
         toast.classList.remove("trigger-fly");
         animationLock = false;
       }, 3500);
+    }
+
+    /* Logout Action Handler */
+    async function handleLogout() {
+      if (confirm("Are you sure you want to log out?")) {
+        await logActivity("user_logout", { timestamp: new Date().toISOString() });
+        // Perform Supabase auth signout if auth is enabled
+        await supabaseClient.auth.signOut();
+        alert("You have logged out successfully.");
+        location.reload();
+      }
     }
   </script>
 </body>
