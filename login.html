@@ -44,34 +44,73 @@
         const SUPABASE_URL = 'https://zudqubbglwphfxaviqsg.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE';
         
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Initialize Supabase safely with local storage persistence fallback
+        let supabaseClient = null;
+        try {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+                auth: {
+                    persistSession: true,
+                    autoRefreshToken: true,
+                    detectSessionInUrl: true
+                }
+            });
+        } catch (e) {
+            console.error('Supabase initialization error:', e);
+        }
 
         window.onload = async function () {
+            let redirected = false;
+
+            const proceed = (targetUrl) => {
+                if (redirected) return;
+                redirected = true;
+                window.location.href = targetUrl;
+            };
+
+            // Safety timeout: If Supabase takes too long (e.g. offline or network issue), fallback to login after 3 seconds
+            const safetyTimer = setTimeout(() => {
+                proceed('login.html');
+            }, 3000);
+
             try {
-                // Check if an active session exists in Supabase
-                const { data: { session }, error } = await supabaseClient.auth.getSession();
+                if (!supabaseClient) {
+                    clearTimeout(safetyTimer);
+                    proceed('login.html');
+                    return;
+                }
+
+                // Check active session
+                const { data, error } = await supabaseClient.auth.getSession();
                 
-                setTimeout(function () {
-                    if (session) {
-                        // User is logged in, redirect to home screen
-                        window.location.href = 'home.html';
-                    } else {
-                        // No active session, redirect to login screen
-                        window.location.href = 'login.html';
+                clearTimeout(safetyTimer);
+
+                setTimeout(() => {
+                    if (error) {
+                        console.error('Session error:', error);
+                        proceed('login.html');
+                        return;
                     }
-                }, 2000); // 2-second splash screen duration
+
+                    if (data && data.session) {
+                        // User is logged in -> Home screen
+                        proceed('home.html');
+                    } else {
+                        // No session -> Login screen
+                        proceed('login.html');
+                    }
+                }, 1000); // Ensures logo shows for at least 1 second
+
             } catch (err) {
+                clearTimeout(safetyTimer);
                 console.error('Auth check failed:', err);
-                // Fallback to login on error
-                setTimeout(function () {
-                    window.location.href = 'login.html';
-                }, 2000);
+                proceed('login.html');
             }
         };
         
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
-            .then(() => console.log('Service Worker Registered'));
+            .then(() => console.log('Service Worker Registered'))
+            .catch(err => console.log('Service Worker Registration Failed', err));
         }
     </script>
 </body>
