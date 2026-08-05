@@ -16,23 +16,13 @@
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         
         /* App container now fills the entire viewport */
-        .app { width: 100vw; height: 100vh; background: #ffffff; position: relative; overflow: hidden; }
+        .app { width: 100vw; height: 100vh; background: #000000; position: relative; overflow: hidden; }
         
         .screen { position: absolute; width: 100%; height: 100%; display: none; padding: 25px; overflow-y: auto; }
         .screen.active { display: flex; flex-direction: column; justify-content: flex-start; }
-        #logoScreen { background: #000000; justify-content: center; align-items: center; }
+        #logoScreen { background: #000000; justify-content: center; align-items: center; display: flex; }
         .logo { display: flex; justify-content: center; align-items: center; width: 100%; }
         .logo img { width: 100%; max-width: 280px; height: auto; object-fit: contain; }
-        .card { background: #ffffff; padding: 15px 5px; width: 100%; margin-bottom: 20px; }
-        .card h1 { font-size: 26px; text-align: center; color: #111111; font-weight: 800; margin-bottom: 12px; }
-        .subtitle { font-size: 14px; color: #555555; text-align: center; margin-bottom: 25px; line-height: 1.5; }
-        .section-title { font-size: 13px; font-weight: 700; color: #111111; margin: 24px 0 10px 0; text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 2px solid #FFD700; padding-bottom: 4px; width: fit-content; }
-        .feature { animation: popup .6s cubic-bezier(0.25, 1, 0.5, 1) forwards; background: #fdfdfd; padding: 16px; margin: 12px 0; border-radius: 18px; font-size: 14px; color: #333333; border-left: 4px solid #FFD700; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04); }
-        .magic-box { background: linear-gradient(135deg, #111111 0%, #222222 100%); padding: 20px; border-radius: 18px; margin: 15px 0; color: #eeeeee; }
-        .magic-box blockquote { font-weight: 700; color: #FFD700; border-left: 3px solid #FFD700; padding-left: 10px; }
-        .btn { width: 100%; padding: 18px; border: none; background: #111111; color: #FFD700; border-radius: 18px; font-weight: 800; font-size: 16px; margin-top: 20px; cursor: pointer; }
-        .btn-alt { background: #FFD700; color: #111111; }
-        @keyframes popup { to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 
@@ -43,33 +33,13 @@
                 <img src="images/appearich-logo.png" alt="Appearich Logo">
             </div>
         </div>
-
-        <div id="aboutScreen" class="screen">
-            <div class="card">
-                <h1>📱 Welcome to Appearich</h1>
-                <div class="subtitle">Appearich helps you discover amazing places, check local prices, and break the language barrier.</div>
-
-                <div class="section-title">✨ What We Do</div>
-                <div class="feature"><strong>🗺️ Discover Amazing Places:</strong> Tell us what you're looking for, and we'll recommend the best places.</div>
-                <div class="feature"><strong>💰 Check Local Prices:</strong> Check standard local rates before buying goods or taking a taxi.</div>
-                <div class="feature"><strong>🗣️ Translate to Swahili:</strong> Communicate effortlessly with locals using instant translations.</div>
-
-                <div class="section-title">⚡ Live WhatsApp Support</div>
-                <div class="magic-box">
-                    <blockquote>Get Local Help Anytime</blockquote>
-                    <p>Need help while exploring? Chat with our team on WhatsApp for quick answers and reliable local assistance.</p>
-                </div>
-
-                <button class="btn btn-alt" onclick="window.location.href='login.html'">Continue</button>
-            </div>
-        </div>
     </div>
 
     <script>
         window.onload = function () {
             setTimeout(function () {
-                document.getElementById("logoScreen").classList.remove("active");
-                document.getElementById("aboutScreen").classList.add("active");
+                // Redirect after the 2-second splash screen
+                window.location.href = 'login.html';
             }, 2000);
         };
         
