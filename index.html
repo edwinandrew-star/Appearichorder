@@ -46,10 +46,8 @@
     <script>
         window.onload = function () {
             setTimeout(function () {
-                document.getElementById("logoScreen").classList.remove("active");
-                document.getElementById("aboutScreen").classList.add("active");
-            }, 2000);
-        };
+                document.getElementById("logoScreen").classList.remove("active")
+            };
         
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
