@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>APPEARICH - Premium Service & Scent Hub</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Supabase JS Client Library -->
+  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     /* ==========================================================================
@@ -27,6 +27,7 @@
       --modal-bg: #ffffff;
       --overlay-bg: rgba(0, 0, 0, 0.5);
       --shadow-color: rgba(0, 0, 0, 0.08);
+      --danger-red: #e74c3c;
     }
     [data-theme="dark"] {
       --bg-color: #0d0d0d;
@@ -103,12 +104,13 @@
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      display: flex !important;
+      display: none;
       align-items: center;
       justify-content: center;
       font-size: 1rem;
       cursor: pointer;
     }
+    .back-btn.show { display: flex !important; }
     .brand-logo-wrap { display: flex; align-items: center; gap: 10px; }
     .brand-logo-img {
       width: 42px;
@@ -373,7 +375,6 @@
       margin-bottom: 16px;
     }
     .sheet-title { font-size: 1.4rem; font-weight: 900; color: var(--text-main); text-align: center; }
-    /* Vertical-Scroll Food Selection Grid */
     .food-selection-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -420,7 +421,6 @@
     }
     .food-name-text { font-size: 0.82rem; font-weight: 800; color: #ffffff; }
     .food-price-text { font-size: 0.72rem; color: var(--accent-gold); font-weight: 700; }
-    /* Selected Items Vertical List */
     .selected-items-box {
       background: var(--card-bg-sub);
       border: 1px solid var(--card-border);
@@ -488,7 +488,6 @@
     .form-group input:focus, .form-group textarea:focus { border-color: var(--accent-gold); }
     .form-group textarea { height: 65px; resize: none; }
     .saved-loc-badge { font-size: 0.72rem; color: var(--accent-gold); font-weight: bold; margin-left: 4px; }
-    /* Payment Styles */
     .payment-selection-box {
       background: var(--card-bg-sub);
       border: 1.5px solid var(--card-border);
@@ -552,25 +551,6 @@
       gap: 8px;
       margin-top: 8px;
     }
-    .logout-btn {
-      width: 100%;
-      background: #dc3545;
-      color: #ffffff;
-      border: none;
-      padding: 14px;
-      border-radius: 14px;
-      font-size: 0.95rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      cursor: pointer;
-      margin-top: 20px;
-      margin-bottom: 30px;
-      transition: background 0.2s ease;
-    }
-    .logout-btn:hover { background: #c82333; }
     .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
     .price-card {
       background: var(--input-bg);
@@ -759,6 +739,28 @@
       margin-bottom: 20px;
       text-decoration: none;
     }
+    .logout-btn {
+      width: 100%;
+      background: transparent;
+      color: var(--danger-red);
+      border: 2px solid var(--danger-red);
+      padding: 12px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+      margin-bottom: 20px;
+      transition: all 0.2s ease;
+    }
+    .logout-btn:hover {
+      background: var(--danger-red);
+      color: #ffffff;
+    }
     .bottom-nav {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -805,6 +807,7 @@
       <i class="fa-solid fa-moon"></i>
     </button>
   </header>
+
   <!-- SCREEN 1: HOME -->
   <div id="screen-home" class="app-screen active">
     <div class="hero-banner">
@@ -850,6 +853,7 @@
       <button class="reorder-btn" onclick="triggerQuickReorder()">Reorder</button>
     </div>
   </div>
+
   <!-- SCREEN 2: PERFUMES -->
   <div id="screen-perfumes" class="app-screen">
     <div class="section-title">
@@ -914,6 +918,7 @@
       </button>
     </div>
   </div>
+
   <!-- SCREEN 4: BOOKINGS -->
   <div id="screen-bookings" class="app-screen">
     <div class="section-title">
@@ -921,12 +926,13 @@
     </div>
     <div id="bookingsListContainer"></div>
   </div>
+
   <!-- SCREEN 5: PROFILE -->
   <div id="screen-profile" class="app-screen">
     <div class="profile-header-card">
       <div class="profile-avatar" id="profAvatar">U</div>
       <div class="profile-name" id="profName">Logged-in User</div>
-      <div class="profile-phone" id="profPhone">+255 764 519 027</div>
+      <div class="profile-phone" id="profPhone">+255 000 000 000</div>
     </div>
     <a href="https://wa.me/255764519027?text=Hello%20Appearich%20Help%20Center!%20I%20need%20assistance." target="_blank" class="whatsapp-support-btn">
       <i class="fa-brands fa-whatsapp" style="font-size:1.3rem;"></i> WhatsApp Help Center
@@ -950,11 +956,12 @@
     </div>
     <div id="historyListContainer"></div>
 
-    <!-- LOGOUT BUTTON AT THE BOTTOM -->
     <button class="logout-btn" onclick="handleLogout()">
-      <i class="fa-solid fa-right-from-bracket"></i> Logout
+      <i class="fa-solid fa-right-from-bracket"></i>
+      <span>Logout</span>
     </button>
   </div>
+
   <!-- HOT MEALS MODAL -->
   <div id="hotMealsModal" class="modal-overlay">
     <div class="sheet-content full-screen">
@@ -966,7 +973,6 @@
       <div style="font-size: 0.82rem; font-weight:800; color:var(--text-main); margin-bottom:4px;">
         <i class="fa-solid fa-plus-circle" style="color:var(--accent-gold);"></i> Tap to Add Available Items:
       </div>
-      <!-- Item Options Grid (Horizontal to Vertical Grid) -->
       <div class="food-selection-grid">
         <div class="food-selection-card" onclick="addItemToOrder('Chipsi Mayai', 3000)">
           <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" alt="Chipsi Mayai">
@@ -1011,16 +1017,13 @@
           </div>
         </div>
       </div>
-      <!-- Vertical Dynamic Selected List Container -->
       <div id="selectedItemsContainer" class="selected-items-box">
         <p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet. Click an item above to add to order.</p>
       </div>
-      <!-- Single Overall Order Description Textarea -->
       <div class="form-group">
         <label for="mealDetails">Overall Order Description / Special Instructions:</label>
         <textarea id="mealDetails" placeholder="Describe your full meal request (e.g., extra chili, salt level, soft chips, specific soda flavor)..."></textarea>
       </div>
-      <!-- Summary Box -->
       <div class="calculation-summary-box">
         <div class="calc-row">
           <span>Items Subtotal:</span>
@@ -1038,7 +1041,6 @@
           <strong id="displayGrandTotal" style="color:var(--accent-gold);">0 TZS</strong>
         </div>
       </div>
-      <!-- Location Inputs -->
       <div class="form-row">
         <div class="form-group">
           <label for="mealBlockLoc">Block / Location: <span id="locSavedTag" class="saved-loc-badge"></span></label>
@@ -1054,7 +1056,6 @@
         <label for="mealPhoneNum">Contact Phone Number:</label>
         <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
       </div>
-      <!-- Payment Selector -->
       <div class="payment-selection-box">
         <label style="font-size:0.82rem; font-weight:800; color:var(--text-main);">Select Payment Method:</label>
         <div class="payment-options-grid">
@@ -1067,7 +1068,6 @@
             <span>Mobile Money</span>
           </div>
         </div>
-        <!-- Mobile Money Dynamic Unfold Area -->
         <div id="mobileUnfoldArea" class="mobile-unfold-box">
           <p style="font-size:0.82rem; color:var(--text-main); line-height:1.4; margin-bottom:10px;">
             Pay via Voda Lipa Namba: <span class="lipa-tag">37247619</span><br>
@@ -1079,12 +1079,12 @@
           </div>
         </div>
       </div>
-      <!-- WhatsApp Order Button -->
       <button id="submitMealBtn" class="submit-order-btn" onclick="submitFoodOrder()">
         <i class="fa-brands fa-whatsapp"></i> Send Order via WhatsApp
       </button>
     </div>
   </div>
+
   <!-- PERFUME ORDER MODAL -->
   <div id="perfumesModal" class="modal-overlay">
     <div class="sheet-content">
@@ -1115,6 +1115,7 @@
       </button>
     </div>
   </div>
+
   <!-- BOTTOM NAVIGATION -->
   <nav class="bottom-nav">
     <button id="nav-home-btn" class="nav-item active" onclick="switchTab('screen-home', this)">
@@ -1134,38 +1135,24 @@
       <span>Profile</span>
     </button>
   </nav>
+
   <!-- LOGIC SCRIPT -->
   <script>
-    /* ==========================================================================
-       SUPABASE INITIALIZATION & ACTIVITY LOGGER
-       ========================================================================== */
-    const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE";
-    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
-    
-    // Create Supabase Client instance
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // --- SUPABASE CONFIGURATION ---
+    const SUPABASE_URL = "https://zudqubbglwphfxaviqsg.supabase.co/rest/v1/";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE";
+    let supabase = null;
 
-    // Global Activity Logging Helper
-    async function logActivity(actionType, details = {}) {
-      try {
-        const payload = {
-          user_name: loggedInUser.name,
-          user_phone: loggedInUser.phone,
-          action: actionType,
-          details: details,
-          created_at: new Date().toISOString()
-        };
-        const { error } = await supabaseClient.from('activity_logs').insert([payload]);
-        if (error) console.error("Supabase Log Error:", error);
-      } catch (err) {
-        console.warn("Failed to log activity to Supabase:", err);
-      }
+    if (SUPABASE_URL !== "https://zudqubbglwphfxaviqsg.supabase.co/rest/v1/" && SUPABASE_ANON_KEY !== "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE") {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }
 
-    /* ==========================================================================
-       APP GLOBAL VARIABLES
-       ========================================================================== */
-    const loggedInUser = { name: "Alex", phone: "+255 764 519 027" };
+    // Dynamic logged in user state
+    let loggedInUser = {
+      name: localStorage.getItem('appearich_user_name') || '',
+      phone: localStorage.getItem('appearich_user_phone') || ''
+    };
+
     const whatsappPhone = "255764519027";
     let completedOrdersCount = 0;
     let activeOrders = [];
@@ -1179,21 +1166,51 @@
     let selectedPaymentType = 'cash';
     let selectedFoodItems = [];
 
-    window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('heroGreeting').innerText = `Welcome, ${loggedInUser.name}!`;
-      document.getElementById('profName').innerText = loggedInUser.name;
-      document.getElementById('profAvatar').innerText = loggedInUser.name.charAt(0).toUpperCase();
-      document.getElementById('profPhone').innerText = loggedInUser.phone;
-      document.getElementById('mealPhoneNum').value = loggedInUser.phone;
+    window.addEventListener('DOMContentLoaded', async () => {
+      // Verification: Require logged in user. If not logged in, redirect to index.html
+      const localSession = localStorage.getItem('appearich_user_session');
+      
+      if (!localSession && !loggedInUser.name) {
+        if (supabase) {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (!session) {
+            window.location.href = 'index.html';
+            return;
+          }
+        } else {
+          window.location.href = 'index.html';
+          return;
+        }
+      }
+
+      // Populate interface with registered user details
+      const displayName = loggedInUser.name || "User";
+      document.getElementById('heroGreeting').innerText = `Welcome, ${displayName}!`;
+      document.getElementById('profName').innerText = displayName;
+      document.getElementById('profAvatar').innerText = displayName.charAt(0).toUpperCase();
+      document.getElementById('profPhone').innerText = loggedInUser.phone || "+255 000 000 000";
+      document.getElementById('mealPhoneNum').value = loggedInUser.phone || "";
       
       loadSavedUserLocation();
       updateLoyaltyUI();
       renderBookings();
       renderSelectedItems();
-
-      // Log App Launch / Session Start to Supabase
-      logActivity("app_opened", { timestamp: new Date().toLocaleString() });
     });
+
+    async function handleLogout() {
+      // Clear Local Storage items
+      localStorage.removeItem('appearich_user_session');
+      localStorage.removeItem('appearich_user_name');
+      localStorage.removeItem('appearich_user_phone');
+
+      // Clear Supabase Session if client exists
+      if (supabase) {
+        await supabase.auth.signOut();
+      }
+
+      // Redirect user to index.html login/splash screen
+      window.location.href = 'index.html';
+    }
 
     function loadSavedUserLocation() {
       const savedBlock = localStorage.getItem('appearich_user_block');
@@ -1208,26 +1225,30 @@
     function toggleTheme() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const icon = document.querySelector('#themeToggleBtn i');
-      let newTheme = 'light';
       if (currentTheme === 'dark') {
         document.documentElement.removeAttribute('data-theme');
         icon.className = 'fa-solid fa-moon';
       } else {
         document.documentElement.setAttribute('data-theme', 'dark');
         icon.className = 'fa-solid fa-sun';
-        newTheme = 'dark';
       }
-      logActivity("toggle_theme", { theme: newTheme });
     }
 
     function switchTab(screenId, element) {
       document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      
       const targetScreen = document.getElementById(screenId);
       if (targetScreen) targetScreen.classList.add('active');
       if (element) element.classList.add('active');
 
-      logActivity("navigate_screen", { target_screen: screenId });
+      // Toggle Header Back Arrow Visibility
+      const backBtn = document.getElementById('globalBackBtn');
+      if (screenId !== 'screen-home') {
+        backBtn.classList.add('show');
+      } else {
+        backBtn.classList.remove('show');
+      }
     }
 
     function goBack() {
@@ -1239,14 +1260,9 @@
       loadSavedUserLocation();
       renderSelectedItems();
       document.getElementById('hotMealsModal').classList.add('active'); 
-      logActivity("open_modal", { modal_name: "Hot Meals" });
     }
 
-    function openOrderModal() { 
-      document.getElementById('perfumesModal').classList.add('active'); 
-      logActivity("open_modal", { modal_name: "Perfume Order" });
-    }
-
+    function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
     function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
 
     function openProductModal(name) {
@@ -1260,7 +1276,6 @@
       selectedPerfumeSize = sizePrice;
     }
 
-    // Payment Selection Toggle
     function selectPaymentMethod(type) {
       selectedPaymentType = type;
       const btnCash = document.getElementById('payOptCash');
@@ -1277,7 +1292,6 @@
       }
     }
 
-    // Dynamic Food Addition
     function addItemToOrder(name, unitPrice) {
       const existing = selectedFoodItems.find(item => item.name === name);
       if (existing) {
@@ -1342,7 +1356,7 @@
       document.getElementById('displayGrandTotal').innerText = calculatedGrandTotal.toLocaleString() + " TZS";
     }
 
-    function submitFoodOrder() {
+    async function submitFoodOrder() {
       if (selectedFoodItems.length === 0) {
         alert("Please select at least one item before placing your order!");
         return;
@@ -1352,6 +1366,7 @@
       const room = document.getElementById('mealRoomLoc').value.trim();
       const phone = document.getElementById('mealPhoneNum').value.trim();
       const payer = document.getElementById('payerName').value.trim();
+
       if (!block || !room) {
         alert("Please fill in both Block/Location and Room Number!");
         return;
@@ -1364,14 +1379,18 @@
         alert("Tafadhali weka jina la namba iliyotumika kufanya malipo!");
         return;
       }
+
       localStorage.setItem('appearich_user_block', block);
       localStorage.setItem('appearich_user_room', room);
+
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
       const itemsSummaryText = selectedFoodItems.map(i => `${i.name} (${i.qty}x @ ${i.unitPrice.toLocaleString()} TZS)`).join("\n• ");
+
       let paymentDetailsMsg = selectedPaymentType === 'cash' 
         ? `💵 *Payment Method:* Cash / Cash on Delivery` 
         : `💳 *Payment Method:* Mobile Money (Lipa Namba 37247619 - Edwin Andrew)\n👤 *Jina la Namba iliyotumika:* ${payer}`;
+
       const whatsappText = `🍔 *NEW APPEARICH MEAL ORDER*\n` +
         `----------------------------------------\n` +
         `🆔 *Order ID:* ${orderId}\n` +
@@ -1386,25 +1405,24 @@
         `${paymentDetailsMsg}\n` +
         `⏰ *Time Placed:* ${currentTime}\n` +
         `----------------------------------------`;
-      
-      // Log Meal Order Activity to Supabase
-      logActivity("place_meal_order", {
-        order_id: orderId,
-        items: selectedFoodItems,
-        grand_total: calculatedGrandTotal,
-        payment_method: selectedPaymentType,
-        location: `${block}, Room ${room}`
-      });
 
       window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`, '_blank');
+
       const newOrder = {
         id: orderId,
+        user_name: loggedInUser.name,
         title: `${calculatedGrandTotal.toLocaleString()} TZS (${selectedFoodItems.length} items)`,
         details: selectedPaymentType === 'cash' ? `Cash on Delivery | Total: ${calculatedGrandTotal.toLocaleString()} TZS` : `Paid by ${payer} | Total: ${calculatedGrandTotal.toLocaleString()} TZS`,
         location: `${block}, Room ${room}`,
         status: "pending",
         timestamp: currentTime
       };
+
+      // Save to Supabase DB if enabled
+      if (supabase) {
+        await supabase.from('orders').insert([newOrder]);
+      }
+
       activeOrders.unshift(newOrder);
       selectedFoodItems = [];
       closeSheet('hotMealsModal');
@@ -1418,14 +1436,7 @@
         alert("Please enter a perfume name or describe the scent you want!");
         return;
       }
-
-      // Log Perfume Order Activity to Supabase
-      logActivity("place_perfume_order", {
-        size: selectedPerfumeSize,
-        description: desc
-      });
-
-      const msg = encodeURIComponent(`Hi APPEARICH! I would like to place an order:\n\n- Preferred Size: ${selectedPerfumeSize}\n- Perfume Details: "${desc}"`);
+      const msg = encodeURIComponent(`Hi APPEARICH! I would like to place an order:\n\n- User: ${loggedInUser.name}\n- Preferred Size: ${selectedPerfumeSize}\n- Perfume Details: "${desc}"`);
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       closeSheet('perfumesModal');
     }
@@ -1436,9 +1447,6 @@
         if (orderIdx !== -1) {
           activeOrders[orderIdx].status = "verified";
           renderBookings();
-
-          logActivity("order_status_verified", { order_id: orderId });
-
           setTimeout(() => {
             const verifiedItem = activeOrders.splice(orderIdx, 1)[0];
             completedHistory.unshift(verifiedItem);
@@ -1446,8 +1454,6 @@
             updateLoyaltyUI();
             renderBookings();
             renderHistory();
-
-            logActivity("order_delivered", { order_id: orderId });
           }, 3000);
         }
       }, 3500);
@@ -1509,43 +1515,34 @@
       });
     }
 
-    function sendCustomInquiry() {
+    async function sendCustomInquiry() {
       const val = document.getElementById('customInquiryInput').value.trim();
       if (!val) return;
 
-      logActivity("send_custom_inquiry", { query: val });
+      if (supabase) {
+        await supabase.from('inquiries').insert([{
+          user_name: loggedInUser.name,
+          query: val,
+          timestamp: new Date().toISOString()
+        }]);
+      }
 
-      const msg = encodeURIComponent(`Hi APPEARICH! Custom Inquiry: "${val}"`);
+      const msg = encodeURIComponent(`Hi APPEARICH! Custom Inquiry from ${loggedInUser.name}: "${val}"`);
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       document.getElementById('customInquiryInput').value = '';
     }
 
-    function triggerQuickReorder() { 
-      logActivity("trigger_quick_reorder");
-      openHotMealsModal(); 
-    }
+    function triggerQuickReorder() { openHotMealsModal(); }
 
     function igniteTeaserToast() {
       if (animationLock) return;
       animationLock = true;
-      logActivity("ai_guide_explore_clicked");
       const toast = document.getElementById("soonToast");
       toast.classList.add("trigger-fly");
       setTimeout(() => {
         toast.classList.remove("trigger-fly");
         animationLock = false;
       }, 3500);
-    }
-
-    /* Logout Action Handler */
-    async function handleLogout() {
-      if (confirm("Are you sure you want to log out?")) {
-        await logActivity("user_logout", { timestamp: new Date().toISOString() });
-        // Perform Supabase auth signout if auth is enabled
-        await supabaseClient.auth.signOut();
-        alert("You have logged out successfully.");
-        location.reload();
-      }
     }
   </script>
 </body>
