@@ -10,7 +10,6 @@
   
   <!-- Supabase JS Client Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
     /* ==========================================================================
        THEME VARIABLES & GLOBAL RESET
@@ -68,7 +67,6 @@
       padding-bottom: 80px;
       overflow-x: hidden;
     }
-
     /* SPLASH / STARTUP SCREEN */
     .splash-screen {
       position: fixed;
@@ -93,7 +91,6 @@
       0%, 100% { transform: scale(1); opacity: 0.9; }
       50% { transform: scale(1.08); opacity: 1; }
     }
-
     /* MAIN APP SCREENS */
     .app-screen {
       display: none;
@@ -110,7 +107,6 @@
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     /* APP HEADER */
     .app-header {
       position: fixed;
@@ -136,7 +132,7 @@
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      display: flex !important;
+      display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1rem;
@@ -811,12 +807,10 @@
   </style>
 </head>
 <body>
-
   <!-- STARTUP / SPLASH SCREEN OVERLAY -->
   <div id="appSplashScreen" class="splash-screen">
     <img src="images/appearich-logo.png" alt="APPEARICH" class="splash-logo">
   </div>
-
   <!-- FIXED HEADER -->
   <header class="app-header">
     <div class="header-left">
@@ -834,7 +828,6 @@
       <i class="fa-solid fa-moon"></i>
     </button>
   </header>
-
   <!-- SCREEN 1: HOME -->
   <div id="screen-home" class="app-screen active">
     <div class="hero-banner">
@@ -880,7 +873,6 @@
       <button class="reorder-btn" onclick="triggerQuickReorder()">Reorder</button>
     </div>
   </div>
-
   <!-- SCREEN 2: PERFUMES -->
   <div id="screen-perfumes" class="app-screen">
     <div class="section-title">
@@ -945,7 +937,6 @@
       </button>
     </div>
   </div>
-
   <!-- SCREEN 4: BOOKINGS -->
   <div id="screen-bookings" class="app-screen">
     <div class="section-title">
@@ -953,7 +944,6 @@
     </div>
     <div id="bookingsListContainer"></div>
   </div>
-
   <!-- SCREEN 5: PROFILE -->
   <div id="screen-profile" class="app-screen">
     <div class="profile-header-card">
@@ -983,7 +973,6 @@
     </div>
     <div id="historyListContainer"></div>
   </div>
-
   <!-- HOT MEALS MODAL -->
   <div id="hotMealsModal" class="modal-overlay">
     <div class="sheet-content full-screen">
@@ -1040,16 +1029,13 @@
           </div>
         </div>
       </div>
-
       <div id="selectedItemsContainer" class="selected-items-box">
         <p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet. Click an item above to add to order.</p>
       </div>
-
       <div class="form-group">
         <label for="mealDetails">Overall Order Description / Special Instructions:</label>
         <textarea id="mealDetails" placeholder="Describe your full meal request (e.g., extra chili, salt level, soft chips, specific soda flavor)..."></textarea>
       </div>
-
       <div class="calculation-summary-box">
         <div class="calc-row">
           <span>Items Subtotal:</span>
@@ -1067,7 +1053,6 @@
           <strong id="displayGrandTotal" style="color:var(--accent-gold);">0 TZS</strong>
         </div>
       </div>
-
       <div class="form-row">
         <div class="form-group">
           <label for="mealBlockLoc">Block / Location: <span id="locSavedTag" class="saved-loc-badge"></span></label>
@@ -1083,7 +1068,6 @@
         <label for="mealPhoneNum">Contact Phone Number:</label>
         <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
       </div>
-
       <div class="payment-selection-box">
         <label style="font-size:0.82rem; font-weight:800; color:var(--text-main);">Select Payment Method:</label>
         <div class="payment-options-grid">
@@ -1107,13 +1091,11 @@
           </div>
         </div>
       </div>
-
       <button id="submitMealBtn" class="submit-order-btn" onclick="submitFoodOrder()">
         <i class="fa-brands fa-whatsapp"></i> Send Order via WhatsApp
       </button>
     </div>
   </div>
-
   <!-- PERFUME ORDER MODAL -->
   <div id="perfumesModal" class="modal-overlay">
     <div class="sheet-content">
@@ -1144,7 +1126,6 @@
       </button>
     </div>
   </div>
-
   <!-- BOTTOM NAVIGATION WITH LOGOUT BUTTON -->
   <nav class="bottom-nav">
     <button id="nav-home-btn" class="nav-item active" onclick="switchTab('screen-home', this)">
@@ -1168,18 +1149,16 @@
       <span>Logout</span>
     </button>
   </nav>
-
   <!-- LOGIC SCRIPT -->
   <script>
     /* ==========================================================================
        SUPABASE CONFIGURATION & INITIALIZATION
        ========================================================================== */
-    const SUPABASE_URL = "https://https://zudqubbglwphfxaviqsg.supabase.co";
+    const SUPABASE_URL = "https://zudqubbglwphfxaviqsg.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE";
     
     // Initialize Supabase client
     const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-
     let loggedInUser = { id: null, name: "Alex", phone: "+255 764 519 027" };
     const whatsappPhone = "255764519027";
     
@@ -1196,14 +1175,12 @@
     let surchargePercent = 25;
     let selectedPaymentType = 'cash';
     let selectedFoodItems = [];
-
     window.addEventListener('DOMContentLoaded', async () => {
       // Hide Splash Screen after 2 seconds
       setTimeout(() => {
         const splash = document.getElementById('appSplashScreen');
         if (splash) splash.classList.add('hidden');
       }, 2000);
-
       // Check for active Supabase user session
       if (supabase) {
         const { data: { session } } = await supabase.auth.getSession();
@@ -1214,7 +1191,6 @@
           await fetchUserOrdersFromSupabase();
         }
       }
-
       document.getElementById('heroGreeting').innerText = `Welcome, ${loggedInUser.name}!`;
       document.getElementById('profName').innerText = loggedInUser.name;
       document.getElementById('profAvatar').innerText = loggedInUser.name.charAt(0).toUpperCase();
@@ -1227,7 +1203,6 @@
       renderHistory();
       renderSelectedItems();
     });
-
     /* ==========================================================================
        SUPABASE DATA HELPERS
        ========================================================================== */
@@ -1239,7 +1214,6 @@
           .select('*')
           .eq('user_id', loggedInUser.id)
           .order('created_at', { ascending: false });
-
         if (error) throw error;
         if (data) {
           activeOrders = data.filter(o => o.status !== 'delivered');
@@ -1251,7 +1225,6 @@
         console.warn('Supabase order sync error (using local storage fallback):', err.message);
       }
     }
-
     async function saveOrderToSupabase(orderData) {
       if (!supabase || !loggedInUser.id) return;
       try {
@@ -1269,7 +1242,6 @@
         console.warn('Supabase save error (saved locally):', err.message);
       }
     }
-
     /* ==========================================================================
        LOGOUT HANDLER
        ========================================================================== */
@@ -1285,7 +1257,6 @@
         location.reload();
       }
     }
-
     /* ==========================================================================
        CORE APP & UI LOGIC
        ========================================================================== */
@@ -1294,7 +1265,6 @@
       localStorage.setItem('appearich_active_orders', JSON.stringify(activeOrders));
       localStorage.setItem('appearich_completed_history', JSON.stringify(completedHistory));
     }
-
     function loadSavedUserLocation() {
       const savedBlock = localStorage.getItem('appearich_user_block');
       const savedRoom = localStorage.getItem('appearich_user_room');
@@ -1304,7 +1274,6 @@
         document.getElementById('locSavedTag').innerText = "(Auto-Filled)";
       }
     }
-
     function toggleTheme() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const icon = document.querySelector('#themeToggleBtn i');
@@ -1316,7 +1285,6 @@
         icon.className = 'fa-solid fa-sun';
       }
     }
-
     function switchTab(screenId, element) {
       document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1324,32 +1292,26 @@
       if (targetScreen) targetScreen.classList.add('active');
       if (element) element.classList.add('active');
     }
-
     function goBack() {
       const homeBtn = document.getElementById('nav-home-btn');
       switchTab('screen-home', homeBtn);
     }
-
     function openHotMealsModal() { 
       loadSavedUserLocation();
       renderSelectedItems();
       document.getElementById('hotMealsModal').classList.add('active'); 
     }
-
     function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
     function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
-
     function openProductModal(name) {
       document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
       openOrderModal();
     }
-
     function selectPerfumeSize(el, sizePrice) {
       document.querySelectorAll('#perfumesModal .price-card').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
       selectedPerfumeSize = sizePrice;
     }
-
     function selectPaymentMethod(type) {
       selectedPaymentType = type;
       const btnCash = document.getElementById('payOptCash');
@@ -1365,7 +1327,6 @@
         unfoldBox.classList.remove('active');
       }
     }
-
     function addItemToOrder(name, unitPrice) {
       const existing = selectedFoodItems.find(item => item.name === name);
       if (existing) {
@@ -1375,7 +1336,6 @@
       }
       renderSelectedItems();
     }
-
     function updateItemQty(index, newQty) {
       const qty = parseInt(newQty) || 1;
       if (qty <= 0) {
@@ -1385,12 +1345,10 @@
       }
       renderSelectedItems();
     }
-
     function removeItem(index) {
       selectedFoodItems.splice(index, 1);
       renderSelectedItems();
     }
-
     function renderSelectedItems() {
       const container = document.getElementById('selectedItemsContainer');
       if (selectedFoodItems.length === 0) {
@@ -1411,7 +1369,6 @@
       }
       recalculateMealTotal();
     }
-
     function recalculateMealTotal() {
       calculatedSubtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
       const currentHour = new Date().getHours();
@@ -1429,7 +1386,6 @@
       document.getElementById('displaySurcharge').innerText = calculatedSurcharge.toLocaleString() + " TZS";
       document.getElementById('displayGrandTotal').innerText = calculatedGrandTotal.toLocaleString() + " TZS";
     }
-
     function submitFoodOrder() {
       if (selectedFoodItems.length === 0) {
         alert("Please select at least one item before placing your order!");
@@ -1440,7 +1396,6 @@
       const room = document.getElementById('mealRoomLoc').value.trim();
       const phone = document.getElementById('mealPhoneNum').value.trim();
       const payer = document.getElementById('payerName').value.trim();
-
       if (!block || !room) {
         alert("Please fill in both Block/Location and Room Number!");
         return;
@@ -1453,10 +1408,8 @@
         alert("Tafadhali weka jina la namba iliyotumika kufanya malipo!");
         return;
       }
-
       localStorage.setItem('appearich_user_block', block);
       localStorage.setItem('appearich_user_room', room);
-
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
       const itemsSummaryText = selectedFoodItems.map(i => `${i.name} (${i.qty}x @ ${i.unitPrice.toLocaleString()} TZS)`).join("\n• ");
@@ -1464,7 +1417,6 @@
       let paymentDetailsMsg = selectedPaymentType === 'cash' 
         ? `💵 *Payment Method:* Cash / Cash on Delivery` 
         : `💳 *Payment Method:* Mobile Money (Lipa Namba 37247619 - Edwin Andrew)\n👤 *Jina la Namba iliyotumika:* ${payer}`;
-
       const whatsappText = `🍔 *NEW APPEARICH MEAL ORDER*\n` +
         `----------------------------------------\n` +
         `🆔 *Order ID:* ${orderId}\n` +
@@ -1479,9 +1431,7 @@
         `${paymentDetailsMsg}\n` +
         `⏰ *Time Placed:* ${currentTime}\n` +
         `----------------------------------------`;
-
       window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`, '_blank');
-
       const newOrder = {
         id: orderId,
         title: `${calculatedGrandTotal.toLocaleString()} TZS (${selectedFoodItems.length} items)`,
@@ -1490,7 +1440,6 @@
         status: "pending",
         timestamp: currentTime
       };
-
       activeOrders.unshift(newOrder);
       saveStateToLocalStorage();
       saveOrderToSupabase(newOrder);
@@ -1500,7 +1449,6 @@
       renderBookings();
       simulateVerification(newOrder.id);
     }
-
     function submitPerfumeOrder() {
       const desc = document.getElementById('perfumeDesc').value.trim();
       if (!desc) {
@@ -1511,7 +1459,6 @@
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       closeSheet('perfumesModal');
     }
-
     function simulateVerification(orderId) {
       setTimeout(() => {
         const orderIdx = activeOrders.findIndex(o => o.id === orderId);
@@ -1519,7 +1466,6 @@
           activeOrders[orderIdx].status = "verified";
           saveStateToLocalStorage();
           renderBookings();
-
           setTimeout(() => {
             const verifiedItem = activeOrders.splice(orderIdx, 1)[0];
             verifiedItem.status = "delivered";
@@ -1534,7 +1480,6 @@
         }
       }, 3500);
     }
-
     function renderBookings() {
       const container = document.getElementById('bookingsListContainer');
       if (activeOrders.length === 0) {
@@ -1546,7 +1491,6 @@
         `;
         return;
       }
-
       container.innerHTML = activeOrders.map(o => `
         <div class="order-card-track">
           <div class="track-header">
@@ -1563,14 +1507,12 @@
         </div>
       `).join('');
     }
-
     function renderHistory() {
       const container = document.getElementById('historyListContainer');
       if (completedHistory.length === 0) {
         container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub);">No past orders logged yet.</p>`;
         return;
       }
-
       container.innerHTML = completedHistory.map(o => `
         <div class="order-card-track" style="opacity:0.85;">
           <div class="track-header">
@@ -1583,7 +1525,6 @@
         </div>
       `).join('');
     }
-
     function updateLoyaltyUI() {
       document.getElementById('loyaltyCountBadge').innerText = `${completedOrdersCount} / 5 Orders`;
       const stamps = document.querySelectorAll('.stamp-dot');
@@ -1592,7 +1533,6 @@
         else stamp.classList.remove('filled');
       });
     }
-
     function sendCustomInquiry() {
       const val = document.getElementById('customInquiryInput').value.trim();
       if (!val) return;
@@ -1600,9 +1540,7 @@
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       document.getElementById('customInquiryInput').value = '';
     }
-
     function triggerQuickReorder() { openHotMealsModal(); }
-
     function igniteTeaserToast() {
       if (animationLock) return;
       animationLock = true;
