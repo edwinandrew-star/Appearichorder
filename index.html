@@ -4,18 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>APPEARICH - Premium Service & Scent Hub</title>
-
   <!-- PWA Capabilities -->
   <meta name="theme-color" content="#000000">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="APPEARICH">
-
   <!-- FontAwesome & Supabase SDK -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
     /* ==========================================================================
        THEME VARIABLES & GLOBAL RESET
@@ -73,7 +70,6 @@
       padding-bottom: 80px;
       overflow-x: hidden;
     }
-
     /* ==========================================================================
        SPLASH & AUTH SCREENS (PURE BLACK BACKGROUND)
        ========================================================================== */
@@ -166,7 +162,6 @@
       cursor: pointer;
       margin-top: 10px;
     }
-
     /* ==========================================================================
        APP MAIN CORE LAYOUT & NAVIGATION
        ========================================================================== */
@@ -297,7 +292,6 @@
     .offer-card-overlay { position: relative; z-index: 2; }
     .offer-card-title { font-size: 1.15rem; font-weight: 800; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
     .offer-card-desc { font-size: 0.72rem; color: #FFD700; margin-top: 2px; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
-
     .section-divider {
       width: 100%;
       height: 1px;
@@ -336,7 +330,6 @@
       font-size: 0.85rem;
       cursor: pointer;
     }
-
     .quick-reorder-section {
       background: var(--card-bg);
       border-radius: 16px;
@@ -372,7 +365,6 @@
       font-weight: 700;
       cursor: pointer;
     }
-
     .perfumes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; margin-bottom: 20px; }
     .perfume-card {
       height: 180px;
@@ -395,7 +387,6 @@
     }
     .perfume-card-title { font-size: 1rem; font-weight: 800; color: #ffffff; }
     .perfume-card-sub { font-size: 0.7rem; color: #FFC107; font-weight: 600; }
-
     .action-container { display: flex; justify-content: center; width: 100%; margin-top: 10px; margin-bottom: 20px; }
     .order-main-btn {
       background: var(--text-main);
@@ -417,7 +408,6 @@
       justify-content: center;
     }
     .order-main-btn:hover { background: var(--accent-gold); color: #000; }
-
     .modal-overlay {
       display: none;
       position: fixed;
@@ -473,7 +463,6 @@
       margin-bottom: 16px;
     }
     .sheet-title { font-size: 1.4rem; font-weight: 900; color: var(--text-main); text-align: center; }
-
     .food-selection-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -520,7 +509,6 @@
     }
     .food-name-text { font-size: 0.82rem; font-weight: 800; color: #ffffff; }
     .food-price-text { font-size: 0.72rem; color: var(--accent-gold); font-weight: 700; }
-
     .selected-items-box {
       background: var(--card-bg-sub);
       border: 1px solid var(--card-border);
@@ -548,7 +536,6 @@
       font-weight: bold;
       text-align: center;
     }
-
     .calculation-summary-box {
       background: var(--card-bg-sub);
       border: 1.5px solid var(--accent-gold);
@@ -589,7 +576,6 @@
     .form-group input:focus, .form-group textarea:focus { border-color: var(--accent-gold); }
     .form-group textarea { height: 65px; resize: none; }
     .saved-loc-badge { font-size: 0.72rem; color: var(--accent-gold); font-weight: bold; margin-left: 4px; }
-
     .payment-selection-box {
       background: var(--card-bg-sub);
       border: 1.5px solid var(--card-border);
@@ -669,7 +655,6 @@
       justify-content: center;
       gap: 8px;
     }
-
     .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
     .price-card {
       background: var(--input-bg);
@@ -710,7 +695,6 @@
       font-weight: 800;
     }
     .stamp-dot.filled { background: var(--accent-gold); border-style: solid; border-color: var(--accent-gold); color: #000; }
-
     .ai-screen-wrap {
       text-align: center;
       display: flex;
@@ -806,7 +790,6 @@
       font-size: 1.1rem;
       flex-shrink: 0;
     }
-
     .order-card-track {
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
@@ -821,7 +804,6 @@
     .status-badge.pending { background: rgba(255, 193, 7, 0.15); color: #d97706; border: 1px solid #d97706; }
     .status-badge.verified { background: rgba(40, 167, 69, 0.15); color: #28a745; border: 1px solid #28a745; }
     .track-details p { font-size: 0.82rem; color: var(--text-sub); margin-bottom: 4px; }
-
     .profile-header-card {
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
@@ -846,7 +828,6 @@
     }
     .profile-name { font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
     .profile-phone { font-size: 0.85rem; color: var(--text-sub); margin-top: 2px; }
-
     .whatsapp-support-btn {
       width: 100%;
       background: #25D366;
@@ -864,7 +845,6 @@
       margin-bottom: 20px;
       text-decoration: none;
     }
-
     .bottom-nav {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -894,12 +874,10 @@
   </style>
 </head>
 <body>
-
   <!-- STEP 1: INITIAL SPLASH SCREEN (PURE BLACK BACKGROUND) -->
   <div id="splashScreen" class="full-cover-screen">
-    <img src="images/appearich-logo1.jpg" alt="APPEARICH Splash Logo" class="splash-logo-img" onclick="openAuthScreen()">
+    <img src="images/appearich-logo.jpg" alt="APPEARICH Splash Logo" class="splash-logo-img" onclick="openAuthScreen()">
   </div>
-
   <!-- STEP 2: AUTHENTICATION SCREEN (SIGN IN / CREATE ACCOUNT) -->
   <div id="authScreen" class="full-cover-screen" style="display: none;">
     <div class="auth-card">
@@ -909,7 +887,6 @@
         <button id="tabSigninBtn" class="auth-tab-btn active" onclick="switchAuthTab('signin')">Sign In</button>
         <button id="tabSignupBtn" class="auth-tab-btn" onclick="switchAuthTab('signup')">Create Account</button>
       </div>
-
       <!-- SIGN IN FORM -->
       <form id="signinForm" onsubmit="handleSignIn(event)">
         <div class="auth-form-group">
@@ -922,7 +899,6 @@
         </div>
         <button type="submit" class="auth-submit-btn">SIGN IN</button>
       </form>
-
       <!-- SIGN UP FORM -->
       <form id="signupForm" style="display: none;" onsubmit="handleSignUp(event)">
         <div class="auth-form-group">
@@ -945,7 +921,6 @@
       </form>
     </div>
   </div>
-
   <!-- FIXED APP HEADER -->
   <header class="app-header">
     <div class="header-left">
@@ -953,14 +928,13 @@
         <i class="fa-solid fa-arrow-left"></i>
       </button>
       <div class="brand-logo-wrap">
-        <img src="images/appearich-logo.jpg" alt="Logo" class="header-brand-img">
+        <img src="images/appearich-logo1.jpg" alt="Logo" class="header-brand-img">
       </div>
     </div>
     <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Switch Light/Dark Mode">
       <i class="fa-solid fa-moon"></i>
     </button>
   </header>
-
   <!-- SCREEN 1: HOME -->
   <div id="screen-home" class="app-screen active">
     <div class="hero-banner">
@@ -988,9 +962,7 @@
         </div>
       </div>
     </div>
-
     <div class="section-divider"></div>
-
     <div class="inquiry-box">
       <h4><i class="fa-solid fa-circle-question" style="color:var(--accent-gold);"></i> Need Anything Specific?</h4>
       <p>Describe your needs, custom order details, or ask any question directly.</p>
@@ -999,7 +971,6 @@
         <button class="inquiry-btn" onclick="sendCustomInquiry()">Ask</button>
       </div>
     </div>
-
     <div class="quick-reorder-section">
       <div class="quick-reorder-info">
         <div class="quick-reorder-icon"><i class="fa-solid fa-rotate-right"></i></div>
@@ -1011,7 +982,6 @@
       <button class="reorder-btn" onclick="triggerQuickReorder()">Reorder</button>
     </div>
   </div>
-
   <!-- SCREEN 2: PERFUMES -->
   <div id="screen-perfumes" class="app-screen">
     <div class="section-title">
@@ -1043,7 +1013,6 @@
         </div>
       </div>
     </main>
-
     <div class="action-container">
       <button onclick="openOrderModal()" class="order-main-btn">
         <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -1051,7 +1020,6 @@
       </button>
     </div>
   </div>
-
   <!-- SCREEN 3: AI GUIDE -->
   <div id="screen-ai" class="app-screen">
     <div class="ambient-glow"></div>
@@ -1077,7 +1045,6 @@
       </button>
     </div>
   </div>
-
   <!-- SCREEN 4: BOOKINGS -->
   <div id="screen-bookings" class="app-screen">
     <div class="section-title">
@@ -1085,7 +1052,6 @@
     </div>
     <div id="bookingsListContainer"></div>
   </div>
-
   <!-- SCREEN 5: PROFILE -->
   <div id="screen-profile" class="app-screen">
     <div class="profile-header-card">
@@ -1097,7 +1063,6 @@
     <a href="https://wa.me/255764519027?text=Hello%20Appearich%20Help%20Center!%20I%20need%20assistance." target="_blank" class="whatsapp-support-btn">
       <i class="fa-brands fa-whatsapp" style="font-size:1.3rem;"></i> WhatsApp Help Center
     </a>
-
     <div class="loyalty-card">
       <div class="loyalty-header">
         <span class="loyalty-title"><i class="fa-solid fa-crown"></i> Loyalty Rewards</span>
@@ -1112,18 +1077,15 @@
         <div class="stamp-dot"><i class="fa-solid fa-gift"></i></div>
       </div>
     </div>
-
     <div class="section-title" style="margin-top:10px;">
       <i class="fa-solid fa-history" style="color:var(--accent-gold);"></i> Order History
     </div>
     <div id="historyListContainer"></div>
-
     <!-- LOGOUT BUTTON AT THE BOTTOM -->
     <button class="logout-btn" onclick="handleLogout()">
       <i class="fa-solid fa-right-from-bracket"></i> Log Out
     </button>
   </div>
-
   <!-- HOT MEALS MODAL -->
   <div id="hotMealsModal" class="modal-overlay">
     <div class="sheet-content full-screen">
@@ -1136,7 +1098,6 @@
       <div style="font-size: 0.82rem; font-weight:800; color:var(--text-main); margin-bottom:4px;">
         <i class="fa-solid fa-plus-circle" style="color:var(--accent-gold);"></i> Tap to Add Available Items:
       </div>
-
       <div class="food-selection-grid">
         <div class="food-selection-card" onclick="addItemToOrder('Chipsi Mayai', 3000)">
           <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" alt="Chipsi Mayai">
@@ -1181,16 +1142,13 @@
           </div>
         </div>
       </div>
-
       <div id="selectedItemsContainer" class="selected-items-box">
         <p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet. Click an item above to add to order.</p>
       </div>
-
       <div class="form-group">
         <label for="mealDetails">Overall Order Description / Special Instructions:</label>
         <textarea id="mealDetails" placeholder="Describe your full meal request..."></textarea>
       </div>
-
       <div class="calculation-summary-box">
         <div class="calc-row">
           <span>Items Subtotal:</span>
@@ -1205,7 +1163,6 @@
           <strong id="displayGrandTotal" style="color:var(--accent-gold);">0 TZS</strong>
         </div>
       </div>
-
       <div class="form-row">
         <div class="form-group">
           <label for="mealBlockLoc">Block / Location: <span id="locSavedTag" class="saved-loc-badge"></span></label>
@@ -1221,7 +1178,6 @@
         <label for="mealPhoneNum">Contact Phone Number:</label>
         <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
       </div>
-
       <div class="payment-selection-box">
         <label style="font-size:0.82rem; font-weight:800; color:var(--text-main);">Select Payment Method:</label>
         <div class="payment-options-grid">
@@ -1234,7 +1190,6 @@
             <span>Mobile Money</span>
           </div>
         </div>
-
         <div id="mobileUnfoldArea" class="mobile-unfold-box">
           <p style="font-size:0.82rem; color:var(--text-main); line-height:1.4; margin-bottom:10px;">
             Pay via Voda Lipa Namba: <span class="lipa-tag">37247619</span><br>
@@ -1246,13 +1201,11 @@
           </div>
         </div>
       </div>
-
       <button id="submitMealBtn" class="submit-order-btn" onclick="submitFoodOrder()">
         <i class="fa-brands fa-whatsapp"></i> Send Order via WhatsApp
       </button>
     </div>
   </div>
-
   <!-- PERFUME ORDER MODAL -->
   <div id="perfumesModal" class="modal-overlay">
     <div class="sheet-content">
@@ -1283,7 +1236,6 @@
       </button>
     </div>
   </div>
-
   <!-- BOTTOM NAVIGATION -->
   <nav class="bottom-nav">
     <button id="nav-home-btn" class="nav-item active" onclick="switchTab('screen-home', this)">
@@ -1303,17 +1255,15 @@
       <span>Profile</span>
     </button>
   </nav>
-
   <!-- JAVASCRIPT LOGIC & SUPABASE INTEGRATION -->
   <script>
     // ------------------------------------------------------------------
     // 1. SUPABASE INITIALIZATION
-    // Replace with your actual project URL and Anon Key
+    // Corrected URL format
     // ------------------------------------------------------------------
-    const SUPABASE_URL = "https://https://zudqubbglwphfxaviqsg.supabase.co/rest/v1/";
+    const SUPABASE_URL = "https://zudqubbglwphfxaviqsg.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE";
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const whatsappPhone = "255764519027";
     let currentUser = null;
     let userProfile = { name: "User", phone: "" };
@@ -1328,7 +1278,6 @@
     let surchargePercent = 25;
     let selectedPaymentType = 'cash';
     let selectedFoodItems = [];
-
     // ------------------------------------------------------------------
     // 2. AUTH & SESSION CONTROL
     // ------------------------------------------------------------------
@@ -1343,12 +1292,10 @@
         // Show Splash Screen on fresh visit
         document.getElementById('splashScreen').style.display = 'flex';
       }
-
       loadSavedUserLocation();
       updateLoyaltyUI();
       renderSelectedItems();
     });
-
     function openAuthScreen() {
       const splash = document.getElementById('splashScreen');
       splash.style.opacity = '0';
@@ -1357,7 +1304,6 @@
         document.getElementById('authScreen').style.display = 'flex';
       }, 500);
     }
-
     function switchAuthTab(type) {
       if (type === 'signin') {
         document.getElementById('tabSigninBtn').classList.add('active');
@@ -1371,12 +1317,10 @@
         document.getElementById('signinForm').style.display = 'none';
       }
     }
-
     async function handleSignIn(e) {
       e.preventDefault();
       const email = document.getElementById('signinEmail').value;
       const password = document.getElementById('signinPassword').value;
-
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         alert(error.message);
@@ -1386,20 +1330,17 @@
         hideSplashAndAuth();
       }
     }
-
     async function handleSignUp(e) {
       e.preventDefault();
       const name = document.getElementById('signupName').value;
       const phone = document.getElementById('signupPhone').value;
       const email = document.getElementById('signupEmail').value;
       const password = document.getElementById('signupPassword').value;
-
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: { data: { full_name: name, phone: phone } }
       });
-
       if (error) {
         alert(error.message);
       } else {
@@ -1411,20 +1352,17 @@
           phone: phone,
           updated_at: new Date()
         });
-
         userProfile = { name, phone };
         updateUserUI();
         hideSplashAndAuth();
       }
     }
-
     async function fetchUserProfile(userId) {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
-
       if (data) {
         userProfile = { name: data.full_name || "User", phone: data.phone || "" };
       } else if (currentUser.user_metadata) {
@@ -1436,7 +1374,6 @@
       updateUserUI();
       await fetchUserOrders(userId);
     }
-
     function updateUserUI() {
       document.getElementById('heroGreeting').innerText = `Welcome, ${userProfile.name}!`;
       document.getElementById('profName').innerText = userProfile.name;
@@ -1444,18 +1381,15 @@
       document.getElementById('profPhone').innerText = userProfile.phone || "+255 --- --- ---";
       document.getElementById('mealPhoneNum').value = userProfile.phone;
     }
-
     function hideSplashAndAuth() {
       document.getElementById('splashScreen').style.display = 'none';
       document.getElementById('authScreen').style.display = 'none';
     }
-
     async function handleLogout() {
       await supabase.auth.signOut();
       localStorage.removeItem('appearich_user_orders');
       location.reload();
     }
-
     // ------------------------------------------------------------------
     // 3. DATABASE ORDER PERSISTENCE
     // ------------------------------------------------------------------
@@ -1469,14 +1403,12 @@
         status: 'pending'
       });
     }
-
     async function fetchUserOrders(userId) {
       const { data, error } = await supabase
         .from('orders')
         .select('*')
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
-
       if (data) {
         activeOrders = data.filter(o => o.status === 'pending').map(o => ({
           id: "APR-" + o.id,
@@ -1500,7 +1432,6 @@
         renderHistory();
       }
     }
-
     // ------------------------------------------------------------------
     // 4. GENERAL APP HELPERS & UI CONTROLS
     // ------------------------------------------------------------------
@@ -1513,7 +1444,6 @@
         document.getElementById('locSavedTag').innerText = "(Auto-Filled)";
       }
     }
-
     function toggleTheme() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const icon = document.querySelector('#themeToggleBtn i');
@@ -1525,7 +1455,6 @@
         icon.className = 'fa-solid fa-sun';
       }
     }
-
     function switchTab(screenId, element) {
       document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1533,12 +1462,10 @@
       if (targetScreen) targetScreen.classList.add('active');
       if (element) element.classList.add('active');
     }
-
     function goBack() {
       const homeBtn = document.getElementById('nav-home-btn');
       switchTab('screen-home', homeBtn);
     }
-
     function openHotMealsModal() { 
       loadSavedUserLocation();
       renderSelectedItems();
@@ -1551,13 +1478,11 @@
       document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
       openOrderModal();
     }
-
     function selectPerfumeSize(el, sizePrice) {
       document.querySelectorAll('#perfumesModal .price-card').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
       selectedPerfumeSize = sizePrice;
     }
-
     function selectPaymentMethod(type) {
       selectedPaymentType = type;
       const btnCash = document.getElementById('payOptCash');
@@ -1573,7 +1498,6 @@
         unfoldBox.classList.remove('active');
       }
     }
-
     function addItemToOrder(name, unitPrice) {
       const existing = selectedFoodItems.find(item => item.name === name);
       if (existing) {
@@ -1583,7 +1507,6 @@
       }
       renderSelectedItems();
     }
-
     function updateItemQty(index, newQty) {
       const qty = parseInt(newQty) || 1;
       if (qty <= 0) {
@@ -1593,12 +1516,10 @@
       }
       renderSelectedItems();
     }
-
     function removeItem(index) {
       selectedFoodItems.splice(index, 1);
       renderSelectedItems();
     }
-
     function renderSelectedItems() {
       const container = document.getElementById('selectedItemsContainer');
       if (selectedFoodItems.length === 0) {
@@ -1619,7 +1540,6 @@
       }
       recalculateMealTotal();
     }
-
     function recalculateMealTotal() {
       calculatedSubtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
       const currentHour = new Date().getHours();
@@ -1637,7 +1557,6 @@
       document.getElementById('displaySurcharge').innerText = calculatedSurcharge.toLocaleString() + " TZS";
       document.getElementById('displayGrandTotal').innerText = calculatedGrandTotal.toLocaleString() + " TZS";
     }
-
     async function submitFoodOrder() {
       if (selectedFoodItems.length === 0) {
         alert("Please select at least one item before placing your order!");
@@ -1653,18 +1572,14 @@
         alert("Please complete all location and contact details!");
         return;
       }
-
       localStorage.setItem('appearich_user_block', block);
       localStorage.setItem('appearich_user_room', room);
-
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
       const itemsSummaryText = selectedFoodItems.map(i => `${i.name} (${i.qty}x @ ${i.unitPrice.toLocaleString()} TZS)`).join("\n• ");
-
       let paymentDetailsMsg = selectedPaymentType === 'cash' 
         ? `💵 *Payment Method:* Cash / Cash on Delivery` 
         : `💳 *Payment Method:* Mobile Money (Lipa Namba 37247619 - Edwin Andrew)\n👤 *Jina la Namba iliyotumika:* ${payer}`;
-
       const whatsappText = `🍔 *NEW APPEARICH MEAL ORDER*\n` +
         `----------------------------------------\n` +
         `🆔 *Order ID:* ${orderId}\n` +
@@ -1679,9 +1594,7 @@
         `${paymentDetailsMsg}\n` +
         `⏰ *Time Placed:* ${currentTime}\n` +
         `----------------------------------------`;
-
       window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`, '_blank');
-
       const newOrder = {
         id: orderId,
         title: `${calculatedGrandTotal.toLocaleString()} TZS (${selectedFoodItems.length} items)`,
@@ -1690,15 +1603,12 @@
         status: "pending",
         timestamp: currentTime
       };
-
       activeOrders.unshift(newOrder);
       await saveOrderToSupabase(newOrder);
-
       selectedFoodItems = [];
       closeSheet('hotMealsModal');
       renderBookings();
     }
-
     function submitPerfumeOrder() {
       const desc = document.getElementById('perfumeDesc').value.trim();
       if (!desc) {
@@ -1709,7 +1619,6 @@
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       closeSheet('perfumesModal');
     }
-
     function renderBookings() {
       const container = document.getElementById('bookingsListContainer');
       if (activeOrders.length === 0) {
@@ -1735,7 +1644,6 @@
         </div>
       `).join('');
     }
-
     function renderHistory() {
       const container = document.getElementById('historyListContainer');
       if (completedHistory.length === 0) {
@@ -1754,7 +1662,6 @@
         </div>
       `).join('');
     }
-
     function updateLoyaltyUI() {
       document.getElementById('loyaltyCountBadge').innerText = `${completedOrdersCount} / 5 Orders`;
       const stamps = document.querySelectorAll('.stamp-dot');
@@ -1763,7 +1670,6 @@
         else stamp.classList.remove('filled');
       });
     }
-
     function sendCustomInquiry() {
       const val = document.getElementById('customInquiryInput').value.trim();
       if (!val) return;
@@ -1771,9 +1677,7 @@
       window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
       document.getElementById('customInquiryInput').value = '';
     }
-
     function triggerQuickReorder() { openHotMealsModal(); }
-
     function igniteTeaserToast() {
       if (animationLock) return;
       animationLock = true;
