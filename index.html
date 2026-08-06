@@ -68,7 +68,7 @@
       overflow-x: hidden;
     }
     
-    /* SPLASH SCREEN */
+    /* SPLASH SCREEN - Uses appearich-logo.png */
     #splash-screen {
       position: fixed;
       inset: 0;
@@ -92,7 +92,7 @@
       to { transform: scale(1.05); opacity: 1; }
     }
 
-    /* AUTH SCREEN - Clean Minimalistic Login */
+    /* AUTH SCREEN */
     .auth-container {
       max-width: 400px;
       width: 90%;
@@ -121,7 +121,7 @@
     .auth-switch { font-size: 0.82rem; color: var(--text-sub); margin-top: 18px; cursor: pointer; }
     .auth-switch span { color: var(--accent-gold); font-weight: 700; }
 
-    /* Main Application Styles */
+    /* Main Application Screens */
     .app-screen {
       display: none;
       width: 100%;
@@ -138,7 +138,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* In-App Header Styles */
+    /* In-App Header - Uses appearich-logo1.png and title-case "Appearich" */
     .app-header {
       position: fixed;
       top: 0;
@@ -325,8 +325,6 @@
       font-weight: 700;
       cursor: pointer;
     }
-
-    /* Logout Button Styling on Home and Profile Screens */
     .logout-main-btn {
       width: 100%;
       background: transparent;
@@ -344,9 +342,7 @@
       margin-top: 20px;
       margin-bottom: 20px;
     }
-    .logout-main-btn:hover {
-      background: rgba(231, 76, 60, 0.1);
-    }
+    .logout-main-btn:hover { background: rgba(231, 76, 60, 0.1); }
 
     .perfumes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; margin-bottom: 20px; }
     .perfume-card {
@@ -800,7 +796,6 @@
     }
     .nav-item i { font-size: 1.3rem; }
     .nav-item.active { color: var(--accent-gold); }
-    
     .pwa-install-btn {
       background: var(--accent-gold-light);
       border: 1px solid var(--accent-gold);
@@ -818,12 +813,12 @@
 </head>
 <body>
 
-  <!-- PURE BLACK SPLASH SCREEN -->
+  <!-- PURE BLACK SPLASH SCREEN - Uses appearich-logo.png -->
   <div id="splash-screen">
-    <img src="images/appearich-logo1.png" alt="Appearich Logo" class="splash-logo">
+    <img src="images/appearich-logo.png" alt="Appearich Splash Logo" class="splash-logo">
   </div>
 
-  <!-- AUTH SCREEN (Clean Minimalist Form) -->
+  <!-- AUTH SCREEN -->
   <div id="screen-auth" class="app-screen" style="display:none; justify-content:center; align-items:center;">
     <div class="auth-container">
       <div id="authTitle" class="auth-title">Welcome Back</div>
@@ -849,14 +844,14 @@
     </div>
   </div>
 
-  <!-- FIXED Header -->
+  <!-- FIXED Header - Uses appearich-logo1.png and title-case "Appearich" -->
   <header class="app-header" id="mainHeader" style="display:none;">
     <div class="header-left">
       <button id="globalBackBtn" class="back-btn" onclick="goBack()" title="Back to Home">
         <i class="fa-solid fa-arrow-left"></i>
       </button>
       <div class="brand-logo-wrap">
-        <img src="images/appearich-logo1.png" alt="Logo" class="brand-logo-img">
+        <img src="images/appearich-logo1.png" alt="Header Logo" class="brand-logo-img">
         <div class="brand-name">Appearich</div>
       </div>
     </div>
@@ -915,7 +910,6 @@
       <button class="reorder-btn" onclick="triggerQuickReorder()">Reorder</button>
     </div>
     
-    <!-- Logout Button on Home Screen -->
     <button class="logout-main-btn" onclick="handleLogout()">
       <i class="fa-solid fa-right-from-bracket"></i> Log Out
     </button>
@@ -1153,15 +1147,15 @@
       <div class="sheet-subtitle" style="font-size:0.8rem; color:var(--text-sub); text-align:center; margin-bottom:12px;">Select your bottle size & perfume details</div>
       <label style="font-size:0.8rem; color:var(--text-main); font-weight:600; display:block; margin-bottom:6px;">1. Select Size:</label>
       <div class="price-grid">
-        <div class="price-card active" onclick="selectPerfumeSize(this, '30ml (25,000/= TZS)')">
+        <div class="price-card active" onclick="selectPerfumeSize(this, '30ml', 25000)">
           <div class="size-title">30ml</div>
           <div class="size-price">25,000/=</div>
         </div>
-        <div class="price-card" onclick="selectPerfumeSize(this, '50ml (35,000/= TZS)')">
+        <div class="price-card" onclick="selectPerfumeSize(this, '50ml', 35000)">
           <div class="size-title">50ml</div>
           <div class="size-price">35,000/=</div>
         </div>
-        <div class="price-card" onclick="selectPerfumeSize(this, '100ml (55,000/= TZS)')">
+        <div class="price-card" onclick="selectPerfumeSize(this, '100ml', 55000)">
           <div class="size-title">100ml</div>
           <div class="size-price">55,000/=</div>
         </div>
@@ -1169,6 +1163,14 @@
       <div class="form-group">
         <label for="perfumeDesc">2. Perfume Name or Description:</label>
         <textarea id="perfumeDesc" placeholder="Enter perfume name..."></textarea>
+      </div>
+      <div class="form-group">
+        <label for="perfumePhoneNum">Contact Phone Number:</label>
+        <input type="tel" id="perfumePhoneNum" placeholder="e.g. 0764519027" value="+255 764 519 027">
+      </div>
+      <div class="form-group">
+        <label for="perfumeLoc">Delivery Location & Room:</label>
+        <input type="text" id="perfumeLoc" placeholder="e.g. Block C, Room 104">
       </div>
       <button class="submit-order-btn" onclick="submitPerfumeOrder()">
         <i class="fa-brands fa-whatsapp"></i> Send Order on WhatsApp
@@ -1206,11 +1208,14 @@
     let currentUsername = "";
     let isRegisterMode = false;
     let deferredPrompt = null;
+
+    // Persistent storage initialization with fallback offline support
     let activeOrders = JSON.parse(localStorage.getItem('appearich_active_orders')) || [];
     let completedHistory = JSON.parse(localStorage.getItem('appearich_history')) || [];
     let completedOrdersCount = parseInt(localStorage.getItem('appearich_loyalty_count')) || 0;
     
-    let selectedPerfumeSize = "30ml (25,000/= TZS)";
+    let selectedPerfumeSizeName = "30ml";
+    let selectedPerfumePrice = 25000;
     let selectedPaymentType = 'cash';
     let selectedFoodItems = [];
 
@@ -1252,6 +1257,7 @@
         if (session && session.user) {
           currentUser = session.user;
           await fetchAndSetupUserData(currentUser.id);
+          await syncOrdersFromSupabase();
         } else {
           showAuthScreen();
         }
@@ -1265,7 +1271,6 @@
     });
 
     async function fetchAndSetupUserData(userId) {
-      // Fetch user profile username from Supabase
       const { data, error } = await supabaseClient
         .from('profiles')
         .select('username')
@@ -1279,6 +1284,34 @@
       }
       localStorage.setItem('appearich_username', currentUsername);
       setupUserInterface();
+    }
+
+    async function syncOrdersFromSupabase() {
+      try {
+        const { data, error } = await supabaseClient
+          .from('orders')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false });
+        
+        if (data && data.length > 0) {
+          // Merge remote orders with local state
+          activeOrders = data.map(row => ({
+            id: row.order_id,
+            items: row.items || [],
+            total: row.total,
+            location: row.location,
+            instructions: row.instructions || 'None',
+            paymentMethod: row.payment_method || 'Cash on Delivery',
+            dateTime: new Date(row.created_at).toLocaleString(),
+            status: row.status || 'pending'
+          }));
+          localStorage.setItem('appearich_active_orders', JSON.stringify(activeOrders));
+          renderBookings();
+        }
+      } catch (e) {
+        console.log("Offline mode: using local cache for orders.", e);
+      }
     }
 
     function showAuthScreen() {
@@ -1301,6 +1334,7 @@
       document.getElementById('profAvatar').innerText = currentUsername.charAt(0).toUpperCase();
       document.getElementById('profPhone').innerText = currentUser.phone || "+255 764 519 027";
       document.getElementById('mealPhoneNum').value = currentUser.phone || "+255 764 519 027";
+      document.getElementById('perfumePhoneNum').value = currentUser.phone || "+255 764 519 027";
     }
 
     function toggleAuthMode() {
@@ -1334,7 +1368,6 @@
           currentUser = data.user;
           currentUsername = username;
           
-          // Save username permanently to Supabase profiles table
           if (currentUser) {
             await supabaseClient.from('profiles').upsert([
               { id: currentUser.id, username: username, email: email }
@@ -1351,6 +1384,7 @@
         } else {
           currentUser = data.user;
           await fetchAndSetupUserData(currentUser.id);
+          await syncOrdersFromSupabase();
         }
       }
     }
@@ -1358,7 +1392,6 @@
     async function handleLogout() {
       await supabaseClient.auth.signOut();
       localStorage.removeItem('appearich_username');
-      localStorage.removeItem('appearich_active_orders');
       currentUser = null;
       currentUsername = "";
       showAuthScreen();
@@ -1407,10 +1440,11 @@
       document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
       openOrderModal();
     }
-    function selectPerfumeSize(el, sizePrice) {
+    function selectPerfumeSize(el, sizeName, price) {
       document.querySelectorAll('#perfumesModal .price-card').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
-      selectedPerfumeSize = sizePrice;
+      selectedPerfumeSizeName = sizeName;
+      selectedPerfumePrice = price;
     }
     function selectPaymentMethod(type) {
       selectedPaymentType = type;
@@ -1475,6 +1509,7 @@
       const block = document.getElementById('mealBlockLoc').value.trim();
       const room = document.getElementById('mealRoomLoc').value.trim();
       const phone = document.getElementById('mealPhoneNum').value.trim();
+      const instructions = document.getElementById('mealDetails').value.trim() || "None";
       
       if (!block || !room || !phone) { alert("Please fill in location and phone number details."); return; }
       
@@ -1482,20 +1517,29 @@
       localStorage.setItem('appearich_user_room', room);
       
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
-      const grandTotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0) * 1.25;
-      
+      const subtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
+      const surcharge = Math.round(subtotal * 0.25);
+      const grandTotal = subtotal + surcharge;
+      const dateTimeStr = new Date().toLocaleString();
+      const paymentName = selectedPaymentType === 'cash' ? 'Cash on Delivery' : 'Mobile Money (Voda Lipa)';
+
       const newOrder = {
         id: orderId,
-        title: `${grandTotal.toLocaleString()} TZS (${selectedFoodItems.length} items)`,
-        details: selectedPaymentType === 'cash' ? `Cash on Delivery` : `Mobile Money Payment`,
+        items: selectedFoodItems,
+        total: grandTotal,
         location: `${block}, Room ${room}`,
-        status: "pending",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        instructions: instructions,
+        paymentMethod: paymentName,
+        dateTime: dateTimeStr,
+        status: "pending"
       };
 
+      // Persistent save locally
       activeOrders.unshift(newOrder);
       localStorage.setItem('appearich_active_orders', JSON.stringify(activeOrders));
-      
+      renderBookings();
+
+      // Save to Supabase database
       try {
         await supabaseClient.from('orders').insert([{
           order_id: orderId,
@@ -1503,23 +1547,84 @@
           items: selectedFoodItems,
           total: grandTotal,
           location: `${block}, Room ${room}`,
+          instructions: instructions,
+          payment_method: paymentName,
           status: 'pending'
         }]);
       } catch (e) {
         console.log("Cloud sync queued offline.", e);
       }
 
+      // Format complete WhatsApp Order message neatly
+      let itemsListStr = selectedFoodItems.map(i => `• ${i.name} (x${i.qty}) - ${(i.unitPrice * i.qty).toLocaleString()} TZS`).join('\n');
+      let waMessage = `*NEW APPEARICH ORDER*\n\n` +
+        `🔖 *Order ID:* ${orderId}\n` +
+        `👤 *Customer:* ${currentUsername}\n` +
+        `📞 *Phone:* ${phone}\n` +
+        `📍 *Location:* ${block}, Room ${room}\n` +
+        `📝 *Instructions:* ${instructions}\n` +
+        `📅 *Date & Time:* ${dateTimeStr}\n\n` +
+        `📦 *Ordered Items:*\n${itemsListStr}\n\n` +
+        `💰 *Total Order Amount:* ${grandTotal.toLocaleString()} TZS\n` +
+        `💳 *Payment Method:* ${paymentName}`;
+
       selectedFoodItems = [];
       closeSheet('hotMealsModal');
-      renderBookings();
-      window.open(`https://wa.me/255764519027?text=${encodeURIComponent("New Appearich Order: " + orderId)}`, '_blank');
+      window.open(`https://wa.me/255764519027?text=${encodeURIComponent(waMessage)}`, '_blank');
     }
 
-    function submitPerfumeOrder() {
+    async function submitPerfumeOrder() {
       const desc = document.getElementById('perfumeDesc').value.trim();
-      if (!desc) { alert("Please describe the perfume."); return; }
-      window.open(`https://wa.me/255764519027?text=${encodeURIComponent("Perfume Order Size: " + selectedPerfumeSize + " | " + desc)}`, '_blank');
+      const phone = document.getElementById('perfumePhoneNum').value.trim();
+      const loc = document.getElementById('perfumeLoc').value.trim();
+      if (!desc || !phone || !loc) { alert("Please fill in all details for your perfume order."); return; }
+      
+      const orderId = "APR-PRF-" + Math.floor(1000 + Math.random() * 9000);
+      const dateTimeStr = new Date().toLocaleString();
+      const perfumeItems = [{ name: `${desc} (${selectedPerfumeSizeName})`, unitPrice: selectedPerfumePrice, qty: 1 }];
+
+      const newOrder = {
+        id: orderId,
+        items: perfumeItems,
+        total: selectedPerfumePrice,
+        location: loc,
+        instructions: desc,
+        paymentMethod: "Cash / Mobile Money",
+        dateTime: dateTimeStr,
+        status: "pending"
+      };
+
+      activeOrders.unshift(newOrder);
+      localStorage.setItem('appearich_active_orders', JSON.stringify(activeOrders));
+      renderBookings();
+
+      try {
+        await supabaseClient.from('orders').insert([{
+          order_id: orderId,
+          user_id: currentUser ? currentUser.id : 'guest',
+          items: perfumeItems,
+          total: selectedPerfumePrice,
+          location: loc,
+          instructions: desc,
+          payment_method: "Cash / Mobile Money",
+          status: 'pending'
+        }]);
+      } catch (e) {
+        console.log("Cloud sync queued offline.", e);
+      }
+
+      let waMessage = `*NEW APPEARICH PERFUME ORDER*\n\n` +
+        `🔖 *Order ID:* ${orderId}\n` +
+        `👤 *Customer:* ${currentUsername}\n` +
+        `📞 *Phone:* ${phone}\n` +
+        `📍 *Location:* ${loc}\n` +
+        `📅 *Date & Time:* ${dateTimeStr}\n\n` +
+        `📦 *Ordered Products:*\n• ${desc} - Size: ${selectedPerfumeSizeName} (x1)\n\n` +
+        `💰 *Total Order Amount:* ${selectedPerfumePrice.toLocaleString()} TZS\n` +
+        `💳 *Payment Method:* Cash / Mobile Money`;
+
       closeSheet('perfumesModal');
+      window.open(`https://wa.me/255764519027?text=${encodeURIComponent(waMessage)}`, '_blank');
     }
 
     function renderBookings() {
@@ -1531,12 +1636,13 @@
       container.innerHTML = activeOrders.map(o => `
         <div class="order-card-track">
           <div class="track-header">
-            <span class="order-id">${o.id} - ${o.title}</span>
+            <span class="order-id">${o.id} - ${o.total.toLocaleString()} TZS</span>
             <span class="status-badge pending"><i class="fa-solid fa-clock"></i> Pending</span>
           </div>
           <div class="track-details">
-            <p><strong>Payment:</strong> ${o.details}</p>
+            <p><strong>Time:</strong> ${o.dateTime || 'Recent'}</p>
             <p><strong>Location:</strong> ${o.location}</p>
+            <p><strong>Payment:</strong> ${o.paymentMethod || 'Cash'}</p>
           </div>
         </div>
       `).join('');
@@ -1570,7 +1676,7 @@
     function sendCustomInquiry() {
       const val = document.getElementById('customInquiryInput').value.trim();
       if (!val) return;
-      window.open(`https://wa.me/255764519027?text=${encodeURIComponent("Custom Inquiry: " + val)}`, '_blank');
+      window.open(`https://wa.me/255764519027?text=${encodeURIComponent("Custom Inquiry from " + currentUsername + ": " + val)}`, '_blank');
       document.getElementById('customInquiryInput').value = '';
     }
 
