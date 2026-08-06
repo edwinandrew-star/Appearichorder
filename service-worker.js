@@ -1,4 +1,4 @@
-const CACHE_NAME = 'appearich-v1';
+const CACHE_NAME = 'appearich';
 const ASSETS = [
   './',
   './index.html',
