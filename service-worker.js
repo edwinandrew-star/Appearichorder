@@ -1,8 +1,9 @@
-const CACHE_NAME = 'appearich-cache-v2';
+const CACHE_NAME = 'appearich-cache-v3';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/images/appearich-logo.png',
   '/images/appearich-logo1.png',
   '/images/appearich-hero.jpg',
   '/images/appearich-perfume1.jpg',
