@@ -1,17 +1,7 @@
-{
-  "name": "Appearich",
-  "short_name": "Appearich",
-  "description": "Premium Delivery, Delivered with Love.",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
-  "icons": [
-    {
-      "src": "images/appearich-logo1.png",
-      "sizes": "192x192 512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ]
-}
+public/
+├── index.html
+├── manifest.json
+├── service-worker.js
+└── images/
+    ├── appearich-logo.png   (Splash screen logo ONLY: Black background compatible, transparent PNG)
+    └── appearich-logo1.png  (App Header, App Icon, Install Prompt logo: Title Case style)
