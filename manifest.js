@@ -1,7 +1,23 @@
-public/
-├── index.html
-├── manifest.json
-├── service-worker.js
-└── images/
-    ├── appearich-logo.png   (Splash screen logo ONLY: Black background compatible, transparent PNG)
-    └── appearich-logo1.png  (App Header, App Icon, Install Prompt logo: Title Case style)
+{
+  "name": "Appearich",
+  "short_name": "Appearich",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "images/appearich-logo1.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/appearich-logo1.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
