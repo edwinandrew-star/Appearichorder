@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -11,13 +11,21 @@
     <title>Appearich</title>
     <link rel="manifest" href="manifest.json">
     <style>
+        :root {
+            --app-height: 100dvh;
+        }
+
         html, body { 
             margin: 0; 
             padding: 0; 
             width: 100%; 
             height: 100%; 
+            height: var(--app-height);
             overflow: hidden; 
             background: #000000; 
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         * { 
@@ -26,8 +34,8 @@
         }
         
         .app { 
-            width: 100vw; 
-            height: 100vh; 
+            width: 100%; 
+            height: 100%; 
             background: #ffffff; 
             position: relative; 
             overflow: hidden; 
@@ -35,11 +43,14 @@
         
         .screen { 
             position: absolute; 
+            top: 0;
+            left: 0;
             width: 100%; 
             height: 100%; 
             display: none; 
-            padding: 25px; 
+            padding: env(safe-area-inset-top, 20px) 24px env(safe-area-inset-bottom, 20px) 24px; 
             overflow-y: auto; 
+            -webkit-overflow-scrolling: touch;
         }
 
         .screen.active { 
@@ -55,9 +66,16 @@
             z-index: 10;
         }
 
+        .logo {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .logo img { 
-            width: 100%; 
-            max-width: 280px; 
+            width: 70%; 
+            max-width: 240px; 
             height: auto; 
             object-fit: contain; 
             animation: logoPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -69,33 +87,34 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* White Screen Containers (Auth & Home) */
+        /* Mobile Container Formatting */
         .auth-card, .home-card {
             width: 100%;
-            max-width: 360px;
+            max-width: 400px;
+            margin: auto 0; /* Keeps card centered while allowing overflow scroll on small screens */
         }
 
         h2 {
-            font-size: 28px;
+            font-size: 1.5rem;
             font-weight: 800;
             color: #111111;
-            margin-bottom: 8px;
+            margin: 0 0 6px 0;
         }
 
         p {
-            font-size: 14px;
+            font-size: 0.9rem;
             color: #666666;
-            margin-bottom: 28px;
+            margin: 0 0 24px 0;
         }
 
         .input-group {
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             width: 100%;
         }
 
         .input-group label {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: #111111;
             margin-bottom: 6px;
@@ -103,15 +122,18 @@
             letter-spacing: 0.5px;
         }
 
+        /* Set base font-size to 16px for input elements to prevent iOS auto-zoom */
         .input-group input {
             width: 100%;
-            padding: 16px;
-            font-size: 15px;
+            padding: 14px 16px;
+            font-size: 16px;
             border: 1.5px solid #eeeeee;
             border-radius: 14px;
             background: #fdfdfd;
             outline: none;
             transition: border-color 0.2s;
+            -webkit-user-select: text;
+            user-select: text;
         }
 
         .input-group input:focus {
@@ -120,15 +142,20 @@
 
         .btn { 
             width: 100%; 
-            padding: 18px; 
+            padding: 16px; 
             border: none; 
             background: #111111; 
             color: #FFD700; 
-            border-radius: 18px; 
+            border-radius: 16px; 
             font-weight: 800; 
-            font-size: 16px; 
-            margin-top: 10px; 
+            font-size: 15px; 
+            margin-top: 8px; 
             cursor: pointer; 
+            transition: opacity 0.15s ease;
+        }
+
+        .btn:active {
+            opacity: 0.85;
         }
 
         .btn-secondary {
@@ -140,7 +167,7 @@
         .auth-toggle {
             text-align: center;
             margin-top: 20px;
-            font-size: 14px;
+            font-size: 13px;
             color: #666666;
         }
 
@@ -162,7 +189,7 @@
             </div>
         </div>
 
-        <!-- 2. CREATE ACCOUNT SCREEN (For New Users) -->
+        <!-- 2. CREATE ACCOUNT SCREEN -->
         <div id="registerScreen" class="screen">
             <div class="auth-card">
                 <h2>Create Account</h2>
@@ -193,7 +220,7 @@
             </div>
         </div>
 
-        <!-- 3. LOGIN SCREEN (Alternative Option) -->
+        <!-- 3. LOGIN SCREEN -->
         <div id="loginScreen" class="screen">
             <div class="auth-card">
                 <h2>Welcome Back</h2>
@@ -219,7 +246,7 @@
             </div>
         </div>
 
-        <!-- 4. HOME SCREEN (Direct Destination for Logged In / Registered Users) -->
+        <!-- 4. HOME SCREEN -->
         <div id="homeScreen" class="screen">
             <div class="home-card">
                 <h2>🏠 Home Screen</h2>
@@ -235,40 +262,33 @@
             setTimeout(function () {
                 document.getElementById("logoScreen").classList.remove("active");
 
-                // Check if user has an account stored in local storage
                 const hasAccount = localStorage.getItem("appearich_has_account");
 
                 if (hasAccount === "true") {
-                    // Direct to Home Screen
                     document.getElementById("homeScreen").classList.add("active");
                 } else {
-                    // Direct to Create Account Screen
                     document.getElementById("registerScreen").classList.add("active");
                 }
             }, 2000);
         };
 
-        // Screen Switching Helper
         function showScreen(targetScreenId) {
             document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
             document.getElementById(targetScreenId).classList.add('active');
         }
 
-        // Handle Account Creation
         function handleRegister(event) {
             event.preventDefault();
             localStorage.setItem("appearich_has_account", "true");
             showScreen("homeScreen");
         }
 
-        // Handle Sign In
         function handleLogin(event) {
             event.preventDefault();
             localStorage.setItem("appearich_has_account", "true");
             showScreen("homeScreen");
         }
 
-        // Handle Logout
         function handleLogout() {
             localStorage.removeItem("appearich_has_account");
             showScreen("registerScreen");
