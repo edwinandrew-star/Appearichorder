@@ -1,19 +1,15 @@
-const CACHE_NAME = 'appearich-cache-v3';
+const CACHE_NAME = 'appearich-v1';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/images/appearich-logo.png',
-  '/images/appearich-logo1.png',
-  '/images/appearich-hero.jpg',
-  '/images/appearich-perfume1.jpg',
-  '/images/appearich-perfume2.jpg',
-  '/images/appearich-perfume3.jpg',
-  '/images/appearich-perfume4.jpg',
-  '/images/heroo-ai.jpg',
+  './',
+  './index.html',
+  './manifest.json',
+  './images/appearich-logo.png',
+  './images/appearich-logo1.png',
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
 ];
 
+// Install Event
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -23,32 +19,37 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
+// Activate Event
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
       );
     })
   );
   self.clients.claim();
 });
 
+// Fetch Event - Stale While Revalidate / Cache First fallback
 self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request).then((response) => {
-        return caches.open(CACHE_NAME).then((cache) => {
-          if (event.request.method === 'GET' && event.request.url.startsWith('http')) {
-            cache.put(event.request, response.clone());
-          }
-          return response;
-        });
-      }).catch(() => {
-        if (event.request.headers.get('accept').includes('text/html')) {
-          return caches.match('/index.html');
+      const fetchPromise = fetch(event.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
         }
-      });
+        return networkResponse;
+      }).catch(() => cachedResponse);
+      return cachedResponse || fetchPromise;
     })
   );
 });
