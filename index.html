@@ -2,184 +2,282 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Appearich">
+    
+    <title>Appearich</title>
+    <link rel="manifest" href="manifest.json">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        html, body { 
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: hidden; 
+            background: #000000; 
         }
 
-        body, html {
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            background-color: #ffffff;
+        * { 
+            box-sizing: border-box; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+        }
+        
+        .app { 
+            width: 100vw; 
+            height: 100vh; 
+            background: #ffffff; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        
+        .screen { 
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            display: none; 
+            padding: 25px; 
+            overflow-y: auto; 
         }
 
-        /* Splash Screen Overlay */
-        #splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000000; /* Pure black background matching your logo backdrop */
-            display: flex;
-            justify-content: center;
+        .screen.active { 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
             align-items: center;
-            z-index: 9999;
-            opacity: 1;
-            transition: opacity 0.8s ease-in-out, visibility 0.8s;
         }
 
-        /* Logo Pop Animation */
-        .splash-logo {
-            width: 120px;
-            height: auto;
-            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        /* 1. Black Splash Screen */
+        #logoScreen { 
+            background: #000000; 
+            z-index: 10;
         }
 
-        @keyframes popIn {
-            0% {
-                transform: scale(0.3);
-                opacity: 0;
-            }
-            70% {
-                transform: scale(1.05);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
+        .logo img { 
+            width: 100%; 
+            max-width: 280px; 
+            height: auto; 
+            object-fit: contain; 
+            animation: logoPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        /* Fade class added by JS */
-        #splash-screen.fade-out {
-            opacity: 0;
-            visibility: hidden;
+        @keyframes logoPop {
+            0% { opacity: 0; transform: scale(0.3); }
+            70% { opacity: 1; transform: scale(1.08); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
-        /* White Background Login Container */
-        .login-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #ffffff; /* Clean white background */
-            padding: 20px;
-        }
-
-        .login-card {
+        /* White Screen Containers (Auth & Home) */
+        .auth-card, .home-card {
             width: 100%;
-            max-width: 380px;
-            padding: 40px 30px;
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            max-width: 360px;
         }
 
-        .login-card h2 {
-            font-size: 26px;
-            font-weight: 700;
+        h2 {
+            font-size: 28px;
+            font-weight: 800;
             color: #111111;
             margin-bottom: 8px;
         }
 
-        .login-card p {
+        p {
             font-size: 14px;
             color: #666666;
-            margin-bottom: 32px;
+            margin-bottom: 28px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #333333;
-            margin-bottom: 8px;
-        }
-
-        .form-group input {
+        .input-group {
+            margin-bottom: 18px;
             width: 100%;
-            padding: 14px 16px;
-            font-size: 15px;
-            border: 1px solid #e1e1e1;
-            border-radius: 10px;
-            outline: none;
-            background-color: #f9f9f9;
-            transition: border-color 0.2s, background-color 0.2s;
         }
 
-        .form-group input:focus {
-            border-color: #000000;
-            background-color: #ffffff;
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #111111;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .btn-submit {
+        .input-group input {
             width: 100%;
             padding: 16px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #ffffff;
-            background-color: #000000;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.1s ease, background-color 0.2s;
-            margin-top: 10px;
+            font-size: 15px;
+            border: 1.5px solid #eeeeee;
+            border-radius: 14px;
+            background: #fdfdfd;
+            outline: none;
+            transition: border-color 0.2s;
         }
 
-        .btn-submit:active {
-            transform: scale(0.98);
+        .input-group input:focus {
+            border-color: #111111;
+        }
+
+        .btn { 
+            width: 100%; 
+            padding: 18px; 
+            border: none; 
+            background: #111111; 
+            color: #FFD700; 
+            border-radius: 18px; 
+            font-weight: 800; 
+            font-size: 16px; 
+            margin-top: 10px; 
+            cursor: pointer; 
+        }
+
+        .btn-secondary {
+            background: #f4f4f4;
+            color: #111111;
+            margin-top: 12px;
+        }
+
+        .auth-toggle {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .auth-toggle span {
+            color: #111111;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: underline;
         }
     </style>
 </head>
+
 <body>
+    <div class="app">
+        <!-- 1. SPLASH SCREEN -->
+        <div id="logoScreen" class="screen active">
+            <div class="logo">
+                <img src="images/appearich-logo.png" alt="Appearich Logo">
+            </div>
+        </div>
 
-    <!-- App Splash Screen -->
-    <div id="splash-screen">
-        <!-- Replace src with your image asset location -->
-        <img src="images/heroo-ai.jpg" alt="Logo" class="splash-logo">
-    </div>
+        <!-- 2. CREATE ACCOUNT SCREEN (For New Users) -->
+        <div id="registerScreen" class="screen">
+            <div class="auth-card">
+                <h2>Create Account</h2>
+                <p>Sign up to get started with Appearich.</p>
 
-    <!-- Login Screen -->
-    <div class="login-wrapper">
-        <div class="login-card">
-            <h2>Welcome Back</h2>
-            <p>Please enter your details to sign in.</p>
+                <form onsubmit="handleRegister(event)">
+                    <div class="input-group">
+                        <label for="reg-name">Full Name</label>
+                        <input type="text" id="reg-name" placeholder="John Doe" required>
+                    </div>
 
-            <form>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" placeholder="name@example.com" required>
+                    <div class="input-group">
+                        <label for="reg-email">Email</label>
+                        <input type="email" id="reg-email" placeholder="name@example.com" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn">Create Account</button>
+                </form>
+
+                <div class="auth-toggle">
+                    Already have an account? <span onclick="showScreen('loginScreen')">Sign In</span>
                 </div>
+            </div>
+        </div>
 
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="••••••••" required>
+        <!-- 3. LOGIN SCREEN (Alternative Option) -->
+        <div id="loginScreen" class="screen">
+            <div class="auth-card">
+                <h2>Welcome Back</h2>
+                <p>Please enter your details to sign in.</p>
+
+                <form onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" placeholder="name@example.com" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn">Sign In</button>
+                </form>
+
+                <div class="auth-toggle">
+                    Don't have an account? <span onclick="showScreen('registerScreen')">Create Account</span>
                 </div>
+            </div>
+        </div>
 
-                <button type="submit" class="btn-submit">Sign In</button>
-            </form>
+        <!-- 4. HOME SCREEN (Direct Destination for Logged In / Registered Users) -->
+        <div id="homeScreen" class="screen">
+            <div class="home-card">
+                <h2>🏠 Home Screen</h2>
+                <p>Welcome to Appearich! You are currently logged in.</p>
+
+                <button class="btn btn-secondary" onclick="handleLogout()">Log Out (Reset Account State)</button>
+            </div>
         </div>
     </div>
 
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            // Keep splash screen visible for 1.8 seconds, then smooth fade out
-            setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                splash.classList.add('fade-out');
-            }, 1800);
-        });
+        window.onload = function () {
+            setTimeout(function () {
+                document.getElementById("logoScreen").classList.remove("active");
+
+                // Check if user has an account stored in local storage
+                const hasAccount = localStorage.getItem("appearich_has_account");
+
+                if (hasAccount === "true") {
+                    // Direct to Home Screen
+                    document.getElementById("homeScreen").classList.add("active");
+                } else {
+                    // Direct to Create Account Screen
+                    document.getElementById("registerScreen").classList.add("active");
+                }
+            }, 2000);
+        };
+
+        // Screen Switching Helper
+        function showScreen(targetScreenId) {
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+            document.getElementById(targetScreenId).classList.add('active');
+        }
+
+        // Handle Account Creation
+        function handleRegister(event) {
+            event.preventDefault();
+            localStorage.setItem("appearich_has_account", "true");
+            showScreen("homeScreen");
+        }
+
+        // Handle Sign In
+        function handleLogin(event) {
+            event.preventDefault();
+            localStorage.setItem("appearich_has_account", "true");
+            showScreen("homeScreen");
+        }
+
+        // Handle Logout
+        function handleLogout() {
+            localStorage.removeItem("appearich_has_account");
+            showScreen("registerScreen");
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+            .then(() => console.log('Service Worker Registered'));
+        }
     </script>
 </body>
 </html>
