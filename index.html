@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Appearich - Premium Service & Scent Hub</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Appearich">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" href="icons/icon-192.png">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    #appRoot { display: none; }
+    #appRoot.active { display: contents; }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== SPLASH SCREEN ==================== -->
+  <div id="splashScreen">
+    <img src="images/appearich-logo.png" alt="Appearich" class="splash-logo"
+         onerror="this.style.display='none'; document.getElementById('splashFallback').style.display='block';">
+    <div id="splashFallback" class="splash-logo-fallback" style="display:none;">Appearich</div>
+  </div>
+
+  <!-- ==================== AUTH SCREEN ==================== -->
+  <div id="authScreen">
+    <div class="auth-brand">
+      <div class="auth-logo-wrap">
+        <img src="images/appearich-logo.png" alt="Appearich" onerror="this.style.display='none';">
+      </div>
+      <h1><span class="logo-appea">Appea</span><span class="logo-rich">rich</span></h1>
+      <p>Premium Delivery, Delivered with Love.</p>
+    </div>
+
+    <div class="auth-tabs">
+      <button id="authTabLogin" class="auth-tab-btn active" onclick="switchAuthTab('login')">Log In</button>
+      <button id="authTabRegister" class="auth-tab-btn" onclick="switchAuthTab('register')">Create Account</button>
+    </div>
+
+    <p id="authError" class="auth-error"></p>
+
+    <!-- LOGIN -->
+    <form id="loginForm" class="auth-form active">
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" placeholder="you@example.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="auth-submit-btn">Log In</button>
+    </form>
+
+    <!-- REGISTER -->
+    <form id="registerForm" class="auth-form">
+      <div class="form-group">
+        <label for="regName">Full Name</label>
+        <input type="text" id="regName" placeholder="Jina lako" required autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label for="regPhone">Phone Number</label>
+        <input type="tel" id="regPhone" placeholder="e.g. 0764519027" required autocomplete="tel">
+      </div>
+      <div class="form-group">
+        <label for="regEmail">Email</label>
+        <input type="email" id="regEmail" placeholder="you@example.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="regPassword">Password</label>
+        <input type="password" id="regPassword" placeholder="At least 6 characters" required minlength="6" autocomplete="new-password">
+      </div>
+      <button type="submit" class="auth-submit-btn">Create Account</button>
+    </form>
+    <p class="auth-note">By continuing you agree this is a demo build for Appearich.</p>
+  </div>
+
+  <!-- ==================== APP ROOT (shown once authenticated) ==================== -->
+  <div id="appRoot">
+
+    <!-- FIXED Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <button id="globalBackBtn" class="back-btn" onclick="App.goBack()" title="Back to Home">
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="brand-logo-wrap">
+          <img src="images/appearich-logo.png" alt="Appearich" class="brand-logo-img-img"
+               style="width:34px;height:34px;object-fit:contain;background:transparent;"
+               onerror="this.style.display='none'; document.getElementById('headerBrandFallback').style.display='flex';">
+          <div id="headerBrandFallback" class="brand-logo-img" style="display:none;">A</div>
+          <div class="brand-name">
+            <span class="logo-appea">Appea</span><span class="logo-rich">rich</span>
+          </div>
+        </div>
+      </div>
+      <button class="theme-toggle-btn" id="themeToggleBtn" onclick="App.toggleTheme()" title="Switch Light/Dark Mode">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </header>
+
+    <!-- SCREEN 1: HOME -->
+    <div id="screen-home" class="app-screen active">
+      <div class="hero-banner">
+        <div class="hero-top-row">
+          <div>
+            <div class="hero-greeting" id="heroGreeting">Welcome!</div>
+            <div class="hero-tagline">Appear Rich — Premium Delivery, Delivered with Love.</div>
+          </div>
+          <button class="logout-btn" onclick="logout()" title="Log Out">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+      <div class="section-title">
+        <i class="fa-solid fa-layer-group" style="color:var(--accent-gold);"></i> We Offer This
+      </div>
+      <div class="offerings-grid">
+        <div class="offer-card" onclick="App.openHotMealsModal()">
+          <div class="offer-card-bg" style="background-image: url('https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=400&auto=format&fit=cover');"></div>
+          <div class="offer-card-overlay">
+            <div class="offer-card-title">Hot Meals</div>
+            <div class="offer-card-desc">Fastest Sourced Food</div>
+          </div>
+        </div>
+        <div class="offer-card" onclick="App.switchTab('screen-perfumes')">
+          <div class="offer-card-bg" style="background-image: url('images/appearich-perfume1.jpg');"></div>
+          <div class="offer-card-overlay">
+            <div class="offer-card-title">Perfumes</div>
+            <div class="offer-card-desc">Luxury Fragrances</div>
+          </div>
+        </div>
+      </div>
+      <div class="section-divider"></div>
+      <div class="inquiry-box">
+        <h4><i class="fa-solid fa-circle-question" style="color:var(--accent-gold);"></i> Need Anything Specific?</h4>
+        <p>Describe your needs, custom order details, or ask any question directly.</p>
+        <div class="inquiry-input-wrap">
+          <input type="text" id="customInquiryInput" class="inquiry-input" placeholder="Type your request here...">
+          <button class="inquiry-btn" onclick="App.sendCustomInquiry()">Ask</button>
+        </div>
+      </div>
+      <div class="quick-reorder-section">
+        <div class="quick-reorder-info">
+          <div class="quick-reorder-icon"><i class="fa-solid fa-rotate-right"></i></div>
+          <div>
+            <div class="reorder-text-main">Quick Reorder</div>
+            <div class="reorder-text-sub">Repeat your last saved order instantly</div>
+          </div>
+        </div>
+        <button class="reorder-btn" onclick="App.triggerQuickReorder()">Reorder</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: PERFUMES -->
+    <div id="screen-perfumes" class="app-screen">
+      <div class="section-title">
+        <i class="fa-solid fa-spray-can-sparkles" style="color:var(--accent-gold);"></i> Scent Hub Offerings
+      </div>
+      <main class="perfumes-grid">
+        <div class="perfume-card" style="background-image: url('images/appearich-perfume1.jpg');" onclick="App.openProductModal('Appearich Signature')">
+          <div class="perfume-card-overlay">
+            <div class="perfume-card-title">Appearich Signature</div>
+            <div class="perfume-card-sub">Luxury • Premium Scent</div>
+          </div>
+        </div>
+        <div class="perfume-card" style="background-image: url('images/appearich-perfume2.jpg');" onclick="App.openProductModal('Sugar Candy')">
+          <div class="perfume-card-overlay">
+            <div class="perfume-card-title">Sugar Candy</div>
+            <div class="perfume-card-sub">Floral • Sweet</div>
+          </div>
+        </div>
+        <div class="perfume-card" style="background-image: url('images/appearich-perfume3.jpg');" onclick="App.openProductModal('212 VIP')">
+          <div class="perfume-card-overlay">
+            <div class="perfume-card-title">212 VIP</div>
+            <div class="perfume-card-sub">Fresh • Sea Salt</div>
+          </div>
+        </div>
+        <div class="perfume-card" style="background-image: url('images/appearich-perfume4.jpg');" onclick="App.openProductModal('Tag Sunset')">
+          <div class="perfume-card-overlay">
+            <div class="perfume-card-title">Tag Sunset</div>
+            <div class="perfume-card-sub">Rich Spices</div>
+          </div>
+        </div>
+      </main>
+      <div class="action-container">
+        <button onclick="App.openOrderModal()" class="order-main-btn">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>PLACE YOUR ORDER</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: AI GUIDE -->
+    <div id="screen-ai" class="app-screen">
+      <div class="ambient-glow"></div>
+      <div id="soonToast" class="coming-soon-toast">
+        <div class="toast-icon-wrap"><i class="fas fa-bolt"></i></div>
+        <div class="toast-info">
+          <h4 style="font-weight:900; text-transform:uppercase;">Coming Soon!</h4>
+          <p style="font-size:0.78rem;">Our intelligent AI curator is currently running final model training loops.</p>
+        </div>
+      </div>
+      <div class="ai-screen-wrap">
+        <div class="teaser-image-card" onclick="App.igniteTeaserToast()">
+          <img src="images/heroo-ai.jpg" alt="AI Neural Guide">
+          <div class="image-overlay"></div>
+        </div>
+        <div class="ai-badge">
+          <i class="fas fa-circle-nodes" style="color:#FFA500;"></i> Smart Engine v2.0
+        </div>
+        <h1 class="ai-title">Appearich <br><span>AI Guide</span></h1>
+        <p class="ai-sub">Tap anywhere on the teaser card above or below to test the matrix preparation status.</p>
+        <button class="status-pill-btn" onclick="App.igniteTeaserToast()">
+          <i class="fas fa-robot"></i> Initialize AI Exploration
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: BOOKINGS -->
+    <div id="screen-bookings" class="app-screen">
+      <div class="section-title">
+        <i class="fa-solid fa-receipt" style="color:var(--accent-gold);"></i> Active Bookings & Status
+      </div>
+      <div id="bookingsListContainer"></div>
+    </div>
+
+    <!-- SCREEN 5: PROFILE -->
+    <div id="screen-profile" class="app-screen">
+      <div class="profile-header-card">
+        <div class="profile-avatar" id="profAvatar">U</div>
+        <div class="profile-name" id="profName">Logged-in User</div>
+        <div class="profile-phone" id="profPhone">+255 764 519 027</div>
+      </div>
+      <a href="https://wa.me/255764519027?text=Hello%20Appearich%20Help%20Center!%20I%20need%20assistance." target="_blank" class="whatsapp-support-btn">
+        <i class="fa-brands fa-whatsapp" style="font-size:1.3rem;"></i> WhatsApp Help Center
+      </a>
+      <div class="loyalty-card">
+        <div class="loyalty-header">
+          <span class="loyalty-title"><i class="fa-solid fa-crown"></i> Loyalty Rewards</span>
+          <span class="loyalty-badge" id="loyaltyCountBadge">0 / 5 Orders</span>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-sub); margin-bottom:8px;">Complete 5 orders to unlock a special reward offer!</p>
+        <div class="stamps-row" id="stampsRow">
+          <div class="stamp-dot">1</div>
+          <div class="stamp-dot">2</div>
+          <div class="stamp-dot">3</div>
+          <div class="stamp-dot">4</div>
+          <div class="stamp-dot"><i class="fa-solid fa-gift"></i></div>
+        </div>
+      </div>
+      <div class="section-title" style="margin-top:10px;">
+        <i class="fa-solid fa-history" style="color:var(--accent-gold);"></i> Order History
+      </div>
+      <div id="historyListContainer"></div>
+      <button class="profile-logout-btn" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Log Out
+      </button>
+    </div>
+
+    <!-- HOT MEALS MODAL -->
+    <div id="hotMealsModal" class="modal-overlay">
+      <div class="sheet-content full-screen">
+        <span class="sheet-close" onclick="App.closeSheet('hotMealsModal')">&times;</span>
+
+        <div class="modal-sticky-header">
+          <div class="sheet-title">Hot Meals</div>
+        </div>
+        <div style="font-size: 0.82rem; font-weight:800; color:var(--text-main); margin-bottom:4px;">
+          <i class="fa-solid fa-plus-circle" style="color:var(--accent-gold);"></i> Tap to Add Available Items:
+        </div>
+        <div class="food-selection-grid">
+          <div class="food-selection-card" onclick="App.addItemToOrder('Chipsi Mayai', 3000)">
+            <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" alt="Chipsi Mayai">
+            <div class="food-card-overlay-label">
+              <span class="food-name-text">Chipsi Mayai</span>
+              <span class="food-price-text">3,000 TZS</span>
+            </div>
+          </div>
+          <div class="food-selection-card" onclick="App.addItemToOrder('Chipsi Kavu', 2000)">
+            <img src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=300&auto=format&fit=cover" alt="Chipsi Kavu">
+            <div class="food-card-overlay-label">
+              <span class="food-name-text">Chipsi Kavu</span>
+              <span class="food-price-text">2,000 TZS</span>
+            </div>
+          </div>
+          <div class="food-selection-card" onclick="App.addItemToOrder('Paja', 3000)">
+            <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?q=80&w=300&auto=format&fit=cover" alt="Paja">
+            <div class="food-card-overlay-label">
+              <span class="food-name-text">Paja</span>
+              <span class="food-price-text">3,000 TZS</span>
+            </div>
+          </div>
+          <div class="food-selection-card" onclick="App.addItemToOrder('Kidali', 3000)">
+            <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?q=80&w=300&auto=format&fit=cover" alt="Kidali">
+            <div class="food-card-overlay-label">
+              <span class="food-name-text">Kidali</span>
+              <span class="food-price-text">3,000 TZS</span>
+            </div>
+          </div>
+          <div class="food-selection-card" onclick="App.addItemToOrder('Mishikaki', 1000)">
+            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=300&auto=format&fit=cover" alt="Mishikaki">
+            <div class="food-card-overlay-label">
+              <span class="food-name-text">Mishikaki</span>
+              <span class="food-price-text">1,000 TZS</span>
+            </div>
+          </div>
+          <div class="food-selection-card" onclick="App.addItemToOrder('Soda', 1000)">
+            <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=300&auto=format&fit=cover" alt="Soda">
+            <div class="food-card-overlay-label">
+              <span class="food-name-text">Soda</span>
+              <span class="food-price-text">1,000 TZS</span>
+            </div>
+          </div>
+        </div>
+        <div id="selectedItemsContainer" class="selected-items-box">
+          <p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet. Click an item above to add to order.</p>
+        </div>
+        <div class="form-group">
+          <label for="mealDetails">Overall Order Description / Special Instructions:</label>
+          <textarea id="mealDetails" placeholder="Describe your full meal request (e.g., extra chili, salt level, soft chips, specific soda flavor)..."></textarea>
+        </div>
+        <div class="calculation-summary-box">
+          <div class="calc-row">
+            <span>Items Subtotal:</span>
+            <strong id="displaySubtotal">0 TZS</strong>
+          </div>
+          <div class="calc-row">
+            <span>
+              Service Fee (<span id="surchargeRateText">25%</span>):
+              <span id="nightBadgeSlot"></span>
+            </span>
+            <strong id="displaySurcharge">0 TZS</strong>
+          </div>
+          <div class="calc-row total-row">
+            <span>GRAND TOTAL:</span>
+            <strong id="displayGrandTotal" style="color:var(--accent-gold);">0 TZS</strong>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="mealBlockLoc">Block / Location: <span id="locSavedTag" class="saved-loc-badge"></span></label>
+            <input type="text" id="mealBlockLoc" placeholder="e.g. Block C / Hall 2">
+          </div>
+          <div class="form-group">
+            <label for="mealRoomLoc">Room Number:</label>
+            <input type="text" id="mealRoomLoc" placeholder="e.g. Room 104">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="mealPhoneNum">Contact Phone Number:</label>
+          <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
+        </div>
+        <div class="payment-selection-box">
+          <label style="font-size:0.82rem; font-weight:800; color:var(--text-main);">Select Payment Method:</label>
+          <div class="payment-options-grid">
+            <div id="payOptCash" class="pay-option-btn active" onclick="App.selectPaymentMethod('cash')">
+              <i class="fa-solid fa-money-bill-wave" style="color:var(--accent-gold);"></i>
+              <span>Cash on Delivery</span>
+            </div>
+            <div id="payOptMobile" class="pay-option-btn" onclick="App.selectPaymentMethod('mobile')">
+              <i class="fa-solid fa-mobile-screen-button" style="color:var(--accent-gold);"></i>
+              <span>Mobile Money</span>
+            </div>
+          </div>
+          <div id="mobileUnfoldArea" class="mobile-unfold-box">
+            <p style="font-size:0.82rem; color:var(--text-main); line-height:1.4; margin-bottom:10px;">
+              Pay via Voda Lipa Namba: <span class="lipa-tag">37247619</span><br>
+              Name: <strong>Edwin Andrew</strong>
+            </p>
+            <div class="form-group" style="margin-bottom:0;">
+              <label for="payerName" style="color:var(--text-main);">Jina la namba iliyotumika kufanya malipo:</label>
+              <input type="text" id="payerName" placeholder="Weka jina la akaunti ya malipo">
+            </div>
+          </div>
+        </div>
+        <button id="submitMealBtn" class="submit-order-btn" onclick="App.submitFoodOrder()">
+          <i class="fa-brands fa-whatsapp"></i> Send Order via WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <!-- PERFUME ORDER MODAL -->
+    <div id="perfumesModal" class="modal-overlay">
+      <div class="sheet-content">
+        <span class="sheet-close" onclick="App.closeSheet('perfumesModal')">&times;</span>
+        <div class="sheet-title">Place Your Order</div>
+        <div class="sheet-subtitle">Select your bottle size & perfume details</div>
+        <label style="font-size:0.8rem; color:var(--text-main); font-weight:600; display:block; margin-bottom:6px;">1. Select Size:</label>
+        <div class="price-grid">
+          <div class="price-card active" onclick="App.selectPerfumeSize(this, '30ml (25,000/= TZS)')">
+            <div class="size-title">30ml</div>
+            <div class="size-price">25,000/=</div>
+          </div>
+          <div class="price-card" onclick="App.selectPerfumeSize(this, '50ml (35,000/= TZS)')">
+            <div class="size-title">50ml</div>
+            <div class="size-price">35,000/=</div>
+          </div>
+          <div class="price-card" onclick="App.selectPerfumeSize(this, '100ml (55,000/= TZS)')">
+            <div class="size-title">100ml</div>
+            <div class="size-price">55,000/=</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="perfumeDesc">2. Perfume Name or Description:</label>
+          <textarea id="perfumeDesc" placeholder="Enter perfume name (e.g., Appearich Signature, 212 VIP) or describe what scent you want..."></textarea>
+        </div>
+        <button class="submit-order-btn" onclick="App.submitPerfumeOrder()">
+          <i class="fa-brands fa-whatsapp"></i> Send Order on WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+      <button id="nav-home-btn" class="nav-item active" onclick="App.switchTab('screen-home', this)">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" onclick="App.switchTab('screen-ai', this)">
+        <i class="fa-solid fa-robot"></i>
+        <span>AI Guide</span>
+      </button>
+      <button class="nav-item" onclick="App.switchTab('screen-bookings', this)">
+        <i class="fa-solid fa-briefcase"></i>
+        <span>Bookings</span>
+      </button>
+      <button class="nav-item" onclick="App.switchTab('screen-profile', this)">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </button>
+    </nav>
+
+  </div>
+  <!-- /appRoot -->
+
+  <!-- INSTALL PROMPT BANNER -->
+  <div id="installBanner" class="install-banner">
+    <div class="install-banner-icon"><i class="fa-solid fa-download"></i></div>
+    <div class="install-banner-text">
+      <strong>Install Appearich</strong>
+      <span>Add to your home screen for the full app experience</span>
+    </div>
+    <div class="install-banner-actions">
+      <button class="install-btn-primary" onclick="handleInstallClick()">Install</button>
+      <button class="install-btn-dismiss" onclick="dismissInstallBanner()">&times;</button>
+    </div>
+  </div>
+
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
