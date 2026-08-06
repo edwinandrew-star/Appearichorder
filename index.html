@@ -1,228 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Appearich</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    body {
-      background-color: #000000;
-      color: #ffffff;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-    
-    .card {
-      background: #0d0d0d;
-      border: 1px solid #222222;
-      padding: 2.5rem;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-      text-align: center;
-      width: 100%;
-      max-width: 380px;
-      
-      /* Logo Pop-Up Animation */
-      animation: popup 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Login</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
 
-    @keyframes popup {
-      0% {
-        opacity: 0;
-        transform: scale(0.7);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
 
-    .logo-container {
-      margin-bottom: 1.5rem;
-      display: flex;
-      justify-content: center;
-    }
+        /* Splash Screen Overlay */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000; /* Pure black background matching your logo backdrop */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.8s ease-in-out, visibility 0.8s;
+        }
 
-    .logo {
-      width: 150px;
-      height: auto;
-      object-fit: contain;
-      /* Eliminates square border artifacts on black backgrounds */
-      mix-blend-mode: screen; 
-      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.15));
-    }
+        /* Logo Pop Animation */
+        .splash-logo {
+            width: 120px;
+            height: auto;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
 
-    h2 {
-      margin-bottom: 1.5rem;
-      font-size: 1.5rem;
-      color: #ffffff;
-      letter-spacing: 0.5px;
-    }
+        @keyframes popIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
 
-    .form-group {
-      margin-bottom: 1.2rem;
-      text-align: left;
-    }
+        /* Fade class added by JS */
+        #splash-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
 
-    label {
-      display: block;
-      margin-bottom: 0.4rem;
-      color: #aaaaaa;
-      font-size: 0.85rem;
-    }
+        /* White Background Login Container */
+        .login-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #ffffff; /* Clean white background */
+            padding: 20px;
+        }
 
-    input {
-      width: 100%;
-      padding: 0.8rem;
-      background: #181818;
-      border: 1px solid #333333;
-      border-radius: 8px;
-      color: #ffffff;
-      outline: none;
-      transition: border-color 0.2s;
-    }
+        .login-card {
+            width: 100%;
+            max-width: 380px;
+            padding: 40px 30px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
 
-    input:focus {
-      border-color: #ffffff;
-    }
+        .login-card h2 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #111111;
+            margin-bottom: 8px;
+        }
 
-    .btn {
-      width: 100%;
-      padding: 0.8rem;
-      background-color: #ffffff;
-      color: #000000;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 1rem;
-      transition: background-color 0.2s, transform 0.1s;
-    }
+        .login-card p {
+            font-size: 14px;
+            color: #666666;
+            margin-bottom: 32px;
+        }
 
-    .btn:hover {
-      background-color: #e0e0e0;
-    }
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-    .btn:active {
-      transform: scale(0.98);
-    }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 8px;
+        }
 
-    .toggle-text {
-      margin-top: 1.2rem;
-      font-size: 0.85rem;
-      color: #888888;
-    }
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 15px;
+            border: 1px solid #e1e1e1;
+            border-radius: 10px;
+            outline: none;
+            background-color: #f9f9f9;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
 
-    .toggle-text a {
-      color: #ffffff;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-  </style>
+        .form-group input:focus {
+            border-color: #000000;
+            background-color: #ffffff;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            background-color: #000000;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.1s ease, background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+    </style>
 </head>
 <body>
 
-  <div class="card">
-    <div class="logo-container">
-      <img src="images/appearich-logo.png" alt="Appearich Logo" class="logo">
+    <!-- App Splash Screen -->
+    <div id="splash-screen">
+        <!-- Replace src with your image asset location -->
+        <img src="images/heroo-ai.jpg" alt="Logo" class="splash-logo">
     </div>
-    
-    <h2 id="formTitle">Create Account</h2>
-    
-    <form id="authForm">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" required placeholder="Enter username">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" required placeholder="Enter password">
-      </div>
-      <button type="submit" id="submitBtn" class="btn">Register</button>
-    </form>
 
-    <div class="toggle-text" id="toggleContainer">
-      <span id="toggleQuestion">Already have an account?</span> 
-      <a id="toggleLink">Sign In</a>
+    <!-- Login Screen -->
+    <div class="login-wrapper">
+        <div class="login-card">
+            <h2>Welcome Back</h2>
+            <p>Please enter your details to sign in.</p>
+
+            <form>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="name@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-submit">Sign In</button>
+            </form>
+        </div>
     </div>
-  </div>
 
-  <script>
-    const formTitle = document.getElementById("formTitle");
-    const submitBtn = document.getElementById("submitBtn");
-    const toggleQuestion = document.getElementById("toggleQuestion");
-    const toggleLink = document.getElementById("toggleLink");
-    const authForm = document.getElementById("authForm");
-
-    let isRegisterMode = true;
-
-    // 1. Initial Routing Check on Load
-    document.addEventListener("DOMContentLoaded", () => {
-      const hasAccount = localStorage.getItem("hasAccount") === "true";
-      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-
-      // If user has an account and is logged in -> jump straight to home.html
-      if (hasAccount && isLoggedIn) {
-        window.location.href = "home.html";
-        return;
-      }
-
-      // If user already has an account but logged out -> show Login mode
-      if (hasAccount) {
-        setLoginMode();
-      } else {
-        // First time visitor without account -> default to Create Account mode
-        setRegisterMode();
-      }
-    });
-
-    // 2. UI Switchers
-    function setRegisterMode() {
-      isRegisterMode = true;
-      formTitle.textContent = "Create Account";
-      submitBtn.textContent = "Register";
-      toggleQuestion.textContent = "Already have an account?";
-      toggleLink.textContent = "Sign In";
-    }
-
-    function setLoginMode() {
-      isRegisterMode = false;
-      formTitle.textContent = "Sign In";
-      submitBtn.textContent = "Log In";
-      toggleQuestion.textContent = "Don't have an account?";
-      toggleLink.textContent = "Create Account";
-    }
-
-    toggleLink.addEventListener("click", () => {
-      if (isRegisterMode) {
-        setLoginMode();
-      } else {
-        setRegisterMode();
-      }
-    });
-
-    // 3. Form Submission Handling
-    authForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      
-      // Store persistent account flag and login state
-      localStorage.setItem("hasAccount", "true");
-      localStorage.setItem("isLoggedIn", "true");
-      
-      // Redirect to home screen
-      window.location.href = "home.html";
-    });
-  </script>
-
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // Keep splash screen visible for 1.8 seconds, then smooth fade out
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.classList.add('fade-out');
+            }, 1800);
+        });
+    </script>
 </body>
 </html>
