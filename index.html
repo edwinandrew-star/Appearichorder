@@ -1,61 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Appearich - Premium Service & Scent Hub</title>
-  <!-- PWA Manifest & Meta Tags -->
+  <title>Appearich</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#000000">
+  <link rel="icon" type="image/png" href="images/appearich-logo1.png">
   <link rel="apple-touch-icon" href="images/appearich-logo1.png">
-  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Supabase CDN Client -->
+  
+  <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <style>
+    /* ==========================================================================
+       THEME VARIABLES & GLOBAL STYLES (PURE BLACK BASE)
+       ========================================================================== */
     :root {
-      --bg-color: #f8f9fa;
-      --card-bg: #ffffff;
-      --card-bg-sub: #f1f3f5;
-      --card-border: #e9ecef;
-      --text-main: #111111;
-      --text-sub: #666666;
-      --accent-gold: #d4af37;
-      --accent-gold-light: rgba(212, 175, 55, 0.15);
-      --nav-bg: #ffffff;
-      --nav-border: #e9ecef;
-      --input-bg: #f1f3f5;
-      --input-border: #ced4da;
-      --modal-bg: #ffffff;
-      --overlay-bg: rgba(0, 0, 0, 0.5);
-      --shadow-color: rgba(0, 0, 0, 0.08);
-    }
-    [data-theme="dark"] {
-      --bg-color: #0d0d0d;
-      --card-bg: #181818;
-      --card-bg-sub: #141414;
+      --bg-color: #000000;
+      --card-bg: #121212;
+      --card-bg-sub: #1a1a1a;
       --card-border: #282828;
       --text-main: #ffffff;
       --text-sub: #aaaaaa;
       --accent-gold: #FFD700;
       --accent-gold-light: rgba(255, 215, 0, 0.15);
-      --nav-bg: #111111;
+      --nav-bg: #000000;
       --nav-border: #222222;
-      --input-bg: #000000;
+      --input-bg: #141414;
       --input-border: #333333;
       --modal-bg: #141414;
       --overlay-bg: rgba(0, 0, 0, 0.85);
       --shadow-color: rgba(0, 0, 0, 0.5);
     }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
-      transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
     }
+
     body {
       background: var(--bg-color);
       color: var(--text-main);
@@ -67,61 +54,77 @@
       padding-bottom: 80px;
       overflow-x: hidden;
     }
-    
-    /* SPLASH SCREEN - Uses appearich-logo.png */
+
+    /* SPLASH SCREEN (#000000 background, images/appearich-logo.png) */
     #splash-screen {
       position: fixed;
       inset: 0;
-      background: #000000;
-      z-index: 99999;
+      background-color: #000000;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    #splash-screen img {
+      width: 170px;
+      height: auto;
+      object-fit: contain;
+      background: transparent;
+    }
+
+    /* AUTHENTICATION CONTAINERS */
+    .auth-container {
+      width: 100%;
+      max-width: 400px;
+      padding: 30px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      transition: opacity 0.5s ease;
+      margin: auto 0;
     }
-    .splash-logo {
-      width: 120px;
-      height: 120px;
-      object-fit: contain;
-      background: transparent;
-      animation: pulseLogo 1.5s infinite alternate;
+    .auth-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
     }
-    @keyframes pulseLogo {
-      from { transform: scale(0.95); opacity: 0.8; }
-      to { transform: scale(1.05); opacity: 1; }
-    }
-
-    /* AUTH SCREEN */
-    .auth-container {
-      max-width: 400px;
-      width: 90%;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 35px 24px;
-      box-shadow: 0 10px 30px var(--shadow-color);
-      margin: auto;
+    .auth-sub {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      margin-bottom: 24px;
       text-align: center;
     }
-    .auth-title { font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; letter-spacing: -0.5px; }
-    .auth-sub { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 24px; }
+    .auth-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
     .auth-btn {
       width: 100%;
       background: var(--accent-gold);
-      color: #000;
+      color: #000000;
       border: none;
-      padding: 12px;
+      padding: 14px;
       border-radius: 12px;
       font-weight: 800;
-      font-size: 0.95rem;
+      font-size: 1rem;
       cursor: pointer;
-      margin-top: 12px;
+      margin-top: 8px;
     }
-    .auth-switch { font-size: 0.82rem; color: var(--text-sub); margin-top: 18px; cursor: pointer; }
-    .auth-switch span { color: var(--accent-gold); font-weight: 700; }
+    .auth-switch {
+      margin-top: 20px;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+    .auth-switch a {
+      color: var(--accent-gold);
+      text-decoration: none;
+      font-weight: 700;
+    }
 
-    /* Main Application Screens */
+    /* APP SCREENS */
     .app-screen {
       display: none;
       width: 100%;
@@ -133,12 +136,13 @@
       animation: fadeIn 0.3s ease-in-out;
     }
     .app-screen.active { display: flex; }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* In-App Header - Uses appearich-logo1.png and title-case "Appearich" */
+    /* FIXED HEADER (images/appearich-logo1.png) */
     .app-header {
       position: fixed;
       top: 0;
@@ -148,62 +152,28 @@
       width: 100%;
       height: 70px;
       padding: 0 16px;
-      display: flex;
+      display: none;
       justify-content: space-between;
       align-items: center;
       background: #000000;
-      border-bottom: 1px solid #222222;
+      border-bottom: 1px solid var(--card-border);
       z-index: 1500;
     }
     .header-left { display: flex; align-items: center; gap: 12px; }
-    .back-btn {
-      background: #181818;
-      border: 1px solid #333333;
-      color: #ffffff;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      display: flex !important;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      cursor: pointer;
-    }
     .brand-logo-wrap { display: flex; align-items: center; gap: 10px; }
     .brand-logo-img {
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
-      background: transparent;
+      width: 36px;
+      height: 36px;
       object-fit: contain;
     }
-    .brand-name {
-      font-size: 1.35rem;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      color: #ffffff;
-      text-transform: capitalize;
-    }
-    .theme-toggle-btn {
-      background: #181818;
-      border: 1px solid #333333;
-      color: #ffffff;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      cursor: pointer;
-    }
+    .brand-name { font-size: 1.6rem; font-weight: 900; letter-spacing: 0.5px; color: #ffffff; }
 
     .hero-banner {
       width: 100%;
       height: 160px;
       border-radius: 20px;
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%), 
-                  url('images/appearich-hero.jpg') center/cover;
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(0, 0, 0, 0.9) 100%), 
+                  url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600&auto=format&fit=cover') center/cover;
       position: relative;
       overflow: hidden;
       display: flex;
@@ -216,6 +186,7 @@
     }
     .hero-greeting { font-size: 1.5rem; font-weight: 800; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
     .hero-tagline { font-size: 0.85rem; color: #FFD700; font-weight: 600; margin-top: 4px; letter-spacing: 0.5px; }
+
     .section-title {
       font-size: 1.1rem;
       font-weight: 800;
@@ -236,7 +207,6 @@
       overflow: hidden;
       border: 1.5px solid var(--card-border);
       cursor: pointer;
-      transition: all 0.25s ease;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
@@ -248,17 +218,12 @@
       inset: 0;
       background-size: cover;
       background-position: center;
-      filter: brightness(0.85);
+      filter: brightness(0.65);
     }
     .offer-card-overlay { position: relative; z-index: 2; }
-    .offer-card-title { font-size: 1.15rem; font-weight: 800; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
-    .offer-card-desc { font-size: 0.72rem; color: #FFD700; margin-top: 2px; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
-    .section-divider {
-      width: 100%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
-      margin: 10px 0 24px 0;
-    }
+    .offer-card-title { font-size: 1.15rem; font-weight: 800; color: #ffffff; }
+    .offer-card-desc { font-size: 0.72rem; color: #FFD700; margin-top: 2px; font-weight: 600; }
+
     .inquiry-box {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -280,6 +245,7 @@
       font-size: 0.85rem;
       outline: none;
     }
+    .inquiry-input:focus { border-color: var(--accent-gold); }
     .inquiry-btn {
       background: var(--accent-gold);
       color: #000;
@@ -290,59 +256,24 @@
       font-size: 0.85rem;
       cursor: pointer;
     }
-    .quick-reorder-section {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 14px;
-      border: 1px solid var(--card-border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 12px var(--shadow-color);
-    }
-    .quick-reorder-info { display: flex; align-items: center; gap: 12px; }
-    .quick-reorder-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--accent-gold-light);
-      color: var(--accent-gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-    }
-    .reorder-text-main { font-size: 0.9rem; font-weight: 700; color: var(--text-main); }
-    .reorder-text-sub { font-size: 0.75rem; color: var(--text-sub); }
-    .reorder-btn {
-      background: transparent;
-      border: 1px solid var(--accent-gold);
-      color: var(--accent-gold);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .logout-main-btn {
+
+    .logout-btn {
       width: 100%;
-      background: transparent;
-      border: 2px solid #e74c3c;
-      color: #e74c3c;
+      background: #dc3545;
+      color: #ffffff;
+      border: none;
       padding: 14px;
-      border-radius: 16px;
+      border-radius: 12px;
       font-weight: 800;
       font-size: 0.95rem;
       cursor: pointer;
+      margin-top: 20px;
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      margin-top: 20px;
-      margin-bottom: 20px;
+      gap: 8px;
     }
-    .logout-main-btn:hover { background: rgba(231, 76, 60, 0.1); }
 
     .perfumes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; margin-bottom: 20px; }
     .perfume-card {
@@ -364,25 +295,8 @@
     }
     .perfume-card-title { font-size: 1rem; font-weight: 800; color: #ffffff; }
     .perfume-card-sub { font-size: 0.7rem; color: #FFC107; font-weight: 600; }
-    .action-container { display: flex; justify-content: center; width: 100%; margin-top: 10px; margin-bottom: 20px; }
-    .order-main-btn {
-      background: var(--text-main);
-      border: 2px solid var(--accent-gold);
-      color: var(--bg-color);
-      font-size: 0.95rem;
-      font-weight: 900;
-      letter-spacing: 1px;
-      padding: 14px 28px;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 8px 20px var(--shadow-color);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-transform: uppercase;
-      width: 100%;
-      justify-content: center;
-    }
+
+    /* MODAL UI */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -406,14 +320,6 @@
       padding: 24px 20px;
       position: relative;
     }
-    .sheet-content.full-screen {
-      height: 100vh;
-      max-height: 100vh;
-      border-radius: 0;
-      border: none;
-      max-width: 480px;
-      padding: 0 18px 40px 18px;
-    }
     .sheet-close {
       position: absolute;
       top: 16px;
@@ -423,27 +329,18 @@
       cursor: pointer;
       z-index: 20;
     }
-    .modal-sticky-header {
-      position: sticky;
-      top: 0;
-      background: var(--modal-bg);
-      padding: 18px 0 12px 0;
-      z-index: 15;
-      border-bottom: 1px solid var(--card-border);
-      margin-bottom: 16px;
-    }
-    .sheet-title { font-size: 1.4rem; font-weight: 900; color: var(--text-main); text-align: center; }
+
     .food-selection-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
       margin-top: 12px;
       margin-bottom: 16px;
-      max-height: 280px;
+      max-height: 220px;
       overflow-y: auto;
     }
     .food-selection-card {
-      height: 110px;
+      height: 100px;
       border-radius: 14px;
       position: relative;
       overflow: hidden;
@@ -463,16 +360,13 @@
     .food-card-overlay-label {
       position: relative;
       z-index: 2;
-      background: linear-gradient(to top, rgba(0,0,0,0.95) 20%, rgba(0,0,0,0.7) 80%, transparent);
+      background: rgba(0,0,0,0.85);
       padding: 6px;
       text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
     }
-    .food-name-text { font-size: 0.82rem; font-weight: 800; color: #ffffff; }
+    .food-name-text { font-size: 0.8rem; font-weight: 800; color: #ffffff; display: block; }
     .food-price-text { font-size: 0.72rem; color: var(--accent-gold); font-weight: 700; }
+
     .selected-items-box {
       background: var(--card-bg-sub);
       border: 1px solid var(--card-border);
@@ -484,63 +378,38 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 0;
+      padding: 6px 0;
       border-bottom: 1px dashed var(--card-border);
     }
+    .selected-item-row:last-child { border-bottom: none; }
     .selected-item-info { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
     .selected-item-ctrls { display: flex; align-items: center; gap: 8px; }
     .selected-item-ctrls input {
-      width: 55px;
+      width: 50px;
       background: var(--input-bg);
       border: 1px solid var(--input-border);
       border-radius: 6px;
-      padding: 4px 6px;
+      padding: 4px;
       color: var(--text-main);
       font-weight: bold;
       text-align: center;
     }
+
     .calculation-summary-box {
       background: var(--card-bg-sub);
       border: 1.5px solid var(--accent-gold);
       border-radius: 14px;
-      padding: 12px 14px;
-      margin-top: 12px;
-      margin-bottom: 14px;
+      padding: 12px;
+      margin: 12px 0;
     }
-    .calc-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.82rem;
-      color: var(--text-sub);
-      margin-bottom: 6px;
-    }
-    .calc-row.total-row {
-      font-size: 1rem;
-      font-weight: 900;
-      color: var(--text-main);
-      border-top: 1px dashed var(--card-border);
-      padding-top: 8px;
-    }
-    .form-row { display: flex; gap: 10px; }
-    .form-group { margin-bottom: 14px; text-align: left; flex: 1; }
-    .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-bottom: 5px; }
-    .form-group input, .form-group textarea {
-      width: 100%;
-      background: var(--input-bg);
-      border: 1.5px solid var(--input-border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      color: var(--text-main);
-      font-size: 0.85rem;
-      outline: none;
-    }
+    .calc-row { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-sub); margin-bottom: 6px; }
+    .calc-row.total-row { font-size: 1rem; font-weight: 900; color: var(--text-main); border-top: 1px dashed var(--card-border); padding-top: 8px; }
+
     .payment-selection-box {
       background: var(--card-bg-sub);
       border: 1.5px solid var(--card-border);
       border-radius: 14px;
       padding: 14px;
-      margin-top: 12px;
       margin-bottom: 16px;
     }
     .payment-options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
@@ -559,16 +428,10 @@
       color: var(--text-main);
     }
     .pay-option-btn.active { border-color: var(--accent-gold); background: var(--accent-gold-light); }
-    .mobile-unfold-box {
-      display: none;
-      background: var(--card-bg);
-      border: 1.5px solid var(--accent-gold);
-      border-radius: 12px;
-      padding: 12px;
-      margin-top: 12px;
-    }
+    .mobile-unfold-box { display: none; background: var(--card-bg); border: 1.5px solid var(--accent-gold); border-radius: 12px; padding: 12px; margin-top: 12px; }
     .mobile-unfold-box.active { display: block; }
     .lipa-tag { background: var(--accent-gold); color: #000; font-weight: 900; padding: 2px 6px; border-radius: 6px; }
+
     .submit-order-btn {
       width: 100%;
       background: #25D366;
@@ -585,150 +448,16 @@
       gap: 8px;
       margin-top: 8px;
     }
-    .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
-    .price-card {
-      background: var(--input-bg);
-      border: 1.5px solid var(--input-border);
-      border-radius: 10px;
-      padding: 10px 4px;
-      text-align: center;
-      cursor: pointer;
-    }
-    .price-card.active { border-color: var(--accent-gold); background: var(--accent-gold-light); }
-    .size-title { font-size: 0.8rem; color: var(--text-main); font-weight: bold; }
-    .size-price { font-size: 0.75rem; font-weight: bold; color: var(--accent-gold); margin-top: 2px; }
-    .loyalty-card {
-      background: var(--card-bg);
-      border: 1.5px solid var(--accent-gold);
-      border-radius: 18px;
-      padding: 16px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 12px var(--shadow-color);
-    }
-    .loyalty-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .loyalty-title { font-size: 0.95rem; font-weight: 800; color: var(--accent-gold); }
-    .loyalty-badge { font-size: 0.7rem; background: var(--accent-gold); color: #000; font-weight: 900; padding: 3px 8px; border-radius: 10px; }
-    .stamps-row { display: flex; justify-content: space-between; margin-top: 10px; }
-    .stamp-dot {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--card-bg-sub);
-      border: 2px dashed var(--input-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.85rem;
-      color: var(--text-sub);
-      font-weight: 800;
-    }
-    .stamp-dot.filled { background: var(--accent-gold); border-style: solid; border-color: var(--accent-gold); color: #000; }
-    .ai-screen-wrap {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: calc(100vh - 170px);
-    }
-    .ambient-glow {
-      position: absolute;
-      width: 260px;
-      height: 260px;
-      background: radial-gradient(circle, var(--accent-gold-light) 0%, rgba(0,0,0,0) 70%);
-      top: 15%;
-      pointer-events: none;
-    }
-    .teaser-image-card {
-      position: relative;
-      width: 100%;
-      max-width: 360px;
-      height: 230px;
-      border-radius: 22px;
-      overflow: hidden;
-      margin-bottom: 24px;
-      box-shadow: 0 15px 35px var(--shadow-color);
-      background: var(--card-bg);
-      cursor: pointer;
-    }
-    .teaser-image-card img { width: 100%; height: 100%; object-fit: cover; }
-    .image-overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--bg-color) 10%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%); }
-    .ai-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--card-bg-sub);
-      color: var(--text-main);
-      padding: 6px 14px;
-      border-radius: 50px;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-      border: 1px solid var(--card-border);
-    }
-    .ai-title { font-size: 2.2rem; font-weight: 900; line-height: 1.1; margin-bottom: 8px; color: var(--text-main); }
-    .ai-title span { color: var(--accent-gold); }
-    .ai-sub { font-size: 0.85rem; color: var(--text-sub); max-width: 300px; margin-bottom: 24px; line-height: 1.5; }
-    .status-pill-btn {
-      background: var(--accent-gold);
-      color: #111111;
-      border: none;
-      padding: 14px 28px;
-      border-radius: 16px;
-      font-weight: 800;
-      font-size: 0.9rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-    }
-    .coming-soon-toast {
-      position: fixed;
-      top: -100px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 32px);
-      max-width: 440px;
-      background: var(--accent-gold);
-      color: #111111;
-      padding: 16px;
-      border-radius: 18px;
-      box-shadow: 0 15px 30px var(--shadow-color);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      z-index: 3000;
-      opacity: 0;
-      transition: all 0.4s ease;
-    }
-    .coming-soon-toast.trigger-fly { top: 20px; opacity: 1; }
-    .toast-icon-wrap {
-      background: #111;
-      color: var(--accent-gold);
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
+
     .order-card-track {
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
       border-radius: 16px;
       padding: 16px;
       margin-bottom: 14px;
-      box-shadow: 0 4px 12px var(--shadow-color);
     }
-    .track-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px dashed var(--card-border); padding-bottom: 8px; }
-    .order-id { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
-    .status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; }
-    .status-badge.pending { background: rgba(255, 193, 7, 0.15); color: #d97706; border: 1px solid #d97706; }
-    .status-badge.verified { background: rgba(40, 167, 69, 0.15); color: #28a745; border: 1px solid #28a745; }
-    .track-details p { font-size: 0.82rem; color: var(--text-sub); margin-bottom: 4px; }
+    .track-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+
     .profile-header-card {
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
@@ -736,7 +465,6 @@
       padding: 20px;
       text-align: center;
       margin-bottom: 20px;
-      box-shadow: 0 4px 12px var(--shadow-color);
     }
     .profile-avatar {
       width: 70px;
@@ -751,129 +479,112 @@
       justify-content: center;
       margin: 0 auto 12px auto;
     }
-    .profile-name { font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
-    .profile-phone { font-size: 0.85rem; color: var(--text-sub); margin-top: 2px; }
-    .whatsapp-support-btn {
-      width: 100%;
-      background: #25D366;
-      color: #fff;
-      border: none;
-      padding: 14px;
-      border-radius: 14px;
-      font-size: 0.95rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      cursor: pointer;
-      margin-bottom: 20px;
-      text-decoration: none;
-    }
+
+    /* BOTTOM NAV */
     .bottom-nav {
       position: fixed;
       bottom: 0; left: 0; right: 0;
       height: 70px;
       background: var(--nav-bg);
       border-top: 1.5px solid var(--nav-border);
-      display: flex;
+      display: none;
       justify-content: space-around;
       align-items: center;
       z-index: 1000;
     }
+    .bottom-nav.active { display: flex; }
     .nav-item {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
       color: var(--text-sub);
-      text-decoration: none;
-      font-size: 0.72rem;
-      font-weight: 700;
       background: none;
       border: none;
+      font-size: 0.72rem;
+      font-weight: 700;
       cursor: pointer;
     }
     .nav-item i { font-size: 1.3rem; }
     .nav-item.active { color: var(--accent-gold); }
-    .pwa-install-btn {
-      background: var(--accent-gold-light);
-      border: 1px solid var(--accent-gold);
-      color: var(--accent-gold);
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: none;
-      align-items: center;
-      gap: 6px;
-    }
   </style>
 </head>
 <body>
 
-  <!-- PURE BLACK SPLASH SCREEN - Uses appearich-logo.png -->
+  <!-- PWA SPLASH SCREEN (Black #000000, logo: images/appearich-logo.png) -->
   <div id="splash-screen">
-    <img src="images/appearich-logo.png" alt="Appearich Splash Logo" class="splash-logo">
+    <img src="images/appearich-logo.png" alt="Appearich Splash">
   </div>
 
-  <!-- AUTH SCREEN -->
-  <div id="screen-auth" class="app-screen" style="display:none; justify-content:center; align-items:center;">
-    <div class="auth-container">
-      <div id="authTitle" class="auth-title">Welcome Back</div>
-      <div id="authSub" class="auth-sub">Sign in to your Appearich account</div>
-      
-      <div class="form-group" id="usernameGroup" style="display:none;">
-        <label for="authUsername">Username</label>
-        <input type="text" id="authUsername" placeholder="e.g. Edwin or John">
-      </div>
-      <div class="form-group">
-        <label for="authEmail">Email Address</label>
-        <input type="email" id="authEmail" placeholder="e.g. user@appearich.com">
-      </div>
-      <div class="form-group">
-        <label for="authPassword">Password</label>
-        <input type="password" id="authPassword" placeholder="••••••••">
-      </div>
-      
-      <button id="authSubmitBtn" class="auth-btn" onclick="handleAuthSubmit()">Sign In</button>
-      <div class="auth-switch" onclick="toggleAuthMode()">
-        <span id="authSwitchText">Don't have an account? Register here</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- FIXED Header - Uses appearich-logo1.png and title-case "Appearich" -->
-  <header class="app-header" id="mainHeader" style="display:none;">
+  <!-- FIXED APP HEADER (Logo: images/appearich-logo1.png) -->
+  <header id="main-header" class="app-header">
     <div class="header-left">
-      <button id="globalBackBtn" class="back-btn" onclick="goBack()" title="Back to Home">
-        <i class="fa-solid fa-arrow-left"></i>
-      </button>
       <div class="brand-logo-wrap">
-        <img src="images/appearich-logo1.png" alt="Header Logo" class="brand-logo-img">
+        <img src="images/appearich-logo1.png" class="brand-logo-img" alt="Appearich Logo">
         <div class="brand-name">Appearich</div>
       </div>
     </div>
-    <div style="display:flex; align-items:center; gap:8px;">
-      <button id="pwaInstallBtn" class="pwa-install-btn" onclick="installPWA()">
-        <i class="fa-solid fa-download"></i> Install
-      </button>
-      <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Switch Light/Dark Mode">
-        <i class="fa-solid fa-moon"></i>
-      </button>
-    </div>
   </header>
 
-  <!-- SCREEN 1: HOME -->
+  <!-- LOGIN SCREEN (No logo, minimal) -->
+  <div id="screen-login" class="app-screen">
+    <div class="auth-container">
+      <h2 class="auth-title">Welcome Back</h2>
+      <p class="auth-sub">Sign in to your account</p>
+      <form class="auth-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" placeholder="edwin@gmail.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="auth-btn">Sign In</button>
+      </form>
+      <div class="auth-switch">
+        Don't have an account? <a href="#" onclick="showScreen('screen-register')">Register</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGISTER SCREEN -->
+  <div id="screen-register" class="app-screen">
+    <div class="auth-container">
+      <h2 class="auth-title">Create Account</h2>
+      <p class="auth-sub">Enter details to get started</p>
+      <form class="auth-form" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="regUsername" placeholder="Edwin" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="regEmail" placeholder="edwin@gmail.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="regPassword" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="auth-btn">Register</button>
+      </form>
+      <div class="auth-switch">
+        Already registered? <a href="#" onclick="showScreen('screen-login')">Sign In</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 1: HOME SCREEN -->
   <div id="screen-home" class="app-screen">
     <div class="hero-banner">
-      <div class="hero-greeting" id="heroGreeting">Welcome!</div>
-      <div class="hero-tagline">Appear Rich — Premium Delivery, Delivered with Love.</div>
+      <div class="hero-greeting" id="heroGreeting">Welcome, User</div>
+      <div class="hero-tagline">Appearich — Premium Delivery, Delivered with Love.</div>
     </div>
+    
     <div class="section-title">
-      <i class="fa-solid fa-layer-group" style="color:var(--accent-gold);"></i> We Offer This
+      <i class="fa-solid fa-layer-group" style="color:var(--accent-gold);"></i> What We Offer
     </div>
+    
     <div class="offerings-grid">
       <div class="offer-card" onclick="openHotMealsModal()">
         <div class="offer-card-bg" style="background-image: url('https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=400&auto=format&fit=cover');"></div>
@@ -882,7 +593,7 @@
           <div class="offer-card-desc">Fastest Sourced Food</div>
         </div>
       </div>
-      <div class="offer-card" onclick="switchTab('screen-perfumes')">
+      <div class="offer-card" onclick="switchTab('screen-perfumes', document.getElementById('nav-perfumes'))">
         <div class="offer-card-bg" style="background-image: url('images/appearich-perfume1.jpg');"></div>
         <div class="offer-card-overlay">
           <div class="offer-card-title">Perfumes</div>
@@ -890,802 +601,483 @@
         </div>
       </div>
     </div>
-    <div class="section-divider"></div>
+
     <div class="inquiry-box">
-      <h4><i class="fa-solid fa-circle-question" style="color:var(--accent-gold);"></i> Need Anything Specific?</h4>
-      <p>Describe your needs, custom order details, or ask any question directly.</p>
+      <h4><i class="fa-solid fa-circle-question" style="color:var(--accent-gold);"></i> Custom Order or Inquiry</h4>
+      <p>Need custom products or help? Describe below:</p>
       <div class="inquiry-input-wrap">
-        <input type="text" id="customInquiryInput" class="inquiry-input" placeholder="Type your request here...">
-        <button class="inquiry-btn" onclick="sendCustomInquiry()">Ask</button>
+        <input type="text" id="customInquiryInput" class="inquiry-input" placeholder="Type request...">
+        <button class="inquiry-btn" onclick="sendCustomInquiry()">Send</button>
       </div>
     </div>
-    <div class="quick-reorder-section">
-      <div class="quick-reorder-info">
-        <div class="quick-reorder-icon"><i class="fa-solid fa-rotate-right"></i></div>
-        <div>
-          <div class="reorder-text-main">Quick Reorder</div>
-          <div class="reorder-text-sub">Repeat your last saved order instantly</div>
-        </div>
-      </div>
-      <button class="reorder-btn" onclick="triggerQuickReorder()">Reorder</button>
-    </div>
-    
-    <button class="logout-main-btn" onclick="handleLogout()">
-      <i class="fa-solid fa-right-from-bracket"></i> Log Out
+
+    <button class="logout-btn" onclick="handleLogout()">
+      <i class="fa-solid fa-right-from-bracket"></i> Sign Out
     </button>
   </div>
 
   <!-- SCREEN 2: PERFUMES -->
   <div id="screen-perfumes" class="app-screen">
     <div class="section-title">
-      <i class="fa-solid fa-spray-can-sparkles" style="color:var(--accent-gold);"></i> Scent Hub Offerings
+      <i class="fa-solid fa-spray-can-sparkles" style="color:var(--accent-gold);"></i> Scent Hub
     </div>
-    <main class="perfumes-grid">
-      <div class="perfume-card" style="background-image: url('images/appearich-perfume1.jpg');" onclick="openProductModal('Appearich Signature')">
+    <div class="perfumes-grid">
+      <div class="perfume-card" style="background-image: url('images/appearich-perfume1.jpg');" onclick="openHotMealsModal()">
         <div class="perfume-card-overlay">
           <div class="perfume-card-title">Appearich Signature</div>
-          <div class="perfume-card-sub">Luxury • Premium Scent</div>
+          <div class="perfume-card-sub">Luxury • 25,000 TZS</div>
         </div>
       </div>
-      <div class="perfume-card" style="background-image: url('images/appearich-perfume2.jpg');" onclick="openProductModal('Sugar Candy')">
+      <div class="perfume-card" style="background-image: url('images/appearich-perfume2.jpg');" onclick="openHotMealsModal()">
         <div class="perfume-card-overlay">
           <div class="perfume-card-title">Sugar Candy</div>
-          <div class="perfume-card-sub">Floral • Sweet</div>
+          <div class="perfume-card-sub">Floral • 25,000 TZS</div>
         </div>
       </div>
-      <div class="perfume-card" style="background-image: url('images/appearich-perfume3.jpg');" onclick="openProductModal('212 VIP')">
-        <div class="perfume-card-overlay">
-          <div class="perfume-card-title">212 VIP</div>
-          <div class="perfume-card-sub">Fresh • Sea Salt</div>
-        </div>
-      </div>
-      <div class="perfume-card" style="background-image: url('images/appearich-perfume4.jpg');" onclick="openProductModal('Tag Sunset')">
-        <div class="perfume-card-overlay">
-          <div class="perfume-card-title">Tag Sunset</div>
-          <div class="perfume-card-sub">Rich Spices</div>
-        </div>
-      </div>
-    </main>
-    <div class="action-container">
-      <button onclick="openOrderModal()" class="order-main-btn">
-        <i class="fa-solid fa-wand-magic-sparkles"></i>
-        <span>PLACE YOUR ORDER</span>
-      </button>
-    </div>
-  </div>
-  
-  <!-- SCREEN 3: AI GUIDE -->
-  <div id="screen-ai" class="app-screen">
-    <div class="ambient-glow"></div>
-    <div id="soonToast" class="coming-soon-toast">
-      <div class="toast-icon-wrap"><i class="fas fa-bolt"></i></div>
-      <div class="toast-info">
-        <h4 style="font-weight:900; text-transform:uppercase;">Coming Soon!</h4>
-        <p style="font-size:0.78rem;">Our intelligent AI curator is currently running final model training loops.</p>
-      </div>
-    </div>
-    <div class="ai-screen-wrap">
-      <div class="teaser-image-card" onclick="igniteTeaserToast()">
-        <img src="images/heroo-ai.jpg" alt="AI Neural Guide">
-        <div class="image-overlay"></div>
-      </div>
-      <div class="ai-badge">
-        <i class="fas fa-circle-nodes" style="color:#FFA500;"></i> Smart Engine v2.0
-      </div>
-      <h1 class="ai-title">Appearich <br><span>AI Guide</span></h1>
-      <p class="ai-sub">Tap anywhere on the teaser card above or below to test the matrix preparation status.</p>
-      <button class="status-pill-btn" onclick="igniteTeaserToast()">
-        <i class="fas fa-robot"></i> Initialize AI Exploration
-      </button>
     </div>
   </div>
 
-  <!-- SCREEN 4: BOOKINGS -->
+  <!-- SCREEN 3: BOOKINGS/ORDERS -->
   <div id="screen-bookings" class="app-screen">
     <div class="section-title">
-      <i class="fa-solid fa-receipt" style="color:var(--accent-gold);"></i> Active Bookings & Status
+      <i class="fa-solid fa-receipt" style="color:var(--accent-gold);"></i> Your Orders
     </div>
-    <div id="bookingsListContainer"></div>
+    <div id="ordersListContainer"></div>
   </div>
 
-  <!-- SCREEN 5: PROFILE -->
+  <!-- SCREEN 4: PROFILE -->
   <div id="screen-profile" class="app-screen">
     <div class="profile-header-card">
       <div class="profile-avatar" id="profAvatar">U</div>
-      <div class="profile-name" id="profName">Logged-in User</div>
-      <div class="profile-phone" id="profPhone">+255 764 519 027</div>
+      <div class="profile-name" style="font-size:1.2rem; font-weight:800;" id="profName">User</div>
+      <div style="font-size:0.85rem; color:var(--text-sub);" id="profEmail">user@email.com</div>
     </div>
-    <a href="https://wa.me/255764519027?text=Hello%20Appearich%20Help%20Center!%20I%20need%20assistance." target="_blank" class="whatsapp-support-btn">
-      <i class="fa-brands fa-whatsapp" style="font-size:1.3rem;"></i> WhatsApp Help Center
-    </a>
-    <div class="loyalty-card">
-      <div class="loyalty-header">
-        <span class="loyalty-title"><i class="fa-solid fa-crown"></i> Loyalty Rewards</span>
-        <span class="loyalty-badge" id="loyaltyCountBadge">0 / 5 Orders</span>
-      </div>
-      <p style="font-size:0.75rem; color:var(--text-sub); margin-bottom:8px;">Complete 5 orders to unlock a special reward offer!</p>
-      <div class="stamps-row" id="stampsRow">
-        <div class="stamp-dot">1</div>
-        <div class="stamp-dot">2</div>
-        <div class="stamp-dot">3</div>
-        <div class="stamp-dot">4</div>
-        <div class="stamp-dot"><i class="fa-solid fa-gift"></i></div>
-      </div>
-    </div>
-    <button class="logout-main-btn" onclick="handleLogout()">
-      <i class="fa-solid fa-right-from-bracket"></i> Log Out
+    <button class="logout-btn" onclick="handleLogout()">
+      <i class="fa-solid fa-right-from-bracket"></i> Sign Out
     </button>
-    <div class="section-title" style="margin-top:10px;">
-      <i class="fa-solid fa-history" style="color:var(--accent-gold);"></i> Order History
-    </div>
-    <div id="historyListContainer"></div>
   </div>
 
-  <!-- HOT MEALS MODAL -->
+  <!-- HOT MEALS & PRODUCT ORDER MODAL -->
   <div id="hotMealsModal" class="modal-overlay">
-    <div class="sheet-content full-screen">
+    <div class="sheet-content">
       <span class="sheet-close" onclick="closeSheet('hotMealsModal')">&times;</span>
-      <div class="modal-sticky-header">
-        <div class="sheet-title">Hot Meals</div>
-      </div>
-      <div style="font-size: 0.82rem; font-weight:800; color:var(--text-main); margin-bottom:4px;">
-        <i class="fa-solid fa-plus-circle" style="color:var(--accent-gold);"></i> Tap to Add Available Items:
-      </div>
+      <h3 style="margin-bottom:12px;">Place Order</h3>
+      
       <div class="food-selection-grid">
-        <div class="food-selection-card" onclick="addItemToOrder('Chipsi Mayai', 3000)">
-          <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" alt="Chipsi Mayai">
+        <div class="food-selection-card" onclick="addFoodItem('Chipsi Mayai', 3000)">
+          <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" alt="Meal">
           <div class="food-card-overlay-label">
             <span class="food-name-text">Chipsi Mayai</span>
             <span class="food-price-text">3,000 TZS</span>
           </div>
         </div>
-        <div class="food-selection-card" onclick="addItemToOrder('Chipsi Kavu', 2000)">
-          <img src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=300&auto=format&fit=cover" alt="Chipsi Kavu">
+        <div class="food-selection-card" onclick="addFoodItem('Appearich Fragrance 30ml', 25000)">
+          <img src="images/appearich-perfume1.jpg" alt="Perfume">
           <div class="food-card-overlay-label">
-            <span class="food-name-text">Chipsi Kavu</span>
-            <span class="food-price-text">2,000 TZS</span>
-          </div>
-        </div>
-        <div class="food-selection-card" onclick="addItemToOrder('Paja', 3000)">
-          <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?q=80&w=300&auto=format&fit=cover" alt="Paja">
-          <div class="food-card-overlay-label">
-            <span class="food-name-text">Paja</span>
-            <span class="food-price-text">3,000 TZS</span>
-          </div>
-        </div>
-        <div class="food-selection-card" onclick="addItemToOrder('Kidali', 3000)">
-          <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?q=80&w=300&auto=format&fit=cover" alt="Kidali">
-          <div class="food-card-overlay-label">
-            <span class="food-name-text">Kidali</span>
-            <span class="food-price-text">3,000 TZS</span>
-          </div>
-        </div>
-        <div class="food-selection-card" onclick="addItemToOrder('Mishikaki', 1000)">
-          <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=300&auto=format&fit=cover" alt="Mishikaki">
-          <div class="food-card-overlay-label">
-            <span class="food-name-text">Mishikaki</span>
-            <span class="food-price-text">1,000 TZS</span>
-          </div>
-        </div>
-        <div class="food-selection-card" onclick="addItemToOrder('Soda', 1000)">
-          <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=300&auto=format&fit=cover" alt="Soda">
-          <div class="food-card-overlay-label">
-            <span class="food-name-text">Soda</span>
-            <span class="food-price-text">1,000 TZS</span>
+            <span class="food-name-text">Perfume 30ml</span>
+            <span class="food-price-text">25,000 TZS</span>
           </div>
         </div>
       </div>
-      <div id="selectedItemsContainer" class="selected-items-box">
-        <p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet. Click an item above to add to order.</p>
-      </div>
+
+      <div id="selectedItemsContainer" class="selected-items-box"></div>
+
       <div class="form-group">
-        <label for="mealDetails">Overall Order Description / Special Instructions:</label>
-        <textarea id="mealDetails" placeholder="Describe your full meal request..."></textarea>
+        <label>Delivery Location</label>
+        <input type="text" id="orderBlockLoc" placeholder="e.g. Block C, Room 104" required>
       </div>
-      <div class="calculation-summary-box">
-        <div class="calc-row">
-          <span>Items Subtotal:</span>
-          <strong id="displaySubtotal">0 TZS</strong>
-        </div>
-        <div class="calc-row">
-          <span>Service Fee (<span id="surchargeRateText">25%</span>):</span>
-          <strong id="displaySurcharge">0 TZS</strong>
-        </div>
-        <div class="calc-row total-row">
-          <span>GRAND TOTAL:</span>
-          <strong id="displayGrandTotal" style="color:var(--accent-gold);">0 TZS</strong>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="mealBlockLoc">Block / Location:</label>
-          <input type="text" id="mealBlockLoc" placeholder="e.g. Block C">
-        </div>
-        <div class="form-group">
-          <label for="mealRoomLoc">Room Number:</label>
-          <input type="text" id="mealRoomLoc" placeholder="e.g. Room 104">
-        </div>
-      </div>
+
       <div class="form-group">
-        <label for="mealPhoneNum">Contact Phone Number:</label>
-        <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
+        <label>Contact Phone Number</label>
+        <input type="tel" id="orderPhoneNum" placeholder="e.g. 0764519027" required>
       </div>
+
       <div class="payment-selection-box">
-        <label style="font-size:0.82rem; font-weight:800; color:var(--text-main);">Select Payment Method:</label>
+        <label style="font-size:0.82rem; font-weight:800;">Payment Method:</label>
         <div class="payment-options-grid">
-          <div id="payOptCash" class="pay-option-btn active" onclick="selectPaymentMethod('cash')">
+          <div id="payOptCash" class="pay-option-btn active" onclick="selectPayment('cash')">
             <i class="fa-solid fa-money-bill-wave" style="color:var(--accent-gold);"></i>
-            <span>Cash on Delivery</span>
+            <span>Cash</span>
           </div>
-          <div id="payOptMobile" class="pay-option-btn" onclick="selectPaymentMethod('mobile')">
+          <div id="payOptMobile" class="pay-option-btn" onclick="selectPayment('mobile')">
             <i class="fa-solid fa-mobile-screen-button" style="color:var(--accent-gold);"></i>
             <span>Mobile Money</span>
           </div>
         </div>
         <div id="mobileUnfoldArea" class="mobile-unfold-box">
-          <p style="font-size:0.82rem; color:var(--text-main); line-height:1.4; margin-bottom:10px;">
-            Pay via Voda Lipa Namba: <span class="lipa-tag">37247619</span><br>
-            Name: <strong>Edwin Andrew</strong>
+          <p style="font-size:0.8rem; color:var(--text-main); margin-bottom:8px;">
+            Lipa Namba: <span class="lipa-tag">37247619</span> (Edwin Andrew)
           </p>
-          <div class="form-group" style="margin-bottom:0;">
-            <label for="payerName" style="color:var(--text-main);">Jina la namba iliyotumika:</label>
-            <input type="text" id="payerName" placeholder="Weka jina la akaunti">
-          </div>
+          <input type="text" id="payerName" placeholder="Account payment name..." style="width:100%; padding:8px; border-radius:6px; background:var(--input-bg); border:1px solid var(--input-border); color:#fff;">
         </div>
       </div>
-      <button class="submit-order-btn" onclick="submitFoodOrder()">
+
+      <div class="calculation-summary-box">
+        <div class="calc-row">
+          <span>Total:</span>
+          <strong id="displayGrandTotal" style="color:var(--accent-gold);">0 TZS</strong>
+        </div>
+      </div>
+
+      <button class="submit-order-btn" onclick="submitWhatsAppOrder()">
         <i class="fa-brands fa-whatsapp"></i> Send Order via WhatsApp
       </button>
     </div>
   </div>
 
-  <!-- PERFUME ORDER MODAL -->
-  <div id="perfumesModal" class="modal-overlay">
-    <div class="sheet-content">
-      <span class="sheet-close" onclick="closeSheet('perfumesModal')">&times;</span>
-      <div class="sheet-title">Place Your Order</div>
-      <div class="sheet-subtitle" style="font-size:0.8rem; color:var(--text-sub); text-align:center; margin-bottom:12px;">Select your bottle size & perfume details</div>
-      <label style="font-size:0.8rem; color:var(--text-main); font-weight:600; display:block; margin-bottom:6px;">1. Select Size:</label>
-      <div class="price-grid">
-        <div class="price-card active" onclick="selectPerfumeSize(this, '30ml', 25000)">
-          <div class="size-title">30ml</div>
-          <div class="size-price">25,000/=</div>
-        </div>
-        <div class="price-card" onclick="selectPerfumeSize(this, '50ml', 35000)">
-          <div class="size-title">50ml</div>
-          <div class="size-price">35,000/=</div>
-        </div>
-        <div class="price-card" onclick="selectPerfumeSize(this, '100ml', 55000)">
-          <div class="size-title">100ml</div>
-          <div class="size-price">55,000/=</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="perfumeDesc">2. Perfume Name or Description:</label>
-        <textarea id="perfumeDesc" placeholder="Enter perfume name..."></textarea>
-      </div>
-      <div class="form-group">
-        <label for="perfumePhoneNum">Contact Phone Number:</label>
-        <input type="tel" id="perfumePhoneNum" placeholder="e.g. 0764519027" value="+255 764 519 027">
-      </div>
-      <div class="form-group">
-        <label for="perfumeLoc">Delivery Location & Room:</label>
-        <input type="text" id="perfumeLoc" placeholder="e.g. Block C, Room 104">
-      </div>
-      <button class="submit-order-btn" onclick="submitPerfumeOrder()">
-        <i class="fa-brands fa-whatsapp"></i> Send Order on WhatsApp
-      </button>
-    </div>
-  </div>
-
   <!-- BOTTOM NAVIGATION -->
-  <nav class="bottom-nav" id="mainNavBar" style="display:none;">
-    <button id="nav-home-btn" class="nav-item active" onclick="switchTab('screen-home', this)">
+  <nav id="main-nav" class="bottom-nav">
+    <button id="nav-home" class="nav-item active" onclick="switchTab('screen-home', this)">
       <i class="fa-solid fa-house"></i>
       <span>Home</span>
     </button>
-    <button class="nav-item" onclick="switchTab('screen-ai', this)">
-      <i class="fa-solid fa-robot"></i>
-      <span>AI Guide</span>
+    <button id="nav-perfumes" class="nav-item" onclick="switchTab('screen-perfumes', this)">
+      <i class="fa-solid fa-spray-can-sparkles"></i>
+      <span>Scent Hub</span>
     </button>
-    <button class="nav-item" onclick="switchTab('screen-bookings', this)">
+    <button id="nav-bookings" class="nav-item" onclick="switchTab('screen-bookings', this)">
       <i class="fa-solid fa-briefcase"></i>
-      <span>Bookings</span>
+      <span>Orders</span>
     </button>
-    <button class="nav-item" onclick="switchTab('screen-profile', this)">
+    <button id="nav-profile" class="nav-item" onclick="switchTab('screen-profile', this)">
       <i class="fa-solid fa-user"></i>
       <span>Profile</span>
     </button>
   </nav>
 
-  <!-- LOGIC SCRIPT -->
+  <!-- JASCRIBE APPLICATION LOGIC & SUPABASE WORKFLOW -->
   <script>
-    const SUPABASE_URL = 'https://zudqubbglwphfxaviqsg.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_URL = "https://zudqubbglwphfxaviqsg.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const WHATSAPP_PHONE = "255764519027";
 
     let currentUser = null;
-    let currentUsername = "";
-    let isRegisterMode = false;
-    let deferredPrompt = null;
-
-    // Persistent storage initialization with fallback offline support
-    let activeOrders = JSON.parse(localStorage.getItem('appearich_active_orders')) || [];
-    let completedHistory = JSON.parse(localStorage.getItem('appearich_history')) || [];
-    let completedOrdersCount = parseInt(localStorage.getItem('appearich_loyalty_count')) || 0;
-    
-    let selectedPerfumeSizeName = "30ml";
-    let selectedPerfumePrice = 25000;
+    let selectedItems = [];
     let selectedPaymentType = 'cash';
-    let selectedFoodItems = [];
 
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js')
-          .then(reg => console.log('ServiceWorker registered:', reg.scope))
-          .catch(err => console.log('ServiceWorker failed:', err));
+    // INDEXEDDB OFFLINE STORE
+    function openDB() {
+      return new Promise((resolve) => {
+        const req = indexedDB.open('AppearichDB', 1);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains('orders')) {
+            db.createObjectStore('orders', { keyPath: 'id' });
+          }
+        };
+        req.onsuccess = (e) => resolve(e.target.result);
       });
     }
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById('pwaInstallBtn').style.display = 'flex';
-    });
-
-    function installPWA() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            document.getElementById('pwaInstallBtn').style.display = 'none';
-          }
-          deferredPrompt = null;
-        });
-      }
+    async function saveOrderLocally(order) {
+      const db = await openDB();
+      const tx = db.transaction('orders', 'readwrite');
+      tx.objectStore('orders').put(order);
     }
 
+    async function getLocalOrders() {
+      const db = await openDB();
+      return new Promise((resolve) => {
+        const tx = db.transaction('orders', 'readonly');
+        const req = tx.objectStore('orders').getAll();
+        req.onsuccess = () => resolve(req.result || []);
+      });
+    }
+
+    // INITIALIZATION & PWA LIFECYCLE
     window.addEventListener('DOMContentLoaded', async () => {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js');
+      }
+
+      // Splash timer
       setTimeout(async () => {
-        document.getElementById('splash-screen').style.opacity = '0';
-        setTimeout(() => {
-          document.getElementById('splash-screen').style.display = 'none';
-        }, 500);
+        const splash = document.getElementById('splash-screen');
+        splash.style.opacity = '0';
+        setTimeout(() => splash.style.display = 'none', 500);
 
-        if (session && session.user) {
-          currentUser = session.user;
-          await fetchAndSetupUserData(currentUser.id);
-          await syncOrdersFromSupabase();
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          await loadUserProfile(session.user);
+          showAuthenticatedApp();
         } else {
-          showAuthScreen();
+          showScreen('screen-login');
         }
-      }, 800);
-
-      loadSavedUserLocation();
-      updateLoyaltyUI();
-      renderBookings();
-      renderHistory();
-      renderSelectedItems();
+      }, 2500);
     });
 
-    async function fetchAndSetupUserData(userId) {
-      const { data, error } = await supabaseClient
-        .from('profiles')
-        .select('username')
-        .eq('id', userId)
-        .single();
-      
-      if (data && data.username) {
-        currentUsername = data.username;
-      } else {
-        currentUsername = localStorage.getItem('appearich_username') || currentUser.email.split('@')[0];
+    async function loadUserProfile(user) {
+      let username = user.user_metadata?.username;
+      if (!username) {
+        const { data } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('id', user.id)
+          .single();
+        if (data && data.username) username = data.username;
       }
-      localStorage.setItem('appearich_username', currentUsername);
-      setupUserInterface();
+
+      currentUser = {
+        id: user.id,
+        email: user.email,
+        username: username || 'User'
+      };
+
+      document.getElementById('heroGreeting').innerText = `Welcome, ${currentUser.username}`;
+      document.getElementById('profName').innerText = currentUser.username;
+      document.getElementById('profEmail').innerText = currentUser.email;
+      document.getElementById('profAvatar').innerText = currentUser.username.charAt(0).toUpperCase();
     }
 
-    async function syncOrdersFromSupabase() {
-      try {
-        const { data, error } = await supabaseClient
-          .from('orders')
-          .select('*')
-          .eq('user_id', currentUser.id)
-          .order('created_at', { ascending: false });
-        
-        if (data && data.length > 0) {
-          // Merge remote orders with local state
-          activeOrders = data.map(row => ({
-            id: row.order_id,
-            items: row.items || [],
-            total: row.total,
-            location: row.location,
-            instructions: row.instructions || 'None',
-            paymentMethod: row.payment_method || 'Cash on Delivery',
-            dateTime: new Date(row.created_at).toLocaleString(),
-            status: row.status || 'pending'
-          }));
-          localStorage.setItem('appearich_active_orders', JSON.stringify(activeOrders));
-          renderBookings();
-        }
-      } catch (e) {
-        console.log("Offline mode: using local cache for orders.", e);
-      }
+    function showScreen(screenId) {
+      document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
     }
 
-    function showAuthScreen() {
-      document.getElementById('screen-auth').style.display = 'flex';
-      document.getElementById('mainHeader').style.display = 'none';
-      document.getElementById('mainNavBar').style.display = 'none';
-      document.querySelectorAll('.app-screen').forEach(s => {
-        if(s.id !== 'screen-auth') s.classList.remove('active');
+    function showAuthenticatedApp() {
+      document.getElementById('main-header').style.display = 'flex';
+      document.getElementById('main-nav').classList.add('active');
+      showScreen('screen-home');
+      fetchOrders();
+    }
+
+    // AUTHENTICATION WORKFLOWS
+    async function handleRegister(e) {
+      e.preventDefault();
+      const username = document.getElementById('regUsername').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value;
+
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { username } }
       });
-    }
 
-    function setupUserInterface() {
-      document.getElementById('screen-auth').style.display = 'none';
-      document.getElementById('mainHeader').style.display = 'flex';
-      document.getElementById('mainNavBar').style.display = 'flex';
-      switchTab('screen-home', document.getElementById('nav-home-btn'));
-
-      document.getElementById('heroGreeting').innerText = `Welcome, ${currentUsername}!`;
-      document.getElementById('profName').innerText = currentUsername;
-      document.getElementById('profAvatar').innerText = currentUsername.charAt(0).toUpperCase();
-      document.getElementById('profPhone').innerText = currentUser.phone || "+255 764 519 027";
-      document.getElementById('mealPhoneNum').value = currentUser.phone || "+255 764 519 027";
-      document.getElementById('perfumePhoneNum').value = currentUser.phone || "+255 764 519 027";
-    }
-
-    function toggleAuthMode() {
-      isRegisterMode = !isRegisterMode;
-      document.getElementById('authTitle').innerText = isRegisterMode ? "Create Account" : "Welcome Back";
-      document.getElementById('authSub').innerText = isRegisterMode ? "Sign up to start ordering with Appearich" : "Sign in to your Appearich account";
-      document.getElementById('authSubmitBtn').innerText = isRegisterMode ? "Register" : "Sign In";
-      document.getElementById('authSwitchText').innerHTML = isRegisterMode ? "Already have an account? <span>Sign In</span>" : "Don't have an account? <span>Register here</span>";
-      document.getElementById('usernameGroup').style.display = isRegisterMode ? "block" : "none";
-    }
-
-    async function handleAuthSubmit() {
-      const email = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value.trim();
-      const username = document.getElementById('authUsername').value.trim();
-      
-      if (!email || !password) {
-        alert("Please enter both email and password.");
-        return;
+      if (error) { alert(error.message); return; }
+      if (data.user) {
+        await supabase.from('profiles').upsert({ id: data.user.id, username, email });
+        await loadUserProfile(data.user);
+        showAuthenticatedApp();
       }
+    }
 
-      if (isRegisterMode) {
-        if (!username) {
-          alert("Please provide a username.");
-          return;
-        }
-        const { data, error } = await supabaseClient.auth.signUp({ email, password });
-        if (error) {
-          alert("Registration Error: " + error.message);
-        } else {
-          currentUser = data.user;
-          currentUsername = username;
-          
-          if (currentUser) {
-            await supabaseClient.from('profiles').upsert([
-              { id: currentUser.id, username: username, email: email }
-            ]);
-          }
-          localStorage.setItem('appearich_username', username);
-          alert("Registration successful! Welcome, " + username);
-          setupUserInterface();
-        }
-      } else {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) {
-          alert("Login Error: " + error.message);
-        } else {
-          currentUser = data.user;
-          await fetchAndSetupUserData(currentUser.id);
-          await syncOrdersFromSupabase();
-        }
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) { alert(error.message); return; }
+      if (data.user) {
+        await loadUserProfile(data.user);
+        showAuthenticatedApp();
       }
     }
 
     async function handleLogout() {
-      await supabaseClient.auth.signOut();
-      localStorage.removeItem('appearich_username');
+      await supabase.auth.signOut();
       currentUser = null;
-      currentUsername = "";
-      showAuthScreen();
+      document.getElementById('main-header').style.display = 'none';
+      document.getElementById('main-nav').classList.remove('active');
+      showScreen('screen-login');
     }
 
-    function loadSavedUserLocation() {
-      const savedBlock = localStorage.getItem('appearich_user_block');
-      const savedRoom = localStorage.getItem('appearich_user_room');
-      if (savedBlock) document.getElementById('mealBlockLoc').value = savedBlock;
-      if (savedRoom) document.getElementById('mealRoomLoc').value = savedRoom;
-    }
-
-    function toggleTheme() {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const icon = document.querySelector('#themeToggleBtn i');
-      if (currentTheme === 'dark') {
-        document.documentElement.removeAttribute('data-theme');
-        icon.className = 'fa-solid fa-moon';
-      } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        icon.className = 'fa-solid fa-sun';
-      }
-    }
-
-    function switchTab(screenId, element) {
-      document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+    function switchTab(screenId, btn) {
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      const targetScreen = document.getElementById(screenId);
-      if (targetScreen) targetScreen.classList.add('active');
-      if (element) element.classList.add('active');
+      if (btn) btn.classList.add('active');
+      showScreen(screenId);
     }
 
-    function goBack() {
-      const homeBtn = document.getElementById('nav-home-btn');
-      switchTab('screen-home', homeBtn);
+    // ORDER MODAL & CALCULATION LOGIC
+    function openHotMealsModal() {
+      document.getElementById('hotMealsModal').classList.add('active');
+      renderSelectedItems();
     }
 
-    function openHotMealsModal() { 
-      loadSavedUserLocation();
-      renderSelectedItems();
-      document.getElementById('hotMealsModal').classList.add('active'); 
+    function closeSheet(id) {
+      document.getElementById(id).classList.remove('active');
     }
-    function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
-    function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
-    function openProductModal(name) {
-      document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
-      openOrderModal();
-    }
-    function selectPerfumeSize(el, sizeName, price) {
-      document.querySelectorAll('#perfumesModal .price-card').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-      selectedPerfumeSizeName = sizeName;
-      selectedPerfumePrice = price;
-    }
-    function selectPaymentMethod(type) {
-      selectedPaymentType = type;
-      const btnCash = document.getElementById('payOptCash');
-      const btnMobile = document.getElementById('payOptMobile');
-      const unfoldBox = document.getElementById('mobileUnfoldArea');
-      if (type === 'mobile') {
-        btnMobile.classList.add('active');
-        btnCash.classList.remove('active');
-        unfoldBox.classList.add('active');
-      } else {
-        btnCash.classList.add('active');
-        btnMobile.classList.remove('active');
-        unfoldBox.classList.remove('active');
-      }
-    }
-    function addItemToOrder(name, unitPrice) {
-      const existing = selectedFoodItems.find(item => item.name === name);
-      if (existing) { existing.qty += 1; } 
-      else { selectedFoodItems.push({ name: name, unitPrice: unitPrice, qty: 1 }); }
+
+    function addFoodItem(name, price) {
+      const existing = selectedItems.find(i => i.name === name);
+      if (existing) { existing.qty += 1; }
+      else { selectedItems.push({ name, price, qty: 1 }); }
       renderSelectedItems();
     }
-    function updateItemQty(index, newQty) {
-      const qty = parseInt(newQty) || 1;
-      if (qty <= 0) { selectedFoodItems.splice(index, 1); } 
-      else { selectedFoodItems[index].qty = qty; }
+
+    function updateItemQty(index, qty) {
+      const val = parseInt(qty) || 1;
+      selectedItems[index].qty = val;
       renderSelectedItems();
     }
-    function removeItem(index) {
-      selectedFoodItems.splice(index, 1);
-      renderSelectedItems();
-    }
+
     function renderSelectedItems() {
-      const container = document.getElementById('selectedItemsContainer');
-      if (selectedFoodItems.length === 0) {
-        container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet.</p>`;
-      } else {
-        container.innerHTML = selectedFoodItems.map((item, index) => `
+      const box = document.getElementById('selectedItemsContainer');
+      if (selectedItems.length === 0) {
+        box.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items selected yet. Tap products above to add.</p>`;
+        document.getElementById('displayGrandTotal').innerText = `0 TZS`;
+        return;
+      }
+
+      let total = 0;
+      box.innerHTML = selectedItems.map((item, idx) => {
+        total += item.price * item.qty;
+        return `
           <div class="selected-item-row">
-            <div class="selected-item-info">${item.name} (${item.unitPrice.toLocaleString()} TZS)</div>
+            <span class="selected-item-info">${item.name} (${item.price.toLocaleString()} TZS)</span>
             <div class="selected-item-ctrls">
-              <label style="font-size:0.75rem;">Qty:</label>
-              <input type="number" value="${item.qty}" min="1" onchange="updateItemQty(${index}, this.value)">
-              <i class="fa-solid fa-trash" style="color:#e74c3c; cursor:pointer;" onclick="removeItem(${index})"></i>
+              <input type="number" value="${item.qty}" min="1" onchange="updateItemQty(${idx}, this.value)">
             </div>
           </div>
-        `).join('');
+        `;
+      }).join('');
+
+      document.getElementById('displayGrandTotal').innerText = `${total.toLocaleString()} TZS`;
+    }
+
+    function selectPayment(type) {
+      selectedPaymentType = type;
+      if (type === 'mobile') {
+        document.getElementById('payOptMobile').classList.add('active');
+        document.getElementById('payOptCash').classList.remove('active');
+        document.getElementById('mobileUnfoldArea').classList.add('active');
+      } else {
+        document.getElementById('payOptCash').classList.add('active');
+        document.getElementById('payOptMobile').classList.remove('active');
+        document.getElementById('mobileUnfoldArea').classList.remove('active');
       }
-      recalculateMealTotal();
-    }
-    function recalculateMealTotal() {
-      const subtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
-      const surcharge = Math.round(subtotal * 0.25);
-      const grandTotal = subtotal + surcharge;
-      document.getElementById('displaySubtotal').innerText = subtotal.toLocaleString() + " TZS";
-      document.getElementById('displaySurcharge').innerText = surcharge.toLocaleString() + " TZS";
-      document.getElementById('displayGrandTotal').innerText = grandTotal.toLocaleString() + " TZS";
     }
 
-    async function submitFoodOrder() {
-      if (selectedFoodItems.length === 0) { alert("Please select at least one item!"); return; }
-      const block = document.getElementById('mealBlockLoc').value.trim();
-      const room = document.getElementById('mealRoomLoc').value.trim();
-      const phone = document.getElementById('mealPhoneNum').value.trim();
-      const instructions = document.getElementById('mealDetails').value.trim() || "None";
-      
-      if (!block || !room || !phone) { alert("Please fill in location and phone number details."); return; }
-      
-      localStorage.setItem('appearich_user_block', block);
-      localStorage.setItem('appearich_user_room', room);
-      
-      const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
-      const subtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
-      const surcharge = Math.round(subtotal * 0.25);
-      const grandTotal = subtotal + surcharge;
-      const dateTimeStr = new Date().toLocaleString();
-      const paymentName = selectedPaymentType === 'cash' ? 'Cash on Delivery' : 'Mobile Money (Voda Lipa)';
-
-      const newOrder = {
-        id: orderId,
-        items: selectedFoodItems,
-        total: grandTotal,
-        location: `${block}, Room ${room}`,
-        instructions: instructions,
-        paymentMethod: paymentName,
-        dateTime: dateTimeStr,
-        status: "pending"
-      };
-
-      // Persistent save locally
-      activeOrders.unshift(newOrder);
-      localStorage.setItem('appearich_active_orders', JSON.stringify(activeOrders));
-      renderBookings();
-
-      // Save to Supabase database
-      try {
-        await supabaseClient.from('orders').insert([{
-          order_id: orderId,
-          user_id: currentUser ? currentUser.id : 'guest',
-          items: selectedFoodItems,
-          total: grandTotal,
-          location: `${block}, Room ${room}`,
-          instructions: instructions,
-          payment_method: paymentName,
-          status: 'pending'
-        }]);
-      } catch (e) {
-        console.log("Cloud sync queued offline.", e);
-      }
-
-      // Format complete WhatsApp Order message neatly
-      let itemsListStr = selectedFoodItems.map(i => `• ${i.name} (x${i.qty}) - ${(i.unitPrice * i.qty).toLocaleString()} TZS`).join('\n');
-      let waMessage = `*NEW APPEARICH ORDER*\n\n` +
-        `🔖 *Order ID:* ${orderId}\n` +
-        `👤 *Customer:* ${currentUsername}\n` +
-        `📞 *Phone:* ${phone}\n` +
-        `📍 *Location:* ${block}, Room ${room}\n` +
-        `📝 *Instructions:* ${instructions}\n` +
-        `📅 *Date & Time:* ${dateTimeStr}\n\n` +
-        `📦 *Ordered Items:*\n${itemsListStr}\n\n` +
-        `💰 *Total Order Amount:* ${grandTotal.toLocaleString()} TZS\n` +
-        `💳 *Payment Method:* ${paymentName}`;
-
-      selectedFoodItems = [];
-      closeSheet('hotMealsModal');
-      window.open(`https://wa.me/255764519027?text=${encodeURIComponent(waMessage)}`, '_blank');
-    }
-
-    async function submitPerfumeOrder() {
-      const desc = document.getElementById('perfumeDesc').value.trim();
-      const phone = document.getElementById('perfumePhoneNum').value.trim();
-      const loc = document.getElementById('perfumeLoc').value.trim();
-      if (!desc || !phone || !loc) { alert("Please fill in all details for your perfume order."); return; }
-      
-      const orderId = "APR-PRF-" + Math.floor(1000 + Math.random() * 9000);
-      const dateTimeStr = new Date().toLocaleString();
-      const perfumeItems = [{ name: `${desc} (${selectedPerfumeSizeName})`, unitPrice: selectedPerfumePrice, qty: 1 }];
-
-      const newOrder = {
-        id: orderId,
-        items: perfumeItems,
-        total: selectedPerfumePrice,
-        location: loc,
-        instructions: desc,
-        paymentMethod: "Cash / Mobile Money",
-        dateTime: dateTimeStr,
-        status: "pending"
-      };
-
-      activeOrders.unshift(newOrder);
-      localStorage.setItem('appearich_active_orders', JSON.stringify(activeOrders));
-      renderBookings();
-
-      try {
-        await supabaseClient.from('orders').insert([{
-          order_id: orderId,
-          user_id: currentUser ? currentUser.id : 'guest',
-          items: perfumeItems,
-          total: selectedPerfumePrice,
-          location: loc,
-          instructions: desc,
-          payment_method: "Cash / Mobile Money",
-          status: 'pending'
-        }]);
-      } catch (e) {
-        console.log("Cloud sync queued offline.", e);
-      }
-
-      let waMessage = `*NEW APPEARICH PERFUME ORDER*\n\n` +
-        `🔖 *Order ID:* ${orderId}\n` +
-        `👤 *Customer:* ${currentUsername}\n` +
-        `📞 *Phone:* ${phone}\n` +
-        `📍 *Location:* ${loc}\n` +
-        `📅 *Date & Time:* ${dateTimeStr}\n\n` +
-        `📦 *Ordered Products:*\n• ${desc} - Size: ${selectedPerfumeSizeName} (x1)\n\n` +
-        `💰 *Total Order Amount:* ${selectedPerfumePrice.toLocaleString()} TZS\n` +
-        `💳 *Payment Method:* Cash / Mobile Money`;
-
-      closeSheet('perfumesModal');
-      window.open(`https://wa.me/255764519027?text=${encodeURIComponent(waMessage)}`, '_blank');
-    }
-
-    function renderBookings() {
-      const container = document.getElementById('bookingsListContainer');
-      if (activeOrders.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-sub);">No active orders pending.</div>`;
+    // WHATSAPP ORDER SUBMISSION FORM
+    async function submitWhatsAppOrder() {
+      if (selectedItems.length === 0) {
+        alert('Please select at least one item.');
         return;
       }
-      container.innerHTML = activeOrders.map(o => `
+
+      const location = document.getElementById('orderBlockLoc').value.trim();
+      const phone = document.getElementById('orderPhoneNum').value.trim();
+      const payer = document.getElementById('payerName').value.trim();
+
+      if (!location || !phone) {
+        alert('Please fill in location and phone number.');
+        return;
+      }
+
+      const orderId = 'APR-' + Math.floor(100000 + Math.random() * 900000);
+      const currentDate = new Date().toLocaleDateString();
+      const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      let grandTotal = 0;
+      const productLines = selectedItems.map(i => {
+        const itemTotal = i.price * i.qty;
+        grandTotal += itemTotal;
+        return `• ${i.name} (${i.qty}x) - ${itemTotal.toLocaleString()} TZS`;
+      }).join('\n');
+
+      const paymentInfo = selectedPaymentType === 'cash' 
+        ? `Cash on Delivery` 
+        : `Mobile Money (Lipa Namba 37247619)\nPayer Account: ${payer || 'Not Provided'}`;
+
+      const orderData = {
+        id: orderId,
+        user_id: currentUser ? currentUser.id : null,
+        username: currentUser ? currentUser.username : 'Guest',
+        phone,
+        location,
+        product_name: selectedItems.map(i => `${i.name} (x${i.qty})`).join(', '),
+        quantity: selectedItems.reduce((acc, i) => acc + i.qty, 0),
+        price: grandTotal,
+        total: grandTotal,
+        payment_method: paymentInfo,
+        status: 'pending',
+        created_at: new Date().toISOString()
+      };
+
+      // 1. Supabase Persistence
+      await supabase.from('orders').insert([orderData]);
+
+      // 2. Local IndexedDB Persistence
+      await saveOrderLocally(orderData);
+
+      // 3. Complete Formatted WhatsApp Message
+      const message = 
+`🛍️ *NEW ORDER - APPEARICH*
+----------------------------------
+🆔 *Order ID:* ${orderId}
+👤 *Customer Username:* ${currentUser ? currentUser.username : 'Guest'}
+📞 *Phone Number:* ${phone}
+📍 *Delivery Location:* ${location}
+📅 *Date:* ${currentDate}
+⏰ *Time:* ${currentTime}
+----------------------------------
+📦 *Products Purchased:*
+${productLines}
+----------------------------------
+💰 *Order Total:* ${grandTotal.toLocaleString()} TZS
+💳 *Payment Method:* ${paymentInfo}`;
+
+      window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`, '_blank');
+      selectedItems = [];
+      closeSheet('hotMealsModal');
+      fetchOrders();
+    }
+
+    // ORDERS LIST SYNC & DISPLAY
+    async function fetchOrders() {
+      // Load IndexedDB items first for immediate access
+      const localOrders = await getLocalOrders();
+      renderOrders(localOrders);
+
+      // Refresh online orders from Supabase database
+      if (currentUser) {
+        const { data: supabaseOrders } = await supabase
+          .from('orders')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false });
+
+        if (supabaseOrders && supabaseOrders.length > 0) {
+          for (const ord of supabaseOrders) {
+            await saveOrderLocally(ord);
+          }
+          renderOrders(supabaseOrders);
+        }
+      }
+    }
+
+    function renderOrders(orders) {
+      const container = document.getElementById('ordersListContainer');
+      if (!orders || orders.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:40px 20px; color:var(--text-sub);">
+            <i class="fa-solid fa-box-open" style="font-size:2.5rem; margin-bottom:10px;"></i>
+            <p>No active orders stored yet.</p>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = orders.map(o => `
         <div class="order-card-track">
           <div class="track-header">
-            <span class="order-id">${o.id} - ${o.total.toLocaleString()} TZS</span>
-            <span class="status-badge pending"><i class="fa-solid fa-clock"></i> Pending</span>
+            <span style="font-weight:800; color:var(--accent-gold);">${o.id}</span>
+            <span style="font-size:0.75rem; background:rgba(255,215,0,0.2); color:#FFD700; padding:3px 8px; border-radius:10px;">${o.status.toUpperCase()}</span>
           </div>
-          <div class="track-details">
-            <p><strong>Time:</strong> ${o.dateTime || 'Recent'}</p>
-            <p><strong>Location:</strong> ${o.location}</p>
-            <p><strong>Payment:</strong> ${o.paymentMethod || 'Cash'}</p>
-          </div>
+          <div style="font-size:0.85rem; color:#ffffff; margin-bottom:4px;"><strong>${o.product_name}</strong></div>
+          <div style="font-size:0.8rem; color:var(--text-sub);">Total: ${o.total.toLocaleString()} TZS</div>
+          <div style="font-size:0.75rem; color:var(--text-sub); margin-top:4px;">Location: ${o.location}</div>
         </div>
       `).join('');
-    }
-
-    function renderHistory() {
-      const container = document.getElementById('historyListContainer');
-      if (completedHistory.length === 0) {
-        container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub);">No past orders logged yet.</p>`;
-        return;
-      }
-      container.innerHTML = completedHistory.map(o => `
-        <div class="order-card-track" style="opacity:0.85;">
-          <div class="track-header">
-            <span class="order-id">${o.id}</span>
-            <span class="status-badge verified"><i class="fa-solid fa-check-double"></i> Delivered</span>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function updateLoyaltyUI() {
-      document.getElementById('loyaltyCountBadge').innerText = `${completedOrdersCount} / 5 Orders`;
-      const stamps = document.querySelectorAll('.stamp-dot');
-      stamps.forEach((stamp, idx) => {
-        if (idx < completedOrdersCount) stamp.classList.add('filled');
-        else stamp.classList.remove('filled');
-      });
     }
 
     function sendCustomInquiry() {
-      const val = document.getElementById('customInquiryInput').value.trim();
-      if (!val) return;
-      window.open(`https://wa.me/255764519027?text=${encodeURIComponent("Custom Inquiry from " + currentUsername + ": " + val)}`, '_blank');
+      const text = document.getElementById('customInquiryInput').value.trim();
+      if (!text) return;
+      const msg = `Hi Appearich! I have an inquiry:\n"${text}"`;
+      window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
       document.getElementById('customInquiryInput').value = '';
-    }
-
-    function triggerQuickReorder() { openHotMealsModal(); }
-
-    function igniteTeaserToast() {
-      const toast = document.getElementById("soonToast");
-      toast.classList.add("trigger-fly");
-      setTimeout(() => toast.classList.remove("trigger-fly"), 3500);
     }
   </script>
 </body>
