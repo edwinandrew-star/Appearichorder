@@ -2,1806 +2,227 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>APPEARICH - Premium Service & Scent Hub</title>
-  <!-- PWA Capabilities -->
-  <meta name="theme-color" content="#000000">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="APPEARICH">
-  <!-- FontAwesome & Supabase SDK -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appearich</title>
   <style>
-    /* ==========================================================================
-       THEME VARIABLES & GLOBAL RESET
-       ========================================================================== */
-    :root {
-      --bg-color: #f8f9fa;
-      --card-bg: #ffffff;
-      --card-bg-sub: #f1f3f5;
-      --card-border: #e9ecef;
-      --text-main: #111111;
-      --text-sub: #666666;
-      --accent-gold: #d4af37;
-      --accent-gold-light: rgba(212, 175, 55, 0.15);
-      --nav-bg: #ffffff;
-      --nav-border: #e9ecef;
-      --input-bg: #f1f3f5;
-      --input-border: #ced4da;
-      --modal-bg: #ffffff;
-      --overlay-bg: rgba(0, 0, 0, 0.5);
-      --shadow-color: rgba(0, 0, 0, 0.08);
-    }
-    [data-theme="dark"] {
-      --bg-color: #0d0d0d;
-      --card-bg: #181818;
-      --card-bg-sub: #141414;
-      --card-border: #282828;
-      --text-main: #ffffff;
-      --text-sub: #aaaaaa;
-      --accent-gold: #FFD700;
-      --accent-gold-light: rgba(255, 215, 0, 0.15);
-      --nav-bg: #111111;
-      --nav-border: #222222;
-      --input-bg: #000000;
-      --input-border: #333333;
-      --modal-bg: #141414;
-      --overlay-bg: rgba(0, 0, 0, 0.85);
-      --shadow-color: rgba(0, 0, 0, 0.5);
-    }
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-      transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     body {
-      background: var(--bg-color);
-      color: var(--text-main);
+      background-color: #000000;
+      color: #ffffff;
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 75px;
-      padding-bottom: 80px;
-      overflow-x: hidden;
-    }
-    /* ==========================================================================
-       SPLASH & AUTH SCREENS
-       ========================================================================== */
-    .full-cover-screen {
-      position: fixed;
-      inset: 0;
-      background-color: #000000 !important;
-      z-index: 5000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      padding: 24px;
-      transition: opacity 0.5s ease;
+      align-items: center;
+      overflow: hidden;
     }
-    .splash-logo-img {
-      max-width: 220px;
-      max-height: 220px;
-      object-fit: contain;
-      cursor: pointer;
-    }
-    .splash-fallback-text {
-      color: var(--accent-gold);
-      font-weight: 900;
-      font-size: 1.8rem;
-      letter-spacing: 2px;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-    .auth-card {
+    
+    .card {
+      background: #0d0d0d;
+      border: 1px solid #222222;
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      text-align: center;
       width: 100%;
       max-width: 380px;
-      background: #111111;
-      border: 1px solid #222222;
-      border-radius: 20px;
-      padding: 24px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      
+      /* Logo Pop-Up Animation */
+      animation: popup 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
-    .auth-logo {
-      width: 100px;
-      height: 100px;
-      object-fit: contain;
-      margin-bottom: 16px;
+
+    @keyframes popup {
+      0% {
+        opacity: 0;
+        transform: scale(0.7);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
-    .auth-tabs {
+
+    .logo-container {
+      margin-bottom: 1.5rem;
       display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
+      justify-content: center;
     }
-    .auth-tab-btn {
-      flex: 1;
-      background: #1a1a1a;
-      border: 1px solid #333;
-      color: #aaa;
-      padding: 10px;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
+
+    .logo {
+      width: 150px;
+      height: auto;
+      object-fit: contain;
+      /* Eliminates square border artifacts on black backgrounds */
+      mix-blend-mode: screen; 
+      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.15));
     }
-    .auth-tab-btn.active {
-      background: var(--accent-gold);
-      color: #000;
-      border-color: var(--accent-gold);
+
+    h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      color: #ffffff;
+      letter-spacing: 0.5px;
     }
-    .auth-form-group {
-      margin-bottom: 14px;
+
+    .form-group {
+      margin-bottom: 1.2rem;
       text-align: left;
     }
-    .auth-form-group label {
+
+    label {
       display: block;
-      font-size: 0.78rem;
-      color: #aaa;
-      margin-bottom: 5px;
+      margin-bottom: 0.4rem;
+      color: #aaaaaa;
+      font-size: 0.85rem;
     }
-    .auth-form-group input {
+
+    input {
       width: 100%;
-      background: #000;
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 12px;
-      color: #fff;
-      font-size: 0.9rem;
+      padding: 0.8rem;
+      background: #181818;
+      border: 1px solid #333333;
+      border-radius: 8px;
+      color: #ffffff;
       outline: none;
+      transition: border-color 0.2s;
     }
-    .auth-form-group input:focus {
-      border-color: var(--accent-gold);
+
+    input:focus {
+      border-color: #ffffff;
     }
-    .auth-submit-btn {
+
+    .btn {
       width: 100%;
-      background: var(--accent-gold);
-      color: #000;
+      padding: 0.8rem;
+      background-color: #ffffff;
+      color: #000000;
       border: none;
-      padding: 14px;
-      border-radius: 10px;
-      font-weight: 900;
-      font-size: 0.95rem;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    /* ==========================================================================
-       APP MAIN CORE LAYOUT & NAVIGATION
-       ========================================================================== */
-    .app-screen {
-      display: none;
-      width: 100%;
-      max-width: 480px;
-      min-height: calc(100vh - 155px);
-      padding: 20px 16px;
-      flex-direction: column;
-      position: relative;
-      animation: fadeIn 0.3s ease-in-out;
-    }
-    .app-screen.active { display: flex; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .app-header {
-      position: fixed;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: 480px;
-      width: 100%;
-      height: 70px;
-      padding: 0 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--bg-color);
-      border-bottom: 1px solid var(--card-border);
-      z-index: 1500;
-    }
-    .header-left { display: flex; align-items: center; gap: 12px; }
-    .back-btn {
-      background: var(--card-bg-sub);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      display: flex !important;
-      align-items: center;
-      justify-content: center;
+      border-radius: 8px;
       font-size: 1rem;
+      font-weight: 600;
       cursor: pointer;
+      margin-top: 1rem;
+      transition: background-color 0.2s, transform 0.1s;
     }
-    .brand-logo-wrap { display: flex; align-items: center; gap: 10px; }
-    .header-brand-img {
-      width: 38px;
-      height: 38px;
-      object-fit: contain;
+
+    .btn:hover {
+      background-color: #e0e0e0;
     }
-    .theme-toggle-btn {
-      background: var(--card-bg-sub);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      cursor: pointer;
+
+    .btn:active {
+      transform: scale(0.98);
     }
-    .hero-banner {
-      width: 100%;
-      height: 160px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%), 
-                  url('images/appearich-hero.jpg') center/cover;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 18px;
-      border: 1px solid var(--card-border);
-      box-shadow: 0 10px 25px var(--shadow-color);
-      margin-bottom: 24px;
-    }
-    .hero-greeting { font-size: 1.5rem; font-weight: 800; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
-    .hero-tagline { font-size: 0.85rem; color: #FFD700; font-weight: 600; margin-top: 4px; letter-spacing: 0.5px; }
-    
-    .section-title {
-      font-size: 1.1rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--text-main);
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .offerings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
-    .offer-card {
-      background: var(--card-bg);
-      border-radius: 18px;
-      height: 160px;
-      position: relative;
-      overflow: hidden;
-      border: 1.5px solid var(--card-border);
-      cursor: pointer;
-      transition: all 0.25s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 14px;
-      box-shadow: 0 4px 12px var(--shadow-color);
-    }
-    .offer-card:hover, .offer-card:active {
-      transform: translateY(-3px);
-      border-color: var(--accent-gold);
-      box-shadow: 0 8px 20px var(--accent-gold-light);
-    }
-    .offer-card-bg {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      filter: brightness(0.85);
-      transition: transform 0.4s ease;
-    }
-    .offer-card:hover .offer-card-bg { transform: scale(1.06); }
-    .offer-card-overlay { position: relative; z-index: 2; }
-    .offer-card-title { font-size: 1.15rem; font-weight: 800; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
-    .offer-card-desc { font-size: 0.72rem; color: #FFD700; margin-top: 2px; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
-    .section-divider {
-      width: 100%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
-      margin: 10px 0 24px 0;
-    }
-    .inquiry-box {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 24px;
-      box-shadow: 0 4px 12px var(--shadow-color);
-    }
-    .inquiry-box h4 { font-size: 0.95rem; color: var(--text-main); margin-bottom: 6px; }
-    .inquiry-box p { font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px; line-height: 1.4; }
-    .inquiry-input-wrap { display: flex; gap: 8px; }
-    .inquiry-input {
-      flex: 1;
-      background: var(--input-bg);
-      border: 1px solid var(--input-border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      color: var(--text-main);
+
+    .toggle-text {
+      margin-top: 1.2rem;
       font-size: 0.85rem;
-      outline: none;
+      color: #888888;
     }
-    .inquiry-input:focus { border-color: var(--accent-gold); }
-    .inquiry-btn {
-      background: var(--accent-gold);
-      color: #000;
-      border: none;
-      padding: 0 16px;
-      border-radius: 10px;
-      font-weight: 800;
-      font-size: 0.85rem;
+
+    .toggle-text a {
+      color: #ffffff;
+      text-decoration: underline;
       cursor: pointer;
     }
-    .quick-reorder-section {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 14px;
-      border: 1px solid var(--card-border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 12px var(--shadow-color);
-    }
-    .quick-reorder-info { display: flex; align-items: center; gap: 12px; }
-    .quick-reorder-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--accent-gold-light);
-      color: var(--accent-gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-    }
-    .reorder-text-main { font-size: 0.9rem; font-weight: 700; color: var(--text-main); }
-    .reorder-text-sub { font-size: 0.75rem; color: var(--text-sub); }
-    .reorder-btn {
-      background: transparent;
-      border: 1px solid var(--accent-gold);
-      color: var(--accent-gold);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .perfumes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; margin-bottom: 20px; }
-    .perfume-card {
-      height: 180px;
-      border-radius: 16px;
-      background-size: cover;
-      background-position: center;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 8px 20px var(--shadow-color);
-      transition: transform 0.3s ease, border-color 0.3s ease;
-      cursor: pointer;
-      border: 2px solid var(--card-border);
-    }
-    .perfume-card:hover, .perfume-card:active { transform: translateY(-4px); border-color: var(--accent-gold); }
-    .perfume-card-overlay {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 10px;
-      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 60%, transparent 100%);
-    }
-    .perfume-card-title { font-size: 1rem; font-weight: 800; color: #ffffff; }
-    .perfume-card-sub { font-size: 0.7rem; color: #FFC107; font-weight: 600; }
-    .action-container { display: flex; justify-content: center; width: 100%; margin-top: 10px; margin-bottom: 20px; }
-    .order-main-btn {
-      background: var(--text-main);
-      border: 2px solid var(--accent-gold);
-      color: var(--bg-color);
-      font-size: 0.95rem;
-      font-weight: 900;
-      letter-spacing: 1px;
-      padding: 14px 28px;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 8px 20px var(--shadow-color);
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-transform: uppercase;
-      width: 100%;
-      justify-content: center;
-    }
-    .order-main-btn:hover { background: var(--accent-gold); color: #000; }
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: var(--overlay-bg);
-      backdrop-filter: blur(8px);
-      justify-content: center;
-      align-items: flex-end;
-      z-index: 2000;
-    }
-    .modal-overlay.active { display: flex; }
-    .sheet-content {
-      background: var(--modal-bg);
-      border: 2px solid var(--card-border);
-      border-top-left-radius: 24px;
-      border-top-right-radius: 24px;
-      width: 100%;
-      max-width: 480px;
-      max-height: 88vh;
-      overflow-y: auto;
-      padding: 24px 20px;
-      position: relative;
-      animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .sheet-content.full-screen {
-      height: 100vh;
-      max-height: 100vh;
-      border-radius: 0;
-      border: none;
-      max-width: 480px;
-      padding: 0 18px 40px 18px;
-    }
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-    .sheet-close {
-      position: absolute;
-      top: 16px;
-      right: 18px;
-      font-size: 1.4rem;
-      color: var(--text-sub);
-      cursor: pointer;
-      z-index: 20;
-    }
-    .modal-sticky-header {
-      position: sticky;
-      top: 0;
-      background: var(--modal-bg);
-      padding: 18px 0 12px 0;
-      z-index: 15;
-      border-bottom: 1px solid var(--card-border);
-      margin-bottom: 16px;
-    }
-    .sheet-title { font-size: 1.4rem; font-weight: 900; color: var(--text-main); text-align: center; }
-    .food-selection-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-top: 12px;
-      margin-bottom: 16px;
-      max-height: 280px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-    .food-selection-card {
-      height: 110px;
-      border-radius: 14px;
-      position: relative;
-      overflow: hidden;
-      border: 2px solid var(--card-border);
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.2s;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-    }
-    .food-selection-card.selected {
-      border-color: var(--accent-gold);
-      box-shadow: 0 0 10px var(--accent-gold-light);
-    }
-    .food-selection-card img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .food-card-overlay-label {
-      position: relative;
-      z-index: 2;
-      background: linear-gradient(to top, rgba(0,0,0,0.95) 20%, rgba(0,0,0,0.7) 80%, transparent);
-      padding: 6px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .food-name-text { font-size: 0.82rem; font-weight: 800; color: #ffffff; }
-    .food-price-text { font-size: 0.72rem; color: var(--accent-gold); font-weight: 700; }
-    .selected-items-box {
-      background: var(--card-bg-sub);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 14px;
-    }
-    .selected-item-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px dashed var(--card-border);
-    }
-    .selected-item-row:last-child { border-bottom: none; }
-    .selected-item-info { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
-    .selected-item-ctrls { display: flex; align-items: center; gap: 8px; }
-    .selected-item-ctrls input {
-      width: 55px;
-      background: var(--input-bg);
-      border: 1px solid var(--input-border);
-      border-radius: 6px;
-      padding: 4px 6px;
-      color: var(--text-main);
-      font-weight: bold;
-      text-align: center;
-    }
-    .calculation-summary-box {
-      background: var(--card-bg-sub);
-      border: 1.5px solid var(--accent-gold);
-      border-radius: 14px;
-      padding: 12px 14px;
-      margin-top: 12px;
-      margin-bottom: 14px;
-    }
-    .calc-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.82rem;
-      color: var(--text-sub);
-      margin-bottom: 6px;
-    }
-    .calc-row.total-row {
-      font-size: 1rem;
-      font-weight: 900;
-      color: var(--text-main);
-      border-top: 1px dashed var(--card-border);
-      padding-top: 8px;
-      margin-bottom: 0;
-    }
-    .form-row { display: flex; gap: 10px; }
-    .form-group { margin-bottom: 12px; text-align: left; flex: 1; }
-    .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-bottom: 5px; }
-    .form-group input, .form-group textarea {
-      width: 100%;
-      background: var(--input-bg);
-      border: 1.5px solid var(--input-border);
-      border-radius: 10px;
-      padding: 10px;
-      color: var(--text-main);
-      font-size: 0.85rem;
-      outline: none;
-    }
-    .form-group input:focus, .form-group textarea:focus { border-color: var(--accent-gold); }
-    .form-group textarea { height: 65px; resize: none; }
-    .saved-loc-badge { font-size: 0.72rem; color: var(--accent-gold); font-weight: bold; margin-left: 4px; }
-    .payment-selection-box {
-      background: var(--card-bg-sub);
-      border: 1.5px solid var(--card-border);
-      border-radius: 14px;
-      padding: 14px;
-      margin-top: 12px;
-      margin-bottom: 16px;
-    }
-    .payment-options-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 8px;
-    }
-    .pay-option-btn {
-      background: var(--card-bg);
-      border: 2px solid var(--card-border);
-      border-radius: 12px;
-      padding: 12px 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      font-size: 0.82rem;
-      font-weight: 800;
-      color: var(--text-main);
-      transition: all 0.2s ease;
-    }
-    .pay-option-btn i { font-size: 1.2rem; }
-    .pay-option-btn.active {
-      border-color: var(--accent-gold);
-      background: var(--accent-gold-light);
-      color: var(--text-main);
-    }
-    .mobile-unfold-box {
-      display: none;
-      background: var(--card-bg);
-      border: 1.5px solid var(--accent-gold);
-      border-radius: 12px;
-      padding: 12px;
-      margin-top: 12px;
-      animation: fadeIn 0.3s ease-in-out;
-    }
-    .mobile-unfold-box.active { display: block; }
-    .lipa-tag { background: var(--accent-gold); color: #000; font-weight: 900; padding: 2px 6px; border-radius: 6px; }
-    .submit-order-btn {
-      width: 100%;
-      background: #25D366;
-      color: #fff;
-      border: none;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 900;
-      font-size: 0.95rem;
-      letter-spacing: 0.5px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 8px;
-    }
-    .logout-btn {
-      width: 100%;
-      background: rgba(231, 76, 60, 0.15);
-      border: 1.5px solid #e74c3c;
-      color: #e74c3c;
-      padding: 12px;
-      border-radius: 14px;
-      font-weight: 800;
-      font-size: 0.9rem;
-      cursor: pointer;
-      margin-top: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
-    .price-card {
-      background: var(--input-bg);
-      border: 1.5px solid var(--input-border);
-      border-radius: 10px;
-      padding: 10px 4px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .price-card:hover, .price-card.active { border-color: var(--accent-gold); background: var(--accent-gold-light); }
-    .size-title { font-size: 0.8rem; color: var(--text-main); font-weight: bold; }
-    .size-price { font-size: 0.75rem; font-weight: bold; color: var(--accent-gold); margin-top: 2px; }
-    
-    .loyalty-card {
-      background: var(--card-bg);
-      border: 1.5px solid var(--accent-gold);
-      border-radius: 18px;
-      padding: 16px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 12px var(--shadow-color);
-    }
-    .loyalty-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .loyalty-title { font-size: 0.95rem; font-weight: 800; color: var(--accent-gold); }
-    .loyalty-badge { font-size: 0.7rem; background: var(--accent-gold); color: #000; font-weight: 900; padding: 3px 8px; border-radius: 10px; }
-    .stamps-row { display: flex; justify-content: space-between; margin-top: 10px; }
-    .stamp-dot {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--card-bg-sub);
-      border: 2px dashed var(--input-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.85rem;
-      color: var(--text-sub);
-      font-weight: 800;
-    }
-    .stamp-dot.filled { background: var(--accent-gold); border-style: solid; border-color: var(--accent-gold); color: #000; }
-    .ai-screen-wrap {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: calc(100vh - 170px);
-    }
-    .ambient-glow {
-      position: absolute;
-      width: 260px;
-      height: 260px;
-      background: radial-gradient(circle, var(--accent-gold-light) 0%, rgba(0,0,0,0) 70%);
-      top: 15%;
-      pointer-events: none;
-    }
-    .teaser-image-card {
-      position: relative;
-      width: 100%;
-      max-width: 360px;
-      height: 230px;
-      border-radius: 22px;
-      overflow: hidden;
-      margin-bottom: 24px;
-      box-shadow: 0 15px 35px var(--shadow-color), 0 0 0 2px var(--accent-gold-light);
-      background: var(--card-bg);
-      cursor: pointer;
-    }
-    .teaser-image-card img { width: 100%; height: 100%; object-fit: cover; }
-    .image-overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--bg-color) 10%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%); }
-    
-    .ai-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--card-bg-sub);
-      color: var(--text-main);
-      padding: 6px 14px;
-      border-radius: 50px;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-bottom: 16px;
-      border: 1px solid var(--card-border);
-    }
-    .ai-title { font-size: 2.2rem; font-weight: 900; line-height: 1.1; margin-bottom: 8px; color: var(--text-main); }
-    .ai-title span { color: var(--accent-gold); }
-    .ai-sub { font-size: 0.85rem; color: var(--text-sub); max-width: 300px; margin-bottom: 24px; line-height: 1.5; }
-    .status-pill-btn {
-      background: var(--accent-gold);
-      color: #111111;
-      border: none;
-      padding: 14px 28px;
-      border-radius: 16px;
-      font-weight: 800;
-      font-size: 0.9rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 8px 20px var(--accent-gold-light);
-      cursor: pointer;
-    }
-    .coming-soon-toast {
-      position: fixed;
-      top: -100px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 32px);
-      max-width: 440px;
-      background: var(--accent-gold);
-      color: #111111;
-      padding: 16px;
-      border-radius: 18px;
-      box-shadow: 0 15px 30px var(--shadow-color);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      z-index: 3000;
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .coming-soon-toast.trigger-fly { top: 20px; opacity: 1; }
-    .toast-icon-wrap {
-      background: #111;
-      color: var(--accent-gold);
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
-    .order-card-track {
-      background: var(--card-bg);
-      border: 1.5px solid var(--card-border);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 14px;
-      box-shadow: 0 4px 12px var(--shadow-color);
-    }
-    .track-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px dashed var(--card-border); padding-bottom: 8px; }
-    .order-id { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
-    .status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; }
-    .status-badge.pending { background: rgba(255, 193, 7, 0.15); color: #d97706; border: 1px solid #d97706; }
-    .status-badge.verified { background: rgba(40, 167, 69, 0.15); color: #28a745; border: 1px solid #28a745; }
-    .track-details p { font-size: 0.82rem; color: var(--text-sub); margin-bottom: 4px; }
-    .profile-header-card {
-      background: var(--card-bg);
-      border: 1.5px solid var(--card-border);
-      border-radius: 20px;
-      padding: 20px;
-      text-align: center;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 12px var(--shadow-color);
-    }
-    .profile-avatar {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: var(--accent-gold);
-      color: #000;
-      font-size: 1.8rem;
-      font-weight: 900;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 12px auto;
-    }
-    .profile-name { font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
-    .profile-phone { font-size: 0.85rem; color: var(--text-sub); margin-top: 2px; }
-    .whatsapp-support-btn {
-      width: 100%;
-      background: #25D366;
-      color: #fff;
-      border: none;
-      padding: 14px;
-      border-radius: 14px;
-      font-size: 0.95rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      cursor: pointer;
-      margin-bottom: 20px;
-      text-decoration: none;
-    }
-    .bottom-nav {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      height: 70px;
-      background: var(--nav-bg);
-      border-top: 1.5px solid var(--nav-border);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 1000;
-    }
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      color: var(--text-sub);
-      text-decoration: none;
-      font-size: 0.72rem;
-      font-weight: 700;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-    .nav-item i { font-size: 1.3rem; }
-    .nav-item.active { color: var(--accent-gold); }
-    .nav-item.logout-nav-item { color: #e74c3c; }
   </style>
 </head>
 <body>
-  <!-- STEP 1: INITIAL SPLASH SCREEN -->
-  <div id="splashScreen" class="full-cover-screen" onclick="openAuthScreen()">
-    <img src="images/appearich-logo.jpg" alt="APPEARICH Splash Logo" class="splash-logo-img" onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='block';">
-    <div id="fallbackLogo" class="splash-fallback-text" style="display:none;">APPEARICH</div>
-  </div>
 
-  <!-- STEP 2: AUTHENTICATION SCREEN -->
-  <div id="authScreen" class="full-cover-screen" style="display: none;">
-    <div class="auth-card">
-      <img src="images/appearich-logo.jpg" alt="APPEARICH Auth Logo" class="auth-logo" onerror="this.style.display='none';">
-      
-      <div class="auth-tabs">
-        <button id="tabSigninBtn" class="auth-tab-btn active" onclick="switchAuthTab('signin')">Sign In</button>
-        <button id="tabSignupBtn" class="auth-tab-btn" onclick="switchAuthTab('signup')">Create Account</button>
-      </div>
-      <!-- SIGN IN FORM -->
-      <form id="signinForm" onsubmit="handleSignIn(event)">
-        <div class="auth-form-group">
-          <label for="signinEmail">Email Address</label>
-          <input type="email" id="signinEmail" required placeholder="name@example.com">
-        </div>
-        <div class="auth-form-group">
-          <label for="signinPassword">Password</label>
-          <input type="password" id="signinPassword" required placeholder="••••••••">
-        </div>
-        <button type="submit" class="auth-submit-btn">SIGN IN</button>
-      </form>
-      <!-- SIGN UP FORM -->
-      <form id="signupForm" style="display: none;" onsubmit="handleSignUp(event)">
-        <div class="auth-form-group">
-          <label for="signupName">Full Name</label>
-          <input type="text" id="signupName" required placeholder="e.g. Alex Masubi">
-        </div>
-        <div class="auth-form-group">
-          <label for="signupPhone">Phone Number</label>
-          <input type="tel" id="signupPhone" required placeholder="e.g. +255 764 519 027">
-        </div>
-        <div class="auth-form-group">
-          <label for="signupEmail">Email Address</label>
-          <input type="email" id="signupEmail" required placeholder="name@example.com">
-        </div>
-        <div class="auth-form-group">
-          <label for="signupPassword">Password</label>
-          <input type="password" id="signupPassword" required placeholder="••••••••">
-        </div>
-        <button type="submit" class="auth-submit-btn">CREATE ACCOUNT</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- FIXED APP HEADER -->
-  <header class="app-header">
-    <div class="header-left">
-      <button id="globalBackBtn" class="back-btn" onclick="goBack()" title="Back to Home">
-        <i class="fa-solid fa-arrow-left"></i>
-      </button>
-      <div class="brand-logo-wrap">
-        <img src="images/appearich-logo.jpg" alt="Logo" class="header-brand-img" onerror="this.style.display='none';">
-      </div>
-    </div>
-    <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Switch Light/Dark Mode">
-      <i class="fa-solid fa-moon"></i>
-    </button>
-  </header>
-
-  <!-- SCREEN 1: HOME -->
-  <div id="screen-home" class="app-screen active">
-    <div class="hero-banner">
-      <div class="hero-greeting" id="heroGreeting">Welcome, User!</div>
-      <div class="hero-tagline">Appear Rich — Premium Delivery, Delivered with Love.</div>
+  <div class="card">
+    <div class="logo-container">
+      <img src="images/appearich-logo.png" alt="Appearich Logo" class="logo">
     </div>
     
-    <div class="section-title">
-      <i class="fa-solid fa-layer-group" style="color:var(--accent-gold);"></i> We Offer This
-    </div>
+    <h2 id="formTitle">Create Account</h2>
     
-    <div class="offerings-grid">
-      <div class="offer-card" onclick="openHotMealsModal()">
-        <div class="offer-card-bg" style="background-image: url('https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=400&auto=format&fit=cover');"></div>
-        <div class="offer-card-overlay">
-          <div class="offer-card-title">Hot Meals</div>
-          <div class="offer-card-desc">Fastest Sourced Food</div>
-        </div>
-      </div>
-      <div class="offer-card" onclick="switchTab('screen-perfumes')">
-        <div class="offer-card-bg" style="background-image: url('images/appearich-perfume1.jpg');"></div>
-        <div class="offer-card-overlay">
-          <div class="offer-card-title">Perfumes</div>
-          <div class="offer-card-desc">Luxury Fragrances</div>
-        </div>
-      </div>
-    </div>
-    <div class="section-divider"></div>
-    <div class="inquiry-box">
-      <h4><i class="fa-solid fa-circle-question" style="color:var(--accent-gold);"></i> Need Anything Specific?</h4>
-      <p>Describe your needs, custom order details, or ask any question directly.</p>
-      <div class="inquiry-input-wrap">
-        <input type="text" id="customInquiryInput" class="inquiry-input" placeholder="Type your request here...">
-        <button class="inquiry-btn" onclick="sendCustomInquiry()">Ask</button>
-      </div>
-    </div>
-    <div class="quick-reorder-section">
-      <div class="quick-reorder-info">
-        <div class="quick-reorder-icon"><i class="fa-solid fa-rotate-right"></i></div>
-        <div>
-          <div class="reorder-text-main">Quick Reorder</div>
-          <div class="reorder-text-sub">Repeat your last saved order instantly</div>
-        </div>
-      </div>
-      <button class="reorder-btn" onclick="triggerQuickReorder()">Reorder</button>
-    </div>
-  </div>
-
-  <!-- SCREEN 2: PERFUMES -->
-  <div id="screen-perfumes" class="app-screen">
-    <div class="section-title">
-      <i class="fa-solid fa-spray-can-sparkles" style="color:var(--accent-gold);"></i> Scent Hub Offerings
-    </div>
-    <main class="perfumes-grid">
-      <div class="perfume-card" style="background-image: url('images/appearich-perfume1.jpg');" onclick="openProductModal('Appearich Signature')">
-        <div class="perfume-card-overlay">
-          <div class="perfume-card-title">Appearich Signature</div>
-          <div class="perfume-card-sub">Luxury • Premium Scent</div>
-        </div>
-      </div>
-      <div class="perfume-card" style="background-image: url('images/appearich-perfume2.jpg');" onclick="openProductModal('Sugar Candy')">
-        <div class="perfume-card-overlay">
-          <div class="perfume-card-title">Sugar Candy</div>
-          <div class="perfume-card-sub">Floral • Sweet</div>
-        </div>
-      </div>
-      <div class="perfume-card" style="background-image: url('images/appearich-perfume3.jpg');" onclick="openProductModal('212 VIP')">
-        <div class="perfume-card-overlay">
-          <div class="perfume-card-title">212 VIP</div>
-          <div class="perfume-card-sub">Fresh • Sea Salt</div>
-        </div>
-      </div>
-      <div class="perfume-card" style="background-image: url('images/appearich-perfume4.jpg');" onclick="openProductModal('Tag Sunset')">
-        <div class="perfume-card-overlay">
-          <div class="perfume-card-title">Tag Sunset</div>
-          <div class="perfume-card-sub">Rich Spices</div>
-        </div>
-      </div>
-    </main>
-    <div class="action-container">
-      <button onclick="openOrderModal()" class="order-main-btn">
-        <i class="fa-solid fa-wand-magic-sparkles"></i>
-        <span>PLACE YOUR ORDER</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- SCREEN 3: AI GUIDE -->
-  <div id="screen-ai" class="app-screen">
-    <div class="ambient-glow"></div>
-    <div id="soonToast" class="coming-soon-toast">
-      <div class="toast-icon-wrap"><i class="fas fa-bolt"></i></div>
-      <div class="toast-info">
-        <h4 style="font-weight:900; text-transform:uppercase;">Coming Soon!</h4>
-        <p style="font-size:0.78rem;">Our intelligent AI curator is currently running final model training loops.</p>
-      </div>
-    </div>
-    <div class="ai-screen-wrap">
-      <div class="teaser-image-card" onclick="igniteTeaserToast()">
-        <img src="images/heroo-ai.jpg" alt="AI Neural Guide" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=cover';">
-        <div class="image-overlay"></div>
-      </div>
-      <div class="ai-badge">
-        <i class="fas fa-circle-nodes" style="color:#FFA500;"></i> Smart Engine v2.0
-      </div>
-      <h1 class="ai-title">Appearich <br><span>AI Guide</span></h1>
-      <p class="ai-sub">Tap anywhere on the teaser card above or below to test the matrix preparation status.</p>
-      <button class="status-pill-btn" onclick="igniteTeaserToast()">
-        <i class="fas fa-robot"></i> Initialize AI Exploration
-      </button>
-    </div>
-  </div>
-
-  <!-- SCREEN 4: BOOKINGS -->
-  <div id="screen-bookings" class="app-screen">
-    <div class="section-title">
-      <i class="fa-solid fa-receipt" style="color:var(--accent-gold);"></i> Active Bookings & Status
-    </div>
-    <div id="bookingsListContainer"></div>
-  </div>
-
-  <!-- SCREEN 5: PROFILE -->
-  <div id="screen-profile" class="app-screen">
-    <div class="profile-header-card">
-      <div class="profile-avatar" id="profAvatar">U</div>
-      <div class="profile-name" id="profName">User</div>
-      <div class="profile-phone" id="profPhone">+255 000 000 000</div>
-    </div>
-    
-    <a href="https://wa.me/255764519027?text=Hello%20Appearich%20Help%20Center!%20I%20need%20assistance." target="_blank" class="whatsapp-support-btn">
-      <i class="fa-brands fa-whatsapp" style="font-size:1.3rem;"></i> WhatsApp Help Center
-    </a>
-    <div class="loyalty-card">
-      <div class="loyalty-header">
-        <span class="loyalty-title"><i class="fa-solid fa-crown"></i> Loyalty Rewards</span>
-        <span class="loyalty-badge" id="loyaltyCountBadge">0 / 5 Orders</span>
-      </div>
-      <p style="font-size:0.75rem; color:var(--text-sub); margin-bottom:8px;">Complete 5 orders to unlock a special reward offer!</p>
-      <div class="stamps-row" id="stampsRow">
-        <div class="stamp-dot">1</div>
-        <div class="stamp-dot">2</div>
-        <div class="stamp-dot">3</div>
-        <div class="stamp-dot">4</div>
-        <div class="stamp-dot"><i class="fa-solid fa-gift"></i></div>
-      </div>
-    </div>
-    <div class="section-title" style="margin-top:10px;">
-      <i class="fa-solid fa-history" style="color:var(--accent-gold);"></i> Order History
-    </div>
-    <div id="historyListContainer"></div>
-    
-    <button class="logout-btn" onclick="handleLogout()">
-      <i class="fa-solid fa-right-from-bracket"></i> Log Out
-    </button>
-  </div>
-
-  <!-- HOT MEALS MODAL -->
-  <div id="hotMealsModal" class="modal-overlay">
-    <div class="sheet-content full-screen">
-      <span class="sheet-close" onclick="closeSheet('hotMealsModal')">&times;</span>
-      
-      <div class="modal-sticky-header">
-        <div class="sheet-title">Hot Meals</div>
-      </div>
-      
-      <div style="font-size: 0.82rem; font-weight:800; color:var(--text-main); margin-bottom:4px;">
-        <i class="fa-solid fa-plus-circle" style="color:var(--accent-gold);"></i> Tap to Add Available Items:
-      </div>
-      <div class="food-selection-grid">
-        <div class="food-selection-card" onclick="addItemToOrder('Chipsi Mayai', 3000)">
-          <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" alt="Chipsi Mayai">
-          <div class="food-card-overlay-label">
-            <span class="food-name-text">Chipsi Mayai</span>
-            <span class="food-price-text">3,000 TZS</span>
-          </div>
-        </div>
-        <div class="food-selection-card" onclick="addItemToOrder('Chipsi Kavu', 2000)">
-          <img src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=300&auto=format&fit=cover" alt="Chipsi Kavu">
-          <div class="food-card-overlay-label">
-            <span class="food-name-text">Chipsi Kavu</span>
-            <span class="food-price-text">2,000 TZS</span>
-          </div>
-        </div>
-        <div class="food-selection-card" onclick="addItemToOrder('Paja', 3000)">
-          <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?q=80&w=300&auto=format&fit=cover" alt="Paja">
-          <div class="food-card-overlay-label">
-            <span class="food-name-text">Paja</span>
-            <span class="food-price-text">3,000 TZS</span>
-          </div>
-        </div>
-        <div class="food-selection-card" onclick="addItemToOrder('Kidali', 3000)">
-          <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?q=80&w=300&auto=format&fit=cover" alt="Kidali">
-          <div class="food-card-overlay-label">
-            <span class="food-name-text">Kidali</span>
-            <span class="food-price-text">3,000 TZS</span>
-          </div>
-        </div>
-        <div class="food-selection-card" onclick="addItemToOrder('Mishikaki', 1000)">
-          <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=300&auto=format&fit=cover" alt="Mishikaki">
-          <div class="food-card-overlay-label">
-            <span class="food-name-text">Mishikaki</span>
-            <span class="food-price-text">1,000 TZS</span>
-          </div>
-        </div>
-        <div class="food-selection-card" onclick="addItemToOrder('Soda', 1000)">
-          <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=300&auto=format&fit=cover" alt="Soda">
-          <div class="food-card-overlay-label">
-            <span class="food-name-text">Soda</span>
-            <span class="food-price-text">1,000 TZS</span>
-          </div>
-        </div>
-      </div>
-      <div id="selectedItemsContainer" class="selected-items-box">
-        <p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet. Click an item above to add to order.</p>
+    <form id="authForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" required placeholder="Enter username">
       </div>
       <div class="form-group">
-        <label for="mealDetails">Overall Order Description / Special Instructions:</label>
-        <textarea id="mealDetails" placeholder="Describe your full meal request..."></textarea>
+        <label for="password">Password</label>
+        <input type="password" id="password" required placeholder="Enter password">
       </div>
-      <div class="calculation-summary-box">
-        <div class="calc-row">
-          <span>Items Subtotal:</span>
-          <strong id="displaySubtotal">0 TZS</strong>
-        </div>
-        <div class="calc-row">
-          <span>Service Fee (<span id="surchargeRateText">25%</span>): <span id="nightBadgeSlot"></span></span>
-          <strong id="displaySurcharge">0 TZS</strong>
-        </div>
-        <div class="calc-row total-row">
-          <span>GRAND TOTAL:</span>
-          <strong id="displayGrandTotal" style="color:var(--accent-gold);">0 TZS</strong>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="mealBlockLoc">Block / Location: <span id="locSavedTag" class="saved-loc-badge"></span></label>
-          <input type="text" id="mealBlockLoc" placeholder="e.g. Block C / Hall 2">
-        </div>
-        <div class="form-group">
-          <label for="mealRoomLoc">Room Number:</label>
-          <input type="text" id="mealRoomLoc" placeholder="e.g. Room 104">
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label for="mealPhoneNum">Contact Phone Number:</label>
-        <input type="tel" id="mealPhoneNum" placeholder="e.g. 0764519027">
-      </div>
-      <div class="payment-selection-box">
-        <label style="font-size:0.82rem; font-weight:800; color:var(--text-main);">Select Payment Method:</label>
-        <div class="payment-options-grid">
-          <div id="payOptCash" class="pay-option-btn active" onclick="selectPaymentMethod('cash')">
-            <i class="fa-solid fa-money-bill-wave" style="color:var(--accent-gold);"></i>
-            <span>Cash on Delivery</span>
-          </div>
-          <div id="payOptMobile" class="pay-option-btn" onclick="selectPaymentMethod('mobile')">
-            <i class="fa-solid fa-mobile-screen-button" style="color:var(--accent-gold);"></i>
-            <span>Mobile Money</span>
-          </div>
-        </div>
-        <div id="mobileUnfoldArea" class="mobile-unfold-box">
-          <p style="font-size:0.82rem; color:var(--text-main); line-height:1.4; margin-bottom:10px;">
-            Pay via Voda Lipa Namba: <span class="lipa-tag">37247619</span><br>
-            Name: <strong>Edwin Andrew</strong>
-          </p>
-          <div class="form-group" style="margin-bottom:0;">
-            <label for="payerName" style="color:var(--text-main);">Jina la namba iliyotumika kufanya malipo:</label>
-            <input type="text" id="payerName" placeholder="Weka jina la akaunti ya malipo">
-          </div>
-        </div>
-      </div>
-      <button id="submitMealBtn" class="submit-order-btn" onclick="submitFoodOrder()">
-        <i class="fa-brands fa-whatsapp"></i> Send Order via WhatsApp
-      </button>
+      <button type="submit" id="submitBtn" class="btn">Register</button>
+    </form>
+
+    <div class="toggle-text" id="toggleContainer">
+      <span id="toggleQuestion">Already have an account?</span> 
+      <a id="toggleLink">Sign In</a>
     </div>
   </div>
 
-  <!-- PERFUME ORDER MODAL -->
-  <div id="perfumesModal" class="modal-overlay">
-    <div class="sheet-content">
-      <span class="sheet-close" onclick="closeSheet('perfumesModal')">&times;</span>
-      <div class="sheet-title">Place Your Order</div>
-      <div class="sheet-subtitle">Select your bottle size & perfume details</div>
-      <label style="font-size:0.8rem; color:var(--text-main); font-weight:600; display:block; margin-bottom:6px;">1. Select Size:</label>
-      <div class="price-grid">
-        <div class="price-card active" onclick="selectPerfumeSize(this, '30ml (25,000/= TZS)')">
-          <div class="size-title">30ml</div>
-          <div class="size-price">25,000/=</div>
-        </div>
-        <div class="price-card" onclick="selectPerfumeSize(this, '50ml (35,000/= TZS)')">
-          <div class="size-title">50ml</div>
-          <div class="size-price">35,000/=</div>
-        </div>
-        <div class="price-card" onclick="selectPerfumeSize(this, '100ml (55,000/= TZS)')">
-          <div class="size-title">100ml</div>
-          <div class="size-price">55,000/=</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="perfumeDesc">2. Perfume Name or Description:</label>
-        <textarea id="perfumeDesc" placeholder="Enter perfume name or describe scent..."></textarea>
-      </div>
-      <button class="submit-order-btn" onclick="submitPerfumeOrder()">
-        <i class="fa-brands fa-whatsapp"></i> Send Order on WhatsApp
-      </button>
-    </div>
-  </div>
-
-  <!-- BOTTOM NAVIGATION -->
-  <nav class="bottom-nav">
-    <button id="nav-home-btn" class="nav-item active" onclick="switchTab('screen-home', this)">
-      <i class="fa-solid fa-house"></i>
-      <span>Home</span>
-    </button>
-    <button class="nav-item" onclick="switchTab('screen-ai', this)">
-      <i class="fa-solid fa-robot"></i>
-      <span>AI Guide</span>
-    </button>
-    <button class="nav-item" onclick="switchTab('screen-bookings', this)">
-      <i class="fa-solid fa-briefcase"></i>
-      <span>Bookings</span>
-    </button>
-    <button class="nav-item" onclick="switchTab('screen-profile', this)">
-      <i class="fa-solid fa-user"></i>
-      <span>Profile</span>
-    </button>
-    <button class="nav-item logout-nav-item" onclick="handleLogout()">
-      <i class="fa-solid fa-right-from-bracket"></i>
-      <span>Logout</span>
-    </button>
-  </nav>
-
-  <!-- JAVASCRIPT LOGIC & SUPABASE INTEGRATION -->
   <script>
-    const SUPABASE_URL = "https://zudqubbglwphfxaviqsg.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE";
-    
-    let supabase = null;
-    try {
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } catch (e) {
-      console.error("Supabase client failed to initialize:", e);
-    }
-    
-    const whatsappPhone = "255764519027";
-    let currentUser = null;
-    let userProfile = { name: "User", phone: "" };
-    let completedOrdersCount = 0;
-    let activeOrders = [];
-    let completedHistory = [];
-    let selectedPerfumeSize = "30ml (25,000/= TZS)";
-    let animationLock = false;
-    let calculatedSubtotal = 0;
-    let calculatedSurcharge = 0;
-    let calculatedGrandTotal = 0;
-    let surchargePercent = 25;
-    let selectedPaymentType = 'cash';
-    let selectedFoodItems = [];
+    const formTitle = document.getElementById("formTitle");
+    const submitBtn = document.getElementById("submitBtn");
+    const toggleQuestion = document.getElementById("toggleQuestion");
+    const toggleLink = document.getElementById("toggleLink");
+    const authForm = document.getElementById("authForm");
 
-    window.addEventListener('DOMContentLoaded', async () => {
-      loadSavedUserLocation();
-      loadLocalOrders();
+    let isRegisterMode = true;
 
-      // FAIL-SAFE TIMEOUT: Ensure splash screen unfreezes automatically within 1.5 seconds
-      const splashTimeout = setTimeout(() => {
-        const splash = document.getElementById('splashScreen');
-        if (splash && splash.style.display !== 'none' && !currentUser) {
-          openAuthScreen();
-        }
-      }, 1500);
+    // 1. Initial Routing Check on Load
+    document.addEventListener("DOMContentLoaded", () => {
+      const hasAccount = localStorage.getItem("hasAccount") === "true";
+      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
-      if (supabase) {
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session) {
-            clearTimeout(splashTimeout);
-            currentUser = session.user;
-            await fetchUserProfile(currentUser.id);
-            hideSplashAndAuth();
-          }
-        } catch (err) {
-          console.warn("Session check fallback:", err);
-        }
+      // If user has an account and is logged in -> jump straight to home.html
+      if (hasAccount && isLoggedIn) {
+        window.location.href = "home.html";
+        return;
       }
-      
-      updateLoyaltyUI();
-      renderSelectedItems();
+
+      // If user already has an account but logged out -> show Login mode
+      if (hasAccount) {
+        setLoginMode();
+      } else {
+        // First time visitor without account -> default to Create Account mode
+        setRegisterMode();
+      }
     });
 
-    function openAuthScreen() {
-      const splash = document.getElementById('splashScreen');
-      if (splash) {
-        splash.style.opacity = '0';
-        setTimeout(() => {
-          splash.style.display = 'none';
-          document.getElementById('authScreen').style.display = 'flex';
-        }, 300);
-      }
+    // 2. UI Switchers
+    function setRegisterMode() {
+      isRegisterMode = true;
+      formTitle.textContent = "Create Account";
+      submitBtn.textContent = "Register";
+      toggleQuestion.textContent = "Already have an account?";
+      toggleLink.textContent = "Sign In";
     }
 
-    function switchAuthTab(type) {
-      if (type === 'signin') {
-        document.getElementById('tabSigninBtn').classList.add('active');
-        document.getElementById('tabSignupBtn').classList.remove('active');
-        document.getElementById('signinForm').style.display = 'block';
-        document.getElementById('signupForm').style.display = 'none';
+    function setLoginMode() {
+      isRegisterMode = false;
+      formTitle.textContent = "Sign In";
+      submitBtn.textContent = "Log In";
+      toggleQuestion.textContent = "Don't have an account?";
+      toggleLink.textContent = "Create Account";
+    }
+
+    toggleLink.addEventListener("click", () => {
+      if (isRegisterMode) {
+        setLoginMode();
       } else {
-        document.getElementById('tabSignupBtn').classList.add('active');
-        document.getElementById('tabSigninBtn').classList.remove('active');
-        document.getElementById('signupForm').style.display = 'block';
-        document.getElementById('signinForm').style.display = 'none';
+        setRegisterMode();
       }
-    }
+    });
 
-    async function handleSignIn(e) {
+    // 3. Form Submission Handling
+    authForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const email = document.getElementById('signinEmail').value;
-      const password = document.getElementById('signinPassword').value;
       
-      if (!supabase) {
-        alert("Authentication client unavailable. Proceeding with local profile.");
-        hideSplashAndAuth();
-        return;
-      }
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        alert(error.message);
-      } else {
-        currentUser = data.user;
-        await fetchUserProfile(currentUser.id);
-        hideSplashAndAuth();
-      }
-    }
-
-    async function handleSignUp(e) {
-      e.preventDefault();
-      const name = document.getElementById('signupName').value;
-      const phone = document.getElementById('signupPhone').value;
-      const email = document.getElementById('signupEmail').value;
-      const password = document.getElementById('signupPassword').value;
+      // Store persistent account flag and login state
+      localStorage.setItem("hasAccount", "true");
+      localStorage.setItem("isLoggedIn", "true");
       
-      if (!supabase) {
-        userProfile = { name, phone };
-        updateUserUI();
-        hideSplashAndAuth();
-        return;
-      }
-
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { data: { full_name: name, phone: phone } }
-      });
-      if (error) {
-        alert(error.message);
-      } else {
-        currentUser = data.user;
-        try {
-          await supabase.from('profiles').upsert({
-            id: currentUser.id,
-            full_name: name,
-            phone: phone,
-            updated_at: new Date()
-          });
-        } catch (e) { console.warn("Profile save deferred"); }
-        userProfile = { name, phone };
-        updateUserUI();
-        hideSplashAndAuth();
-      }
-    }
-
-    async function fetchUserProfile(userId) {
-      if (!supabase) return;
-      try {
-        const { data } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', userId)
-          .single();
-
-        if (data) {
-          userProfile = { name: data.full_name || "User", phone: data.phone || "" };
-        } else if (currentUser && currentUser.user_metadata) {
-          userProfile = {
-            name: currentUser.user_metadata.full_name || "User",
-            phone: currentUser.user_metadata.phone || ""
-          };
-        }
-      } catch (err) {
-        console.warn("User fetch fallback active");
-      }
-      updateUserUI();
-      await fetchUserOrders(userId);
-    }
-
-    function updateUserUI() {
-      document.getElementById('heroGreeting').innerText = `Welcome, ${userProfile.name}!`;
-      document.getElementById('profName').innerText = userProfile.name;
-      document.getElementById('profAvatar').innerText = userProfile.name.charAt(0).toUpperCase();
-      document.getElementById('profPhone').innerText = userProfile.phone || "+255 --- --- ---";
-      document.getElementById('mealPhoneNum').value = userProfile.phone;
-    }
-
-    function hideSplashAndAuth() {
-      document.getElementById('splashScreen').style.display = 'none';
-      document.getElementById('authScreen').style.display = 'none';
-    }
-
-    async function handleLogout() {
-      if (supabase) {
-        try { await supabase.auth.signOut(); } catch (e) {}
-      }
-      localStorage.removeItem('appearich_user_orders');
-      location.reload();
-    }
-
-    function saveOrderLocally(orderData) {
-      let localOrders = JSON.parse(localStorage.getItem('appearich_user_orders') || '[]');
-      localOrders.unshift(orderData);
-      localStorage.setItem('appearich_user_orders', JSON.stringify(localOrders));
-    }
-
-    function loadLocalOrders() {
-      const localOrders = JSON.parse(localStorage.getItem('appearich_user_orders') || '[]');
-      if (localOrders.length > 0) {
-        activeOrders = localOrders;
-        renderBookings();
-      }
-    }
-
-    async function saveOrderToSupabase(orderData) {
-      saveOrderLocally(orderData);
-      if (!currentUser || !supabase) return;
-      try {
-        await supabase.from('orders').insert({
-          user_id: currentUser.id,
-          details: orderData.details,
-          total_amount: calculatedGrandTotal,
-          payment_method: selectedPaymentType,
-          status: 'pending'
-        });
-      } catch (e) {
-        console.warn("Order cached locally");
-      }
-    }
-
-    async function fetchUserOrders(userId) {
-      if (!supabase) return;
-      try {
-        const { data } = await supabase
-          .from('orders')
-          .select('*')
-          .eq('user_id', userId)
-          .order('created_at', { ascending: false });
-        if (data && data.length > 0) {
-          activeOrders = data.filter(o => o.status === 'pending').map(o => ({
-            id: "APR-" + o.id,
-            title: `${o.total_amount.toLocaleString()} TZS`,
-            details: o.details,
-            location: "Saved Order",
-            status: o.status,
-            timestamp: new Date(o.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-          }));
-          
-          completedHistory = data.filter(o => o.status === 'verified').map(o => ({
-            id: "APR-" + o.id,
-            title: `${o.total_amount.toLocaleString()} TZS`,
-            details: o.details,
-            status: "verified"
-          }));
-          
-          completedOrdersCount = completedHistory.length;
-          updateLoyaltyUI();
-          renderBookings();
-          renderHistory();
-        }
-      } catch (e) {}
-    }
-
-    function loadSavedUserLocation() {
-      const savedBlock = localStorage.getItem('appearich_user_block');
-      const savedRoom = localStorage.getItem('appearich_user_room');
-      if (savedBlock) document.getElementById('mealBlockLoc').value = savedBlock;
-      if (savedRoom) document.getElementById('mealRoomLoc').value = savedRoom;
-      if (savedBlock || savedRoom) {
-        document.getElementById('locSavedTag').innerText = "(Auto-Filled)";
-      }
-    }
-
-    function toggleTheme() {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const icon = document.querySelector('#themeToggleBtn i');
-      if (currentTheme === 'dark') {
-        document.documentElement.removeAttribute('data-theme');
-        icon.className = 'fa-solid fa-moon';
-      } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        icon.className = 'fa-solid fa-sun';
-      }
-    }
-
-    function switchTab(screenId, element) {
-      document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      const targetScreen = document.getElementById(screenId);
-      if (targetScreen) targetScreen.classList.add('active');
-      if (element) element.classList.add('active');
-    }
-
-    function goBack() {
-      const homeBtn = document.getElementById('nav-home-btn');
-      switchTab('screen-home', homeBtn);
-    }
-
-    function openHotMealsModal() { 
-      loadSavedUserLocation();
-      renderSelectedItems();
-      document.getElementById('hotMealsModal').classList.add('active'); 
-    }
-
-    function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
-    function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
-    
-    function openProductModal(name) {
-      document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
-      openOrderModal();
-    }
-
-    function selectPerfumeSize(el, sizePrice) {
-      document.querySelectorAll('#perfumesModal .price-card').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-      selectedPerfumeSize = sizePrice;
-    }
-
-    function selectPaymentMethod(type) {
-      selectedPaymentType = type;
-      const btnCash = document.getElementById('payOptCash');
-      const btnMobile = document.getElementById('payOptMobile');
-      const unfoldBox = document.getElementById('mobileUnfoldArea');
-      if (type === 'mobile') {
-        btnMobile.classList.add('active');
-        btnCash.classList.remove('active');
-        unfoldBox.classList.add('active');
-      } else {
-        btnCash.classList.add('active');
-        btnMobile.classList.remove('active');
-        unfoldBox.classList.remove('active');
-      }
-    }
-
-    function addItemToOrder(name, unitPrice) {
-      const existing = selectedFoodItems.find(item => item.name === name);
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        selectedFoodItems.push({ name: name, unitPrice: unitPrice, qty: 1 });
-      }
-      renderSelectedItems();
-    }
-
-    function updateItemQty(index, newQty) {
-      const qty = parseInt(newQty) || 1;
-      if (qty <= 0) {
-        selectedFoodItems.splice(index, 1);
-      } else {
-        selectedFoodItems[index].qty = qty;
-      }
-      renderSelectedItems();
-    }
-
-    function removeItem(index) {
-      selectedFoodItems.splice(index, 1);
-      renderSelectedItems();
-    }
-
-    function renderSelectedItems() {
-      const container = document.getElementById('selectedItemsContainer');
-      if (selectedFoodItems.length === 0) {
-        container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet. Click an item above to add to order.</p>`;
-      } else {
-        container.innerHTML = selectedFoodItems.map((item, index) => `
-          <div class="selected-item-row">
-            <div class="selected-item-info">
-              ${item.name} (${item.unitPrice.toLocaleString()} TZS)
-            </div>
-            <div class="selected-item-ctrls">
-              <label style="font-size:0.75rem; color:var(--text-sub);">Qty:</label>
-              <input type="number" value="${item.qty}" min="1" onchange="updateItemQty(${index}, this.value)" onkeyup="updateItemQty(${index}, this.value)">
-              <i class="fa-solid fa-trash" style="color:#e74c3c; cursor:pointer; font-size:0.9rem;" onclick="removeItem(${index})"></i>
-            </div>
-          </div>
-        `).join('');
-      }
-      recalculateMealTotal();
-    }
-
-    function recalculateMealTotal() {
-      calculatedSubtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
-      const currentHour = new Date().getHours();
-      if (currentHour >= 23) {
-        surchargePercent = 40;
-        document.getElementById('nightBadgeSlot').innerHTML = `<span class="night-tag">Night Rate</span>`;
-      } else {
-        surchargePercent = 25;
-        document.getElementById('nightBadgeSlot').innerHTML = '';
-      }
-      calculatedSurcharge = Math.round(calculatedSubtotal * (surchargePercent / 100));
-      calculatedGrandTotal = calculatedSubtotal + calculatedSurcharge;
-      document.getElementById('surchargeRateText').innerText = surchargePercent + "%";
-      document.getElementById('displaySubtotal').innerText = calculatedSubtotal.toLocaleString() + " TZS";
-      document.getElementById('displaySurcharge').innerText = calculatedSurcharge.toLocaleString() + " TZS";
-      document.getElementById('displayGrandTotal').innerText = calculatedGrandTotal.toLocaleString() + " TZS";
-    }
-
-    async function submitFoodOrder() {
-      if (selectedFoodItems.length === 0) {
-        alert("Please select at least one item before placing your order!");
-        return;
-      }
-      const details = document.getElementById('mealDetails').value.trim();
-      const block = document.getElementById('mealBlockLoc').value.trim();
-      const room = document.getElementById('mealRoomLoc').value.trim();
-      const phone = document.getElementById('mealPhoneNum').value.trim();
-      const payer = document.getElementById('payerName').value.trim();
-      
-      if (!block || !room || !phone) {
-        alert("Please complete all location and contact details!");
-        return;
-      }
-      localStorage.setItem('appearich_user_block', block);
-      localStorage.setItem('appearich_user_room', room);
-      const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
-      const itemsSummaryText = selectedFoodItems.map(i => `${i.name} (${i.qty}x @ ${i.unitPrice.toLocaleString()} TZS)`).join("\n• ");
-      let paymentDetailsMsg = selectedPaymentType === 'cash' 
-        ? `💵 *Payment Method:* Cash / Cash on Delivery` 
-        : `💳 *Payment Method:* Mobile Money (Lipa Namba 37247619 - Edwin Andrew)\n👤 *Jina la Namba iliyotumika:* ${payer}`;
-      const whatsappText = `🍔 *NEW APPEARICH MEAL ORDER*\n` +
-        `----------------------------------------\n` +
-        `🆔 *Order ID:* ${orderId}\n` +
-        `🍽️ *Selected Items:*\n• ${itemsSummaryText}\n\n` +
-        `💵 *Subtotal:* ${calculatedSubtotal.toLocaleString()} TZS\n` +
-        `⚡ *Service Fee (${surchargePercent}%):* ${calculatedSurcharge.toLocaleString()} TZS\n` +
-        `💰 *TOTAL PAYABLE:* ${calculatedGrandTotal.toLocaleString()} TZS\n` +
-        `----------------------------------------\n` +
-        `📝 *Overall Description:* ${details || "None"}\n` +
-        `📍 *Location:* ${block}, Room ${room}\n` +
-        `📞 *Phone:* ${phone}\n` +
-        `${paymentDetailsMsg}\n` +
-        `⏰ *Time Placed:* ${currentTime}\n` +
-        `----------------------------------------`;
-      window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`, '_blank');
-      
-      const newOrder = {
-        id: orderId,
-        title: `${calculatedGrandTotal.toLocaleString()} TZS (${selectedFoodItems.length} items)`,
-        details: selectedPaymentType === 'cash' ? `Cash on Delivery | Total: ${calculatedGrandTotal.toLocaleString()} TZS` : `Paid by ${payer} | Total: ${calculatedGrandTotal.toLocaleString()} TZS`,
-        location: `${block}, Room ${room}`,
-        status: "pending",
-        timestamp: currentTime
-      };
-      
-      activeOrders.unshift(newOrder);
-      await saveOrderToSupabase(newOrder);
-      selectedFoodItems = [];
-      closeSheet('hotMealsModal');
-      renderBookings();
-    }
-
-    function submitPerfumeOrder() {
-      const desc = document.getElementById('perfumeDesc').value.trim();
-      if (!desc) {
-        alert("Please enter a perfume name or describe the scent you want!");
-        return;
-      }
-      const msg = encodeURIComponent(`Hi APPEARICH! I would like to place an order:\n\n- Preferred Size: ${selectedPerfumeSize}\n- Perfume Details: "${desc}"`);
-      window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
-      closeSheet('perfumesModal');
-    }
-
-    function renderBookings() {
-      const container = document.getElementById('bookingsListContainer');
-      if (activeOrders.length === 0) {
-        container.innerHTML = `
-          <div style="text-align:center; padding:40px 20px; color:var(--text-sub);">
-            <i class="fa-solid fa-box-open" style="font-size:2.5rem; margin-bottom:10px;"></i>
-            <p style="font-size:0.85rem;">No active orders pending right now.</p>
-          </div>
-        `;
-        return;
-      }
-      container.innerHTML = activeOrders.map(o => `
-        <div class="order-card-track">
-          <div class="track-header">
-            <span class="order-id">${o.id} - ${o.title}</span>
-            <span class="status-badge pending"><i class="fa-solid fa-clock"></i> Pending</span>
-          </div>
-          <div class="track-details">
-            <p><strong>Payment Info:</strong> ${o.details}</p>
-            <p><strong>Location:</strong> ${o.location}</p>
-            <p style="font-size:0.75rem; color:var(--text-sub); margin-top:4px;">Placed at: ${o.timestamp}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderHistory() {
-      const container = document.getElementById('historyListContainer');
-      if (completedHistory.length === 0) {
-        container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub);">No past orders logged yet.</p>`;
-        return;
-      }
-      container.innerHTML = completedHistory.map(o => `
-        <div class="order-card-track" style="opacity:0.85;">
-          <div class="track-header">
-            <span class="order-id">${o.id} - ${o.title}</span>
-            <span class="status-badge verified"><i class="fa-solid fa-check-double"></i> Delivered</span>
-          </div>
-          <div class="track-details">
-            <p style="font-size:0.8rem;">${o.details}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function updateLoyaltyUI() {
-      document.getElementById('loyaltyCountBadge').innerText = `${completedOrdersCount} / 5 Orders`;
-      const stamps = document.querySelectorAll('.stamp-dot');
-      stamps.forEach((stamp, idx) => {
-        if (idx < completedOrdersCount) stamp.classList.add('filled');
-        else stamp.classList.remove('filled');
-      });
-    }
-
-    function sendCustomInquiry() {
-      const val = document.getElementById('customInquiryInput').value.trim();
-      if (!val) return;
-      const msg = encodeURIComponent(`Hi APPEARICH! Custom Inquiry: "${val}"`);
-      window.open(`https://wa.me/${whatsappPhone}?text=${msg}`, '_blank');
-      document.getElementById('customInquiryInput').value = '';
-    }
-
-    function triggerQuickReorder() { openHotMealsModal(); }
-    
-    function igniteTeaserToast() {
-      if (animationLock) return;
-      animationLock = true;
-      const toast = document.getElementById("soonToast");
-      toast.classList.add("trigger-fly");
-      setTimeout(() => {
-        toast.classList.remove("trigger-fly");
-        animationLock = false;
-      }, 3500);
-    }
+      // Redirect to home screen
+      window.location.href = "home.html";
+    });
   </script>
+
 </body>
 </html>
