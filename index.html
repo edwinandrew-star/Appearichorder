@@ -71,7 +71,7 @@
       overflow-x: hidden;
     }
     /* ==========================================================================
-       SPLASH & AUTH SCREENS (PURE BLACK BACKGROUND)
+       SPLASH & AUTH SCREENS
        ========================================================================== */
     .full-cover-screen {
       position: fixed;
@@ -89,6 +89,14 @@
       max-width: 220px;
       max-height: 220px;
       object-fit: contain;
+      cursor: pointer;
+    }
+    .splash-fallback-text {
+      color: var(--accent-gold);
+      font-weight: 900;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      margin-top: 10px;
       cursor: pointer;
     }
     .auth-card {
@@ -875,15 +883,16 @@
   </style>
 </head>
 <body>
-  <!-- STEP 1: INITIAL SPLASH SCREEN (PURE BLACK BACKGROUND) -->
-  <div id="splashScreen" class="full-cover-screen">
-    <img src="images/appearich-logo.jpg" alt="APPEARICH Splash Logo" class="splash-logo-img" onclick="openAuthScreen()">
+  <!-- STEP 1: INITIAL SPLASH SCREEN -->
+  <div id="splashScreen" class="full-cover-screen" onclick="openAuthScreen()">
+    <img src="images/appearich-logo.jpg" alt="APPEARICH Splash Logo" class="splash-logo-img" onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='block';">
+    <div id="fallbackLogo" class="splash-fallback-text" style="display:none;">APPEARICH</div>
   </div>
 
-  <!-- STEP 2: AUTHENTICATION SCREEN (SIGN IN / CREATE ACCOUNT) -->
+  <!-- STEP 2: AUTHENTICATION SCREEN -->
   <div id="authScreen" class="full-cover-screen" style="display: none;">
     <div class="auth-card">
-      <img src="images/appearich-logo.jpg" alt="APPEARICH Auth Logo" class="auth-logo">
+      <img src="images/appearich-logo.jpg" alt="APPEARICH Auth Logo" class="auth-logo" onerror="this.style.display='none';">
       
       <div class="auth-tabs">
         <button id="tabSigninBtn" class="auth-tab-btn active" onclick="switchAuthTab('signin')">Sign In</button>
@@ -931,7 +940,7 @@
         <i class="fa-solid fa-arrow-left"></i>
       </button>
       <div class="brand-logo-wrap">
-        <img src="images/appearich-logo.jpg" alt="Logo" class="header-brand-img">
+        <img src="images/appearich-logo.jpg" alt="Logo" class="header-brand-img" onerror="this.style.display='none';">
       </div>
     </div>
     <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Switch Light/Dark Mode">
@@ -1038,7 +1047,7 @@
     </div>
     <div class="ai-screen-wrap">
       <div class="teaser-image-card" onclick="igniteTeaserToast()">
-        <img src="images/heroo-ai.jpg" alt="AI Neural Guide">
+        <img src="images/heroo-ai.jpg" alt="AI Neural Guide" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=cover';">
         <div class="image-overlay"></div>
       </div>
       <div class="ai-badge">
@@ -1273,10 +1282,15 @@
 
   <!-- JAVASCRIPT LOGIC & SUPABASE INTEGRATION -->
   <script>
-    // 1. SUPABASE INITIALIZATION
     const SUPABASE_URL = "https://zudqubbglwphfxaviqsg.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    let supabase = null;
+    try {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch (e) {
+      console.error("Supabase client failed to initialize:", e);
+    }
     
     const whatsappPhone = "255764519027";
     let currentUser = null;
@@ -1293,18 +1307,30 @@
     let selectedPaymentType = 'cash';
     let selectedFoodItems = [];
 
-    // 2. AUTH & AUTOMATIC SESSION ROUTING
     window.addEventListener('DOMContentLoaded', async () => {
       loadSavedUserLocation();
       loadLocalOrders();
 
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        currentUser = session.user;
-        await fetchUserProfile(currentUser.id);
-        hideSplashAndAuth();
-      } else {
-        document.getElementById('splashScreen').style.display = 'flex';
+      // FAIL-SAFE TIMEOUT: Ensure splash screen unfreezes automatically within 1.5 seconds
+      const splashTimeout = setTimeout(() => {
+        const splash = document.getElementById('splashScreen');
+        if (splash && splash.style.display !== 'none' && !currentUser) {
+          openAuthScreen();
+        }
+      }, 1500);
+
+      if (supabase) {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            clearTimeout(splashTimeout);
+            currentUser = session.user;
+            await fetchUserProfile(currentUser.id);
+            hideSplashAndAuth();
+          }
+        } catch (err) {
+          console.warn("Session check fallback:", err);
+        }
       }
       
       updateLoyaltyUI();
@@ -1313,11 +1339,13 @@
 
     function openAuthScreen() {
       const splash = document.getElementById('splashScreen');
-      splash.style.opacity = '0';
-      setTimeout(() => {
-        splash.style.display = 'none';
-        document.getElementById('authScreen').style.display = 'flex';
-      }, 500);
+      if (splash) {
+        splash.style.opacity = '0';
+        setTimeout(() => {
+          splash.style.display = 'none';
+          document.getElementById('authScreen').style.display = 'flex';
+        }, 300);
+      }
     }
 
     function switchAuthTab(type) {
@@ -1338,6 +1366,12 @@
       e.preventDefault();
       const email = document.getElementById('signinEmail').value;
       const password = document.getElementById('signinPassword').value;
+      
+      if (!supabase) {
+        alert("Authentication client unavailable. Proceeding with local profile.");
+        hideSplashAndAuth();
+        return;
+      }
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         alert(error.message);
@@ -1355,6 +1389,13 @@
       const email = document.getElementById('signupEmail').value;
       const password = document.getElementById('signupPassword').value;
       
+      if (!supabase) {
+        userProfile = { name, phone };
+        updateUserUI();
+        hideSplashAndAuth();
+        return;
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -1364,12 +1405,14 @@
         alert(error.message);
       } else {
         currentUser = data.user;
-        await supabase.from('profiles').upsert({
-          id: currentUser.id,
-          full_name: name,
-          phone: phone,
-          updated_at: new Date()
-        });
+        try {
+          await supabase.from('profiles').upsert({
+            id: currentUser.id,
+            full_name: name,
+            phone: phone,
+            updated_at: new Date()
+          });
+        } catch (e) { console.warn("Profile save deferred"); }
         userProfile = { name, phone };
         updateUserUI();
         hideSplashAndAuth();
@@ -1377,19 +1420,24 @@
     }
 
     async function fetchUserProfile(userId) {
-      const { data } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
+      if (!supabase) return;
+      try {
+        const { data } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .single();
 
-      if (data) {
-        userProfile = { name: data.full_name || "User", phone: data.phone || "" };
-      } else if (currentUser.user_metadata) {
-        userProfile = {
-          name: currentUser.user_metadata.full_name || "User",
-          phone: currentUser.user_metadata.phone || ""
-        };
+        if (data) {
+          userProfile = { name: data.full_name || "User", phone: data.phone || "" };
+        } else if (currentUser && currentUser.user_metadata) {
+          userProfile = {
+            name: currentUser.user_metadata.full_name || "User",
+            phone: currentUser.user_metadata.phone || ""
+          };
+        }
+      } catch (err) {
+        console.warn("User fetch fallback active");
       }
       updateUserUI();
       await fetchUserOrders(userId);
@@ -1409,12 +1457,13 @@
     }
 
     async function handleLogout() {
-      await supabase.auth.signOut();
+      if (supabase) {
+        try { await supabase.auth.signOut(); } catch (e) {}
+      }
       localStorage.removeItem('appearich_user_orders');
       location.reload();
     }
 
-    // 3. STORAGE & PERSISTENCE (PHONE + SUPABASE)
     function saveOrderLocally(orderData) {
       let localOrders = JSON.parse(localStorage.getItem('appearich_user_orders') || '[]');
       localOrders.unshift(orderData);
@@ -1431,48 +1480,53 @@
 
     async function saveOrderToSupabase(orderData) {
       saveOrderLocally(orderData);
-      
-      if (!currentUser) return;
-      await supabase.from('orders').insert({
-        user_id: currentUser.id,
-        details: orderData.details,
-        total_amount: calculatedGrandTotal,
-        payment_method: selectedPaymentType,
-        status: 'pending'
-      });
-    }
-
-    async function fetchUserOrders(userId) {
-      const { data, error } = await supabase
-        .from('orders')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false });
-      if (data && data.length > 0) {
-        activeOrders = data.filter(o => o.status === 'pending').map(o => ({
-          id: "APR-" + o.id,
-          title: `${o.total_amount.toLocaleString()} TZS`,
-          details: o.details,
-          location: "Saved Order",
-          status: o.status,
-          timestamp: new Date(o.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }));
-        
-        completedHistory = data.filter(o => o.status === 'verified').map(o => ({
-          id: "APR-" + o.id,
-          title: `${o.total_amount.toLocaleString()} TZS`,
-          details: o.details,
-          status: "verified"
-        }));
-        
-        completedOrdersCount = completedHistory.length;
-        updateLoyaltyUI();
-        renderBookings();
-        renderHistory();
+      if (!currentUser || !supabase) return;
+      try {
+        await supabase.from('orders').insert({
+          user_id: currentUser.id,
+          details: orderData.details,
+          total_amount: calculatedGrandTotal,
+          payment_method: selectedPaymentType,
+          status: 'pending'
+        });
+      } catch (e) {
+        console.warn("Order cached locally");
       }
     }
 
-    // 4. GENERAL APP HELPERS & UI CONTROLS
+    async function fetchUserOrders(userId) {
+      if (!supabase) return;
+      try {
+        const { data } = await supabase
+          .from('orders')
+          .select('*')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false });
+        if (data && data.length > 0) {
+          activeOrders = data.filter(o => o.status === 'pending').map(o => ({
+            id: "APR-" + o.id,
+            title: `${o.total_amount.toLocaleString()} TZS`,
+            details: o.details,
+            location: "Saved Order",
+            status: o.status,
+            timestamp: new Date(o.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          }));
+          
+          completedHistory = data.filter(o => o.status === 'verified').map(o => ({
+            id: "APR-" + o.id,
+            title: `${o.total_amount.toLocaleString()} TZS`,
+            details: o.details,
+            status: "verified"
+          }));
+          
+          completedOrdersCount = completedHistory.length;
+          updateLoyaltyUI();
+          renderBookings();
+          renderHistory();
+        }
+      } catch (e) {}
+    }
+
     function loadSavedUserLocation() {
       const savedBlock = localStorage.getItem('appearich_user_block');
       const savedRoom = localStorage.getItem('appearich_user_room');
