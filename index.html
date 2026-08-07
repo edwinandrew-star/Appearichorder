@@ -434,8 +434,9 @@
       gap: 10px;
       margin-top: 12px;
       margin-bottom: 16px;
-      max-height: 280px;
+      max-height: 320px;
       overflow-y: auto;
+      padding-right: 4px;
     }
     .food-selection-card {
       height: 110px;
@@ -447,6 +448,11 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .food-selection-card:active {
+      transform: scale(0.97);
+      border-color: var(--accent-gold);
     }
     .food-selection-card img {
       position: absolute;
@@ -1022,6 +1028,7 @@
       <div style="font-size: 0.82rem; font-weight:800; color:var(--text-main); margin-bottom:4px;">
         <i class="fa-solid fa-plus-circle" style="color:var(--accent-gold);"></i> Tap to Add Available Items:
       </div>
+      <!-- CREATIVELY UPDATED FOOD SELECTION GRID -->
       <div class="food-selection-grid">
         <div class="food-selection-card" onclick="addItemToOrder('Chipsi Mayai', 3000)">
           <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" alt="Chipsi Mayai">
@@ -1035,6 +1042,34 @@
           <div class="food-card-overlay-label">
             <span class="food-name-text">Chipsi Kavu</span>
             <span class="food-price-text">2,000 TZS</span>
+          </div>
+        </div>
+        <div class="food-selection-card" onclick="addItemToOrder('Wali Nyama', 2000)">
+          <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=300&auto=format&fit=cover" alt="Wali Nyama">
+          <div class="food-card-overlay-label">
+            <span class="food-name-text">Wali Nyama</span>
+            <span class="food-price-text">2,000 TZS</span>
+          </div>
+        </div>
+        <div class="food-selection-card" onclick="addItemToOrder('Ugali Nyama', 2000)">
+          <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=300&auto=format&fit=cover" alt="Ugali Nyama">
+          <div class="food-card-overlay-label">
+            <span class="food-name-text">Ugali Nyama</span>
+            <span class="food-price-text">2,000 TZS</span>
+          </div>
+        </div>
+        <div class="food-selection-card" onclick="addItemToOrder('Wali Maharage', 1500)">
+          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=300&auto=format&fit=cover" alt="Wali Maharage">
+          <div class="food-card-overlay-label">
+            <span class="food-name-text">Wali Maharage</span>
+            <span class="food-price-text">1,500 TZS</span>
+          </div>
+        </div>
+        <div class="food-selection-card" onclick="addItemToOrder('Chapati', 500)">
+          <img src="https://images.unsplash.com/photo-1626074353765-517a681e40be?q=80&w=300&auto=format&fit=cover" alt="Chapati">
+          <div class="food-card-overlay-label">
+            <span class="food-name-text">Chapati</span>
+            <span class="food-price-text">500 TZS</span>
           </div>
         </div>
         <div class="food-selection-card" onclick="addItemToOrder('Paja', 3000)">
@@ -1461,7 +1496,7 @@
     function renderSelectedItems() {
       const container = document.getElementById('selectedItemsContainer');
       if (selectedFoodItems.length === 0) {
-        container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet.</p>`;
+        container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet. Click an item above to add to order.</p>`;
       } else {
         container.innerHTML = selectedFoodItems.map((item, index) => `
           <div class="selected-item-row">
