@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Appearich - Premium Service & Scent Hub</title>
+  <title>Appearich</title>
+  <meta name="apple-mobile-web-app-title" content="Appearich">
+  <meta name="application-name" content="Appearich">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     /* ==========================================================================
        THEME VARIABLES & GLOBAL RESET
@@ -62,7 +66,6 @@
       padding-bottom: 80px;
       overflow-x: hidden;
     }
-
     /* SPLASH SCREEN WITH SPLASH LOGO ONLY */
     #splash-screen {
       position: fixed;
@@ -85,7 +88,6 @@
       height: auto;
       object-fit: contain;
     }
-
     .app-screen {
       display: none;
       width: 100%;
@@ -101,7 +103,6 @@
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     /* PREMIUM BLACK APPLICATION HEADER */
     .app-header {
       position: fixed;
@@ -756,6 +757,33 @@
       margin-bottom: 20px;
       text-decoration: none;
     }
+    .logout-btn {
+      width: 100%;
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+      margin-bottom: 20px;
+    }
+    .auth-toggle-btn {
+      background: transparent;
+      border: none;
+      color: var(--accent-gold);
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 0.85rem;
+      text-decoration: underline;
+    }
     .bottom-nav {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -785,20 +813,18 @@
   </style>
 </head>
 <body>
-
   <!-- SPLASH SCREEN (EXCLUSIVELY USES images/appearich-logo.png) -->
   <div id="splash-screen">
     <img src="images/appearich-logo.png" alt="Appearich Splash Logo" class="splash-logo-img">
   </div>
-
-  <!-- APPLICATION HEADER (MODERN BLACK THEME, EXCLUSIVELY USES images/appearich-logo1.png AND 'Appearich' NAME) -->
+  <!-- APPLICATION HEADER (MODERN BLACK THEME, EXCLUSIVELY USES images/appearich-logo1 AND 'Appearich' NAME) -->
   <header class="app-header">
     <div class="header-left">
       <button id="globalBackBtn" class="back-btn" onclick="goBack()" title="Back to Home">
         <i class="fa-solid fa-arrow-left"></i>
       </button>
       <div class="brand-logo-wrap">
-        <img src="images/appearich-logo1.png" alt="Appearich Header Logo" class="header-logo-img">
+        <img src="images/appearich-logo1" alt="Appearich Header Logo" class="header-logo-img" onerror="this.src='images/appearich-logo1.png'">
         <div class="brand-name">Appearich</div>
       </div>
     </div>
@@ -807,8 +833,47 @@
     </button>
   </header>
 
+  <!-- AUTHENTICATION SCREEN (LOGIN / SIGN UP) -->
+  <div id="screen-auth" class="app-screen">
+    <div style="text-align: center; margin-top: 20px; margin-bottom: 24px;">
+      <h2 id="authTitle" style="font-size: 1.6rem; font-weight: 800;">Sign In to Appearich</h2>
+      <p id="authSubtitle" style="font-size: 0.85rem; color: var(--text-sub); margin-top: 4px;">Welcome back! Access your account.</p>
+    </div>
+    
+    <div id="signUpFields">
+      <div class="form-group">
+        <label for="authUsername">Username</label>
+        <input type="text" id="authUsername" placeholder="e.g. edwinrich">
+      </div>
+      <div class="form-group">
+        <label for="authPhone">Phone Number <span style="color:red;">*</span></label>
+        <input type="tel" id="authPhone" placeholder="e.g. 0712345678">
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="authEmail">Email Address</label>
+      <input type="email" id="authEmail" placeholder="name@example.com">
+    </div>
+    
+    <div class="form-group">
+      <label for="authPassword">Password</label>
+      <input type="password" id="authPassword" placeholder="••••••••">
+    </div>
+
+    <button id="authSubmitBtn" class="order-main-btn" onclick="handleAuthSubmit()" style="margin-top: 10px;">
+      <span>SIGN IN</span>
+    </button>
+
+    <div style="text-align: center; margin-top: 15px;">
+      <button id="authToggleBtn" class="auth-toggle-btn" onclick="toggleAuthMode()">
+        Need an account? Sign Up
+      </button>
+    </div>
+  </div>
+
   <!-- SCREEN 1: HOME -->
-  <div id="screen-home" class="app-screen active">
+  <div id="screen-home" class="app-screen">
     <div class="hero-banner">
       <div class="hero-greeting" id="heroGreeting">Welcome, Guest!</div>
       <div class="hero-tagline">Appear Rich — Premium Delivery, Delivered with Love.</div>
@@ -929,9 +994,9 @@
   <!-- SCREEN 5: PROFILE -->
   <div id="screen-profile" class="app-screen">
     <div class="profile-header-card">
-      <div class="profile-avatar" id="profAvatar">E</div>
-      <div class="profile-name" id="profName">Edwin</div>
-      <div class="profile-phone" id="profPhone">+255 764 519 027</div>
+      <div class="profile-avatar" id="profAvatar">U</div>
+      <div class="profile-name" id="profName">User</div>
+      <div class="profile-phone" id="profPhone">---</div>
     </div>
     <a href="https://wa.me/255764519027?text=Hello%20Appearich%20Help%20Center!%20I%20need%20assistance." target="_blank" class="whatsapp-support-btn">
       <i class="fa-brands fa-whatsapp" style="font-size:1.3rem;"></i> WhatsApp Help Center
@@ -954,6 +1019,10 @@
       <i class="fa-solid fa-history" style="color:var(--accent-gold);"></i> Order History
     </div>
     <div id="historyListContainer"></div>
+
+    <button class="logout-btn" onclick="handleLogout()">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </button>
   </div>
 
   <!-- HOT MEALS MODAL -->
@@ -1046,10 +1115,6 @@
         </div>
       </div>
       
-      <div class="form-group">
-        <label for="mealPhoneNum">Phone Number:</label>
-        <input type="tel" id="mealPhoneNum" placeholder="e.g. +255XXXXXXXXX">
-      </div>
       <div class="payment-selection-box">
         <label style="font-size:0.82rem; font-weight:800; color:var(--text-main);">Select Payment Method:</label>
         <div class="payment-options-grid">
@@ -1119,7 +1184,7 @@
   </div>
 
   <!-- BOTTOM NAVIGATION -->
-  <nav class="bottom-nav">
+  <nav class="bottom-nav" id="bottomNav">
     <button id="nav-home-btn" class="nav-item active" onclick="switchTab('screen-home', this)">
       <i class="fa-solid fa-house"></i>
       <span>Home</span>
@@ -1138,9 +1203,14 @@
     </button>
   </nav>
 
-  <!-- LOGIC SCRIPT -->
+  <!-- LOGIC SCRIPT WITH SUPABASE INTEGRATION -->
   <script>
-    const loggedInUser = { name: "Edwin", phone: "+255764519027" };
+    // SUPABASE INITIALIZATION
+    const SUPABASE_URL = "https://zudqubbglwphfxaviqsg.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz-9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let loggedInUser = { name: "Guest", phone: "", email: "", id: null };
     const whatsappPhone = "255764519027";
     let completedOrdersCount = 0;
     let activeOrders = [];
@@ -1154,32 +1224,273 @@
     let surchargePercent = 25;
     let selectedPaymentType = 'cash';
     let selectedFoodItems = [];
+    let isSignUpMode = false;
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', async () => {
       // Hide Splash Screen after 2 seconds
       setTimeout(() => {
         const splash = document.getElementById('splash-screen');
         if (splash) splash.classList.add('hidden');
       }, 2000);
 
+      // Check current Supabase Auth Session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        await handleAuthenticatedUser(session.user);
+      } else {
+        showAuthScreen();
+      }
+
+      // Listen for session state changes
+      supabase.auth.onAuthStateChange(async (event, session) => {
+        if (session) {
+          await handleAuthenticatedUser(session.user);
+        } else {
+          showAuthScreen();
+        }
+      });
+
+      loadSavedUserLocation();
+      updateLoyaltyUI();
+      renderSelectedItems();
+    });
+
+    async function handleAuthenticatedUser(user) {
+      const username = user.user_metadata?.username || user.email?.split('@')[0] || "User";
+      const phone = user.user_metadata?.phone || "";
+
+      loggedInUser = {
+        id: user.id,
+        name: username,
+        email: user.email,
+        phone: phone
+      };
+
+      // Try fetching profile record if exists
+      try {
+        const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+        if (profile) {
+          if (profile.username) loggedInUser.name = profile.username;
+          if (profile.phone) loggedInUser.phone = profile.phone;
+        }
+      } catch(e) {
+        // Table or profile record might be optional if stored in user_metadata
+      }
+
       document.getElementById('heroGreeting').innerText = `Welcome, ${loggedInUser.name}!`;
       document.getElementById('profName').innerText = loggedInUser.name;
       document.getElementById('profAvatar').innerText = loggedInUser.name.charAt(0).toUpperCase();
-      document.getElementById('profPhone').innerText = loggedInUser.phone;
-      document.getElementById('mealPhoneNum').value = loggedInUser.phone;
-      
-      loadSavedUserLocation();
-      updateLoyaltyUI();
-      renderBookings();
-      renderSelectedItems();
-    });
+      document.getElementById('profPhone').innerText = loggedInUser.phone || "No phone registered";
+
+      document.getElementById('bottomNav').style.display = 'flex';
+      switchTab('screen-home', document.getElementById('nav-home-btn'));
+
+      // Fetch persistent orders from Supabase
+      await fetchOrdersFromSupabase();
+    }
+
+    function showAuthScreen() {
+      document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-auth').classList.add('active');
+      document.getElementById('bottomNav').style.display = 'none';
+      isSignUpMode = false;
+      renderAuthForm();
+    }
+
+    function toggleAuthMode() {
+      isSignUpMode = !isSignUpMode;
+      renderAuthForm();
+    }
+
+    function renderAuthForm() {
+      const title = document.getElementById('authTitle');
+      const subtitle = document.getElementById('authSubtitle');
+      const submitBtn = document.getElementById('authSubmitBtn');
+      const toggleBtn = document.getElementById('authToggleBtn');
+      const signUpFields = document.getElementById('signUpFields');
+
+      if (isSignUpMode) {
+        title.innerText = "Create Your Account";
+        subtitle.innerText = "Join Appearich today for luxury deliveries.";
+        submitBtn.querySelector('span').innerText = "SIGN UP";
+        toggleBtn.innerText = "Already have an account? Sign In";
+        signUpFields.style.display = "block";
+      } else {
+        title.innerText = "Sign In to Appearich";
+        subtitle.innerText = "Welcome back! Access your account.";
+        submitBtn.querySelector('span').innerText = "SIGN IN";
+        toggleBtn.innerText = "Need an account? Sign Up";
+        signUpFields.style.display = "none";
+      }
+    }
+
+    async function handleAuthSubmit() {
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value.trim();
+
+      if (!email || !password) {
+        alert("Please provide both email and password!");
+        return;
+      }
+
+      if (isSignUpMode) {
+        const username = document.getElementById('authUsername').value.trim();
+        const phone = document.getElementById('authPhone').value.trim();
+
+        if (!username) {
+          alert("Please enter a username!");
+          return;
+        }
+        if (!phone) {
+          alert("Phone number is required during Sign Up!");
+          return;
+        }
+
+        const { data, error } = await supabase.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: {
+              username: username,
+              phone: phone
+            }
+          }
+        });
+
+        if (error) {
+          alert("Sign Up Error: " + error.message);
+          return;
+        }
+
+        if (data.user) {
+          // Attempt inserting profile into 'profiles' table if configured
+          try {
+            await supabase.from('profiles').upsert({
+              id: data.user.id,
+              username: username,
+              phone: phone,
+              email: email,
+              updated_at: new Date()
+            });
+          } catch(e) {}
+          
+          alert("Account created successfully!");
+          await handleAuthenticatedUser(data.user);
+        }
+      } else {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
+        if (error) {
+          alert("Login Error: " + error.message);
+          return;
+        }
+
+        if (data.user) {
+          await handleAuthenticatedUser(data.user);
+        }
+      }
+    }
+
+    async function handleLogout() {
+      await supabase.auth.signOut();
+      loggedInUser = { name: "Guest", phone: "", email: "", id: null };
+      activeOrders = [];
+      completedHistory = [];
+      showAuthScreen();
+    }
+
+    async function fetchOrdersFromSupabase() {
+      if (!loggedInUser.id) return;
+      try {
+        const { data, error } = await supabase
+          .from('orders')
+          .select('*')
+          .eq('user_id', loggedInUser.id)
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          loadOrdersFromLocalStorage();
+          return;
+        }
+
+        if (data) {
+          activeOrders = data.filter(o => o.status === 'pending' || o.status === 'verified').map(mapOrderFromSupabase);
+          completedHistory = data.filter(o => o.status === 'completed' || o.status === 'delivered').map(mapOrderFromSupabase);
+          completedOrdersCount = completedHistory.length;
+          updateLoyaltyUI();
+          renderBookings();
+          renderHistory();
+          // Backup locally
+          localStorage.setItem(`appearich_orders_${loggedInUser.id}`, JSON.stringify(data));
+        }
+      } catch (e) {
+        loadOrdersFromLocalStorage();
+      }
+    }
+
+    function mapOrderFromSupabase(o) {
+      return {
+        id: o.order_id || o.id,
+        title: o.title || `Order (${o.total || ''})`,
+        details: o.details || `Payment: ${o.payment_method || 'N/A'}`,
+        location: o.location || 'N/A',
+        status: o.status || 'pending',
+        timestamp: o.timestamp || new Date(o.created_at).toLocaleString()
+      };
+    }
+
+    function loadOrdersFromLocalStorage() {
+      if (!loggedInUser.id) return;
+      const saved = localStorage.getItem(`appearich_orders_${loggedInUser.id}`);
+      if (saved) {
+        const data = JSON.parse(saved);
+        activeOrders = data.filter(o => o.status === 'pending' || o.status === 'verified');
+        completedHistory = data.filter(o => o.status === 'completed' || o.status === 'delivered');
+        completedOrdersCount = completedHistory.length;
+        updateLoyaltyUI();
+        renderBookings();
+        renderHistory();
+      }
+    }
+
+    async function saveOrderToSupabase(orderData) {
+      const dbPayload = {
+        user_id: loggedInUser.id,
+        order_id: orderData.id,
+        phone_number: loggedInUser.phone,
+        title: orderData.title,
+        details: orderData.details,
+        location: orderData.location,
+        status: orderData.status,
+        total: orderData.total,
+        items: orderData.items,
+        instructions: orderData.instructions,
+        created_at: new Date().toISOString()
+      };
+
+      try {
+        const { error } = await supabase.from('orders').insert([dbPayload]);
+        if (error) console.warn("Supabase order insert retry pending...", error);
+      } catch(e) {
+        console.warn("Network error saving to Supabase", e);
+      }
+
+      // Always persist locally for seamless fallback
+      const saved = localStorage.getItem(`appearich_orders_${loggedInUser.id}`);
+      const allOrders = saved ? JSON.parse(saved) : [];
+      allOrders.unshift(orderData);
+      localStorage.setItem(`appearich_orders_${loggedInUser.id}`, JSON.stringify(allOrders));
+    }
 
     function loadSavedUserLocation() {
       const savedBlock = localStorage.getItem('appearich_user_block');
       const savedRoom = localStorage.getItem('appearich_user_room');
-      if (savedBlock) document.getElementById('mealBlockLoc').value = savedBlock;
-      if (savedRoom) document.getElementById('mealRoomLoc').value = savedRoom;
-      if (savedBlock || savedRoom) {
+      if (savedBlock && document.getElementById('mealBlockLoc')) document.getElementById('mealBlockLoc').value = savedBlock;
+      if (savedRoom && document.getElementById('mealRoomLoc')) document.getElementById('mealRoomLoc').value = savedRoom;
+      if ((savedBlock || savedRoom) && document.getElementById('locSavedTag')) {
         document.getElementById('locSavedTag').innerText = "(Auto-Filled)";
       }
     }
@@ -1217,7 +1528,7 @@
 
     function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
     function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
-
+    
     function openProductModal(name, price) {
       document.getElementById('perfumeDesc').value = name;
       openOrderModal();
@@ -1273,6 +1584,7 @@
 
     function renderSelectedItems() {
       const container = document.getElementById('selectedItemsContainer');
+      if (!container) return;
       if (selectedFoodItems.length === 0) {
         container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub); text-align:center;">No items added yet. Click an item above to add to order.</p>`;
       } else {
@@ -1310,8 +1622,8 @@
       document.getElementById('displayGrandTotal').innerText = "TZS " + calculatedGrandTotal.toLocaleString();
     }
 
-    /* FORMATTED WHATSAPP MESSAGE GENERATION */
-    function submitFoodOrder() {
+    /* FORMATTED WHATSAPP MESSAGE GENERATION WITH AUTO RETRIEVED PHONE */
+    async function submitFoodOrder() {
       if (selectedFoodItems.length === 0) {
         alert("Please select at least one item before placing your order!");
         return;
@@ -1319,15 +1631,10 @@
       const instructions = document.getElementById('mealDetails').value.trim();
       const block = document.getElementById('mealBlockLoc').value.trim();
       const room = document.getElementById('mealRoomLoc').value.trim();
-      const phone = document.getElementById('mealPhoneNum').value.trim();
       const payer = document.getElementById('payerName').value.trim();
       
       if (!block) {
         alert("Please fill in your Delivery Location!");
-        return;
-      }
-      if (!phone) {
-        alert("Please provide a contact phone number!");
         return;
       }
       if (selectedPaymentType === 'mobile' && !payer) {
@@ -1342,15 +1649,14 @@
       const orderDate = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
       const orderTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const orderId = "APR-" + Math.floor(100000 + Math.random() * 900000);
-
       const locationFull = room ? `${block}, Room ${room}` : block;
       const itemsListFormatted = selectedFoodItems.map(i => `• ${i.name} ×${i.qty} - TZS ${(i.unitPrice * i.qty).toLocaleString()}`).join("\n");
       const paymentText = selectedPaymentType === 'cash' ? "Cash on Delivery" : `Mobile Money (${payer})`;
-
+      
       let whatsappText = `🛍️ *New Order - Appearich*\n\n` +
         `*Order ID:* ${orderId}\n` +
         `*Customer:* ${loggedInUser.name}\n` +
-        `*Phone:* ${phone}\n` +
+        `*Phone:* ${loggedInUser.phone}\n` +
         `*Location:* ${locationFull}\n` +
         `*Delivery Instructions:* ${instructions || "None"}\n\n` +
         `*Items:*\n${itemsListFormatted}\n\n` +
@@ -1367,17 +1673,22 @@
         details: `Payment: ${paymentText}`,
         location: locationFull,
         status: "pending",
+        total: `TZS ${calculatedGrandTotal.toLocaleString()}`,
+        items: selectedFoodItems,
+        instructions: instructions,
         timestamp: `${orderDate} ${orderTime}`
       };
 
       activeOrders.unshift(newOrder);
+      await saveOrderToSupabase(newOrder);
+
       selectedFoodItems = [];
       closeSheet('hotMealsModal');
       renderBookings();
       simulateVerification(newOrder.id);
     }
 
-    function submitPerfumeOrder() {
+    async function submitPerfumeOrder() {
       const perfumeName = document.getElementById('perfumeDesc').value.trim();
       const location = document.getElementById('perfumeLoc').value.trim();
       const instructions = document.getElementById('perfumeInstructions').value.trim();
@@ -1415,10 +1726,15 @@
         details: `Total: TZS ${selectedPerfumePrice.toLocaleString()}`,
         location: location,
         status: "pending",
+        total: `TZS ${selectedPerfumePrice.toLocaleString()}`,
+        items: [{ name: perfumeName, size: selectedPerfumeSizeStr, price: selectedPerfumePrice }],
+        instructions: instructions,
         timestamp: `${orderDate} ${orderTime}`
       };
 
       activeOrders.unshift(newOrder);
+      await saveOrderToSupabase(newOrder);
+
       closeSheet('perfumesModal');
       renderBookings();
       simulateVerification(newOrder.id);
@@ -1430,13 +1746,19 @@
         if (orderIdx !== -1) {
           activeOrders[orderIdx].status = "verified";
           renderBookings();
-          setTimeout(() => {
+          setTimeout(async () => {
             const verifiedItem = activeOrders.splice(orderIdx, 1)[0];
+            verifiedItem.status = "completed";
             completedHistory.unshift(verifiedItem);
             completedOrdersCount++;
             updateLoyaltyUI();
             renderBookings();
             renderHistory();
+
+            // Update status in Supabase if exists
+            try {
+              await supabase.from('orders').update({ status: 'completed' }).eq('order_id', orderId);
+            } catch(e) {}
           }, 3000);
         }
       }, 3500);
@@ -1444,6 +1766,7 @@
 
     function renderBookings() {
       const container = document.getElementById('bookingsListContainer');
+      if (!container) return;
       if (activeOrders.length === 0) {
         container.innerHTML = `
           <div style="text-align:center; padding:40px 20px; color:var(--text-sub);">
@@ -1472,6 +1795,7 @@
 
     function renderHistory() {
       const container = document.getElementById('historyListContainer');
+      if (!container) return;
       if (completedHistory.length === 0) {
         container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub);">No past orders logged yet.</p>`;
         return;
@@ -1490,7 +1814,8 @@
     }
 
     function updateLoyaltyUI() {
-      document.getElementById('loyaltyCountBadge').innerText = `${completedOrdersCount} / 5 Orders`;
+      const badge = document.getElementById('loyaltyCountBadge');
+      if (badge) badge.innerText = `${completedOrdersCount} / 5 Orders`;
       const stamps = document.querySelectorAll('.stamp-dot');
       stamps.forEach((stamp, idx) => {
         if (idx < completedOrdersCount) stamp.classList.add('filled');
@@ -1512,11 +1837,13 @@
       if (animationLock) return;
       animationLock = true;
       const toast = document.getElementById("soonToast");
-      toast.classList.add("trigger-fly");
-      setTimeout(() => {
-        toast.classList.remove("trigger-fly");
-        animationLock = false;
-      }, 3500);
+      if (toast) {
+        toast.classList.add("trigger-fly");
+        setTimeout(() => {
+          toast.classList.remove("trigger-fly");
+          animationLock = false;
+        }, 3500);
+      }
     }
   </script>
 </body>
