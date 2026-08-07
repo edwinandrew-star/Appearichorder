@@ -1471,35 +1471,48 @@
       document.getElementById('displaySurcharge').innerText = surcharge.toLocaleString() + " TZS";
       document.getElementById('displayGrandTotal').innerText = grandTotal.toLocaleString() + " TZS";
     }
-    async function submitFoodOrder() {
-      if (selectedFoodItems.length === 0) { alert("Please select at least one item!"); return; }
-      const block = document.getElementById('mealBlockLoc').value.trim();
-      const room = document.getElementById('mealRoomLoc').value.trim();
-      const phone = currentUserPhone;
-      const instructions = document.getElementById('mealDetails').value.trim() || "None";
-      
-      if (!block || !room) { alert("Please fill in location details."); return; }
-      
-      localStorage.setItem('appearich_user_block', block);
-      localStorage.setItem('appearich_user_room', room);
-      
-      const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
-      const subtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
-      const surcharge = Math.round(subtotal * 0.25);
-      const grandTotal = subtotal + surcharge;
-      const dateTimeStr = new Date().toLocaleString();
-      const paymentName = selectedPaymentType === 'cash' ? 'Cash on Delivery' : 'Mobile Money (Voda Lipa)';
-      const newOrder = {
-        id: orderId,
-        items: selectedFoodItems,
-        total: grandTotal,
-        location: `${block}, Room ${room}`,
-        instructions: instructions,
-        paymentMethod: paymentName,
-        dateTime: dateTimeStr,
-        status: "confirmed"
-      };
-      
+   async function submitOrderToSupabase(cartItems, deliveryDetails, paymentMethod) {
+  // 1. Get the currently logged-in user from Supabase Auth
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    alert("Please sign in again to place your order.");
+    return;
+  }
+
+  // 2. Extract customer info from user metadata or checkout form inputs
+  const customerName = user.user_metadata?.full_name || deliveryDetails.name || "Guest Customer";
+  const customerPhone = user.user_metadata?.phone_number || deliveryDetails.phone || "";
+
+  // 3. Calculate total amount
+  const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  // 4. Insert directly into your Supabase 'orders' table
+  const { data, error } = await supabase
+    .from('orders')
+    .insert([
+      {
+        user_id: user.id,            // Links the order to the user ID
+        customer_name: customerName, // Now explicitly saves the name
+        customer_phone: customerPhone, // Now explicitly saves the phone
+        items: cartItems,             // Stores your cart contents (jsonb or text)
+        total_amount: totalAmount,    // Total cost
+        payment_method: paymentMethod,// e.g., 'Cash' or 'Lipa na M-Pesa'
+        status: 'pending'             // Initial order status
+      }
+    ])
+    .select();
+
+  if (error) {
+    console.error('Supabase Order Insert Error:', error.message);
+    alert('Failed to place order: ' + error.message);
+    return null;
+  }
+
+  console.log('Order successfully recorded:', data);
+  alert('Order placed successfully!');
+  return data;
+}
       activeOrders.unshift(newOrder);
       completedHistory.unshift(newOrder);
       completedOrdersCount += 1;
