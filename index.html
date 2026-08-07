@@ -995,7 +995,7 @@
         <span class="loyalty-title"><i class="fa-solid fa-crown"></i> Loyalty Rewards</span>
         <span class="loyalty-badge" id="loyaltyCountBadge">Total Orders: 0</span>
       </div>
-      <p style="font-size:0.75rem; color:var(--text-sub); margin-bottom:8px;" id="loyaltySubText">Every 5th order receives a FREE reward order!</p>
+      <p style="font-size:0.75rem; color:var(--text-sub); margin-bottom:8px;" id="loyaltySubText">Every 5th order receives FREE DELIVERY!</p>
       <div class="stamps-row" id="stampsRow">
         <div class="stamp-dot">1</div>
         <div class="stamp-dot">2</div>
@@ -1079,8 +1079,8 @@
           <strong id="displaySubtotal">0 TZS</strong>
         </div>
         <div class="calc-row">
-          <span>Service Fee (<span id="surchargeRateText">25%</span>):</span>
-          <strong id="displaySurcharge">0 TZS</strong>
+          <span>Delivery Fee:</span>
+          <strong id="displaySurcharge">500 TZS</strong>
         </div>
         <div class="calc-row total-row">
           <span>GRAND TOTAL:</span>
@@ -1199,7 +1199,6 @@
     let selectedPerfumePrice = 25000;
     let selectedPaymentType = 'cash';
     let selectedFoodItems = [];
-
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('service-worker.js')
@@ -1207,13 +1206,11 @@
           .catch(err => console.log('ServiceWorker failed:', err));
       });
     }
-
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
       document.getElementById('pwaInstallBtn').style.display = 'flex';
     });
-
     function installPWA() {
       if (deferredPrompt) {
         deferredPrompt.prompt();
@@ -1225,7 +1222,6 @@
         });
       }
     }
-
     window.addEventListener('DOMContentLoaded', async () => {
       const { data: { session } } = await supabaseClient.auth.getSession();
       
@@ -1234,7 +1230,6 @@
         setTimeout(() => {
           document.getElementById('splash-screen').style.display = 'none';
         }, 500);
-
         if (session && session.user) {
           currentUser = session.user;
           await fetchAndSetupUserData(currentUser.id);
@@ -1243,11 +1238,9 @@
           showAuthScreen();
         }
       }, 800);
-
       loadSavedUserLocation();
       renderSelectedItems();
     });
-
     async function fetchAndSetupUserData(userId) {
       const { data, error } = await supabaseClient
         .from('profiles')
@@ -1259,17 +1252,14 @@
         if (data.username) currentUsername = data.username;
         if (data.phone) currentUserPhone = data.phone;
       }
-
       if (!currentUsername) {
         currentUsername = currentUser.email.split('@')[0];
       }
       if (!currentUserPhone) {
         currentUserPhone = "+255 764 519 027";
       }
-
       setupUserInterface();
     }
-
     async function syncOrdersFromSupabase() {
       if (!currentUser) return;
       try {
@@ -1290,10 +1280,8 @@
             dateTime: new Date(row.created_at).toLocaleString(),
             status: row.status || 'confirmed'
           }));
-
           completedHistory = [...activeOrders];
           completedOrdersCount = activeOrders.length;
-
           renderBookings();
           renderHistory();
           updateLoyaltyUI();
@@ -1302,7 +1290,6 @@
         console.log("Offline or sync error fetching orders.", e);
       }
     }
-
     function showAuthScreen() {
       document.getElementById('screen-auth').style.display = 'flex';
       document.getElementById('mainHeader').style.display = 'none';
@@ -1311,7 +1298,6 @@
         if(s.id !== 'screen-auth') s.classList.remove('active');
       });
     }
-
     function setupUserInterface() {
       document.getElementById('screen-auth').style.display = 'none';
       document.getElementById('mainHeader').style.display = 'flex';
@@ -1322,7 +1308,6 @@
       document.getElementById('profAvatar').innerText = currentUsername.charAt(0).toUpperCase();
       document.getElementById('profPhone').innerText = currentUserPhone;
     }
-
     function toggleAuthMode() {
       isRegisterMode = !isRegisterMode;
       document.getElementById('authTitle').innerText = isRegisterMode ? "Create Account" : "Welcome Back";
@@ -1332,7 +1317,6 @@
       document.getElementById('usernameGroup').style.display = isRegisterMode ? "block" : "none";
       document.getElementById('phoneGroup').style.display = isRegisterMode ? "block" : "none";
     }
-
     async function handleAuthSubmit() {
       const email = document.getElementById('authEmail').value.trim();
       const password = document.getElementById('authPassword').value.trim();
@@ -1343,7 +1327,6 @@
         alert("Please enter both email and password.");
         return;
       }
-
       if (isRegisterMode) {
         if (!username || !phone) {
           alert("Please provide both a username and a phone number.");
@@ -1377,7 +1360,6 @@
         }
       }
     }
-
     async function handleLogout() {
       await supabaseClient.auth.signOut();
       
@@ -1389,7 +1371,6 @@
       completedHistory = [];
       completedOrdersCount = 0;
       selectedFoodItems = [];
-
       // Clear local UI fields
       document.getElementById('authEmail').value = '';
       document.getElementById('authPassword').value = '';
@@ -1399,17 +1380,14 @@
       renderBookings();
       renderHistory();
       updateLoyaltyUI();
-
       showAuthScreen();
     }
-
     function loadSavedUserLocation() {
       const savedBlock = localStorage.getItem('appearich_user_block');
       const savedRoom = localStorage.getItem('appearich_user_room');
       if (savedBlock) document.getElementById('mealBlockLoc').value = savedBlock;
       if (savedRoom) document.getElementById('mealRoomLoc').value = savedRoom;
     }
-
     function toggleTheme() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const icon = document.querySelector('#themeToggleBtn i');
@@ -1421,7 +1399,6 @@
         icon.className = 'fa-solid fa-sun';
       }
     }
-
     function switchTab(screenId, element) {
       document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1429,33 +1406,27 @@
       if (targetScreen) targetScreen.classList.add('active');
       if (element) element.classList.add('active');
     }
-
     function goBack() {
       const homeBtn = document.getElementById('nav-home-btn');
       switchTab('screen-home', homeBtn);
     }
-
     function openHotMealsModal() { 
       loadSavedUserLocation();
       renderSelectedItems();
       document.getElementById('hotMealsModal').classList.add('active'); 
     }
-
     function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
     function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
-
     function openProductModal(name) {
       document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
       openOrderModal();
     }
-
     function selectPerfumeSize(el, sizeName, price) {
       document.querySelectorAll('#perfumesModal .price-card').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
       selectedPerfumeSizeName = sizeName;
       selectedPerfumePrice = price;
     }
-
     function selectPaymentMethod(type) {
       selectedPaymentType = type;
       const btnCash = document.getElementById('payOptCash');
@@ -1471,26 +1442,22 @@
         unfoldBox.classList.remove('active');
       }
     }
-
     function addItemToOrder(name, unitPrice) {
       const existing = selectedFoodItems.find(item => item.name === name);
       if (existing) { existing.qty += 1; } 
       else { selectedFoodItems.push({ name: name, unitPrice: unitPrice, qty: 1 }); }
       renderSelectedItems();
     }
-
     function updateItemQty(index, newQty) {
       const qty = parseInt(newQty) || 1;
       if (qty <= 0) { selectedFoodItems.splice(index, 1); } 
       else { selectedFoodItems[index].qty = qty; }
       renderSelectedItems();
     }
-
     function removeItem(index) {
       selectedFoodItems.splice(index, 1);
       renderSelectedItems();
     }
-
     function renderSelectedItems() {
       const container = document.getElementById('selectedItemsContainer');
       if (selectedFoodItems.length === 0) {
@@ -1509,26 +1476,24 @@
       }
       recalculateMealTotal();
     }
-
     function recalculateMealTotal() {
       const subtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
-      const surcharge = Math.round(subtotal * 0.25);
       
-      // Determine continuous free order eligibility (Every 5th order is FREE: 5th, 10th, 15th, 20th...)
+      // Every 5th order receives FREE DELIVERY ONLY
       const nextOrderNumber = completedOrdersCount + 1;
-      const isFreeOrder = (nextOrderNumber % 5 === 0);
-      const grandTotal = isFreeOrder ? 0 : (subtotal + surcharge);
-
-      document.getElementById('displaySubtotal').innerText = subtotal.toLocaleString() + " TZS";
-      document.getElementById('displaySurcharge').innerText = surcharge.toLocaleString() + " TZS";
+      const isFreeDelivery = (nextOrderNumber % 5 === 0);
+      const deliveryFee = isFreeDelivery ? 0 : 500;
+      const grandTotal = subtotal + deliveryFee;
       
-      if (isFreeOrder) {
-        document.getElementById('displayGrandTotal').innerText = "0 TZS (LOYALTY FREE REWARD!)";
+      document.getElementById('displaySubtotal').innerText = subtotal.toLocaleString() + " TZS";
+      
+      if (isFreeDelivery) {
+        document.getElementById('displaySurcharge').innerText = "0 TZS (FREE DELIVERY!)";
       } else {
-        document.getElementById('displayGrandTotal').innerText = grandTotal.toLocaleString() + " TZS";
+        document.getElementById('displaySurcharge').innerText = "500 TZS";
       }
+      document.getElementById('displayGrandTotal').innerText = grandTotal.toLocaleString() + " TZS";
     }
-
     async function submitFoodOrder() {
       if (selectedFoodItems.length === 0) { alert("Please select at least one item!"); return; }
       const block = document.getElementById('mealBlockLoc').value.trim();
@@ -1543,14 +1508,14 @@
       
       const orderId = "APR-" + Math.floor(1000 + Math.random() * 9000);
       const subtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
-      const surcharge = Math.round(subtotal * 0.25);
       
       const targetOrderNumber = completedOrdersCount + 1;
-      const isFreeOrder = (targetOrderNumber % 5 === 0);
-      const grandTotal = isFreeOrder ? 0 : (subtotal + surcharge);
+      const isFreeDelivery = (targetOrderNumber % 5 === 0);
+      const deliveryFee = isFreeDelivery ? 0 : 500;
+      const grandTotal = subtotal + deliveryFee;
       
       const dateTimeStr = new Date().toLocaleString();
-      const paymentName = isFreeOrder ? '0 TZS (Loyalty Reward)' : (selectedPaymentType === 'cash' ? 'Cash on Delivery' : 'Mobile Money (Voda Lipa)');
+      const paymentName = selectedPaymentType === 'cash' ? 'Cash on Delivery' : 'Mobile Money (Voda Lipa)';
       
       const newOrder = {
         id: orderId,
@@ -1570,7 +1535,6 @@
       renderBookings();
       renderHistory();
       updateLoyaltyUI();
-
       try {
         await supabaseClient.from('orders').insert([{
           order_id: orderId,
@@ -1585,7 +1549,6 @@
       } catch (e) {
         console.log("Cloud sync queued offline.", e);
       }
-
       let itemsListStr = selectedFoodItems.map(i => `• ${i.name} (x${i.qty}) - ${(i.unitPrice * i.qty).toLocaleString()} TZS`).join('\n');
       let waMessage = `*NEW APPEARICH ORDER*\n\n` +
         `🔖 *Order ID:* ${orderId}\n` +
@@ -1595,14 +1558,14 @@
         `📝 *Instructions:* ${instructions}\n` +
         `📅 *Date & Time:* ${dateTimeStr}\n\n` +
         `📦 *Ordered Items:*\n${itemsListStr}\n\n` +
-        `💰 *Total Order Amount:* ${grandTotal.toLocaleString()} TZS ${isFreeOrder ? '(FREE REWARD APPLIED!)' : ''}\n` +
+        `🚚 *Delivery Fee:* ${deliveryFee.toLocaleString()} TZS ${isFreeDelivery ? '(FREE DELIVERY REWARD APPLIED!)' : ''}\n` +
+        `💰 *Total Order Amount:* ${grandTotal.toLocaleString()} TZS\n` +
         `💳 *Payment Method:* ${paymentName}`;
       
       selectedFoodItems = [];
       closeSheet('hotMealsModal');
       window.open(`https://wa.me/255764519027?text=${encodeURIComponent(waMessage)}`, '_blank');
     }
-
     async function submitPerfumeOrder() {
       const desc = document.getElementById('perfumeDesc').value.trim();
       const phone = currentUserPhone;
@@ -1613,12 +1576,12 @@
       const dateTimeStr = new Date().toLocaleString();
       
       const targetOrderNumber = completedOrdersCount + 1;
-      const isFreeOrder = (targetOrderNumber % 5 === 0);
-      const finalPrice = isFreeOrder ? 0 : selectedPerfumePrice;
+      const isFreeDelivery = (targetOrderNumber % 5 === 0);
+      const deliveryFee = isFreeDelivery ? 0 : 500;
+      const finalPrice = selectedPerfumePrice + deliveryFee;
       
       const perfumeItems = [{ name: `${desc} (${selectedPerfumeSizeName})`, unitPrice: selectedPerfumePrice, qty: 1 }];
-      const paymentName = isFreeOrder ? '0 TZS (Loyalty Reward)' : 'Cash / Mobile Money';
-
+      const paymentName = 'Cash / Mobile Money';
       const newOrder = {
         id: orderId,
         items: perfumeItems,
@@ -1637,7 +1600,6 @@
       renderBookings();
       renderHistory();
       updateLoyaltyUI();
-
       try {
         await supabaseClient.from('orders').insert([{
           order_id: orderId,
@@ -1652,21 +1614,20 @@
       } catch (e) {
         console.log("Cloud sync queued offline.", e);
       }
-
       let waMessage = `*NEW APPEARICH PERFUME ORDER*\n\n` +
         `🔖 *Order ID:* ${orderId}\n` +
         `👤 *Customer:* ${currentUsername}\n` +
         `📞 *Phone:* ${phone}\n` +
         `📍 *Location:* ${loc}\n` +
         `📅 *Date & Time:* ${dateTimeStr}\n\n` +
-        `📦 *Ordered Products:*\n• ${desc} - Size: ${selectedPerfumeSizeName} (x1)\n\n` +
-        `💰 *Total Order Amount:* ${finalPrice.toLocaleString()} TZS ${isFreeOrder ? '(FREE REWARD APPLIED!)' : ''}\n` +
+        `📦 *Ordered Products:*\n• ${desc} - Size: ${selectedPerfumeSizeName} (x1) - ${selectedPerfumePrice.toLocaleString()} TZS\n\n` +
+        `🚚 *Delivery Fee:* ${deliveryFee.toLocaleString()} TZS ${isFreeDelivery ? '(FREE DELIVERY REWARD APPLIED!)' : ''}\n` +
+        `💰 *Total Order Amount:* ${finalPrice.toLocaleString()} TZS\n` +
         `💳 *Payment Method:* ${paymentName}`;
       
       closeSheet('perfumesModal');
       window.open(`https://wa.me/255764519027?text=${encodeURIComponent(waMessage)}`, '_blank');
     }
-
     function renderBookings() {
       const container = document.getElementById('bookingsListContainer');
       if (activeOrders.length === 0) {
@@ -1687,7 +1648,6 @@
         </div>
       `).join('');
     }
-
     function renderHistory() {
       const container = document.getElementById('historyListContainer');
       if (completedHistory.length === 0) {
@@ -1707,16 +1667,14 @@
         </div>
       `).join('');
     }
-
     function updateLoyaltyUI() {
       document.getElementById('loyaltyCountBadge').innerText = `Total Orders: ${completedOrdersCount}`;
       
       const remainder = completedOrdersCount % 5;
       const nextFree = completedOrdersCount + (5 - remainder);
       document.getElementById('loyaltySubText').innerText = remainder === 0 && completedOrdersCount > 0 
-        ? `Order #${completedOrdersCount} was FREE! Next free order is #${completedOrdersCount + 5}.`
-        : `Every 5th order receives a FREE reward order! Next free order is #${nextFree}.`;
-
+        ? `Order #${completedOrdersCount} had FREE DELIVERY! Next free delivery is on order #${completedOrdersCount + 5}.`
+        : `Every 5th order receives FREE DELIVERY! Next free delivery is on order #${nextFree}.`;
       const stamps = document.querySelectorAll('.stamp-dot');
       stamps.forEach((stamp, idx) => {
         // Highlight stamps based on current position towards the next multiple of 5
@@ -1728,14 +1686,12 @@
         }
       });
     }
-
     function sendCustomInquiry() {
       const val = document.getElementById('customInquiryInput').value.trim();
       if (!val) return;
       window.open(`https://wa.me/255764519027?text=${encodeURIComponent("Custom Inquiry from " + currentUsername + ": " + val)}`, '_blank');
       document.getElementById('customInquiryInput').value = '';
     }
-
     function triggerQuickReorder() { openHotMealsModal(); }
     
     function igniteTeaserToast() {
