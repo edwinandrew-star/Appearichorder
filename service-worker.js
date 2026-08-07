@@ -1,4 +1,4 @@
-const CACHE_NAME = 'appearich-v2'; // Bump version number on every deployment
+const CACHE_NAME = 'appearich-v3'; // Bump version number on every deployment
 
 const ASSETS = [
   './',
