@@ -133,10 +133,10 @@
       position: relative;
       animation: fadeIn 0.3s ease-in-out;
     }
-    .app-screen.active { display: flex; }
-    #screen-home {
-      padding-top: 0px;
+    #screen-home.app-screen {
+      padding-top: 0;
     }
+    .app-screen.active { display: flex; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
@@ -201,25 +201,34 @@
       font-size: 1rem;
       cursor: pointer;
     }
-    .hero-banner {
-      width: calc(100% + 32px);
-      margin-left: -16px;
-      margin-right: -16px;
-      margin-top: 0;
-      height: 160px;
-      border-radius: 0 0 20px 20px;
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%), 
-                  url('images/appearich-hero.jpg') center/cover;
+    /* Hero Banner Updated to Display Full Image Uncropped Flush Below Header */
+    .hero-banner-wrap {
+      width: 100%;
       position: relative;
+      margin-bottom: 24px;
+      border-radius: 0 0 20px 20px;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 18px;
       border: 1px solid var(--card-border);
       border-top: none;
       box-shadow: 0 10px 25px var(--shadow-color);
-      margin-bottom: 24px;
+      background: var(--card-bg);
+    }
+    .hero-img-full {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+    .hero-text-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 18px;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
     }
     .hero-greeting { font-size: 1.5rem; font-weight: 800; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
     .hero-tagline { font-size: 0.85rem; color: #FFD700; font-weight: 600; margin-top: 4px; letter-spacing: 0.5px; }
@@ -879,9 +888,12 @@
   </header>
   <!-- SCREEN 1: HOME -->
   <div id="screen-home" class="app-screen">
-    <div class="hero-banner">
-      <div class="hero-greeting" id="heroGreeting">Welcome!</div>
-      <div class="hero-tagline">Appear Rich — Premium Delivery, Delivered with Love.</div>
+    <div class="hero-banner-wrap">
+      <img src="images/appearich-hero.jpg" alt="Appearich Hero" class="hero-img-full">
+      <div class="hero-text-overlay">
+        <div class="hero-greeting" id="heroGreeting">Welcome!</div>
+        <div class="hero-tagline">Appear Rich — Premium Delivery, Delivered with Love.</div>
+      </div>
     </div>
     <div class="section-title">
       <i class="fa-solid fa-layer-group" style="color:var(--accent-gold);"></i> We Offer This
