@@ -6,7 +6,7 @@
   <title>Appearich - Premium Service & Scent Hub</title>
   <!-- PWA Manifest & Meta Tags -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#ffffff">
   <link rel="apple-touch-icon" href="images/appearich-logo1.png">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -68,11 +68,11 @@
       overflow-x: hidden;
     }
     
-    /* SPLASH SCREEN - Uses appearich-logo.png */
+    /* SPLASH SCREEN - Pure White Background with Clean Transparent Logo */
     #splash-screen {
       position: fixed;
       inset: 0;
-      background: #000000;
+      background: #FFFFFF;
       z-index: 99999;
       display: flex;
       flex-direction: column;
@@ -81,14 +81,17 @@
       transition: opacity 0.5s ease;
     }
     .splash-logo {
-      width: 120px;
-      height: 120px;
+      width: 140px;
+      height: 140px;
       object-fit: contain;
       background: transparent;
+      border: none;
+      outline: none;
+      box-shadow: none;
       animation: pulseLogo 1.5s infinite alternate;
     }
     @keyframes pulseLogo {
-      from { transform: scale(0.95); opacity: 0.8; }
+      from { transform: scale(0.95); opacity: 0.85; }
       to { transform: scale(1.05); opacity: 1; }
     }
     /* AUTH SCREEN */
@@ -135,7 +138,7 @@
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    /* In-App Header - Uses appearich-logo1.png and title-case "Appearich" */
+    /* In-App Header - Updated Pure White Background */
     .app-header {
       position: fixed;
       top: 0;
@@ -148,15 +151,16 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #000000;
-      border-bottom: 1px solid #222222;
+      background: #FFFFFF;
+      border-bottom: 1px solid #e9ecef;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
       z-index: 1500;
     }
     .header-left { display: flex; align-items: center; gap: 12px; }
     .back-btn {
-      background: #181818;
-      border: 1px solid #333333;
-      color: #ffffff;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      color: #111111;
       width: 38px;
       height: 38px;
       border-radius: 50%;
@@ -178,13 +182,13 @@
       font-size: 1.35rem;
       font-weight: 800;
       letter-spacing: 0.5px;
-      color: #ffffff;
+      color: #111111;
       text-transform: capitalize;
     }
     .theme-toggle-btn {
-      background: #181818;
-      border: 1px solid #333333;
-      color: #ffffff;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      color: #111111;
       width: 38px;
       height: 38px;
       border-radius: 50%;
@@ -813,7 +817,7 @@
   </style>
 </head>
 <body>
-  <!-- PURE BLACK SPLASH SCREEN - Uses appearich-logo.png -->
+  <!-- PURE WHITE SPLASH SCREEN -->
   <div id="splash-screen">
     <img src="images/appearich-logo.png" alt="Appearich Splash Logo" class="splash-logo">
   </div>
@@ -846,7 +850,7 @@
       </div>
     </div>
   </div>
-  <!-- FIXED Header - Uses appearich-logo1.png and title-case "Appearich" -->
+  <!-- FIXED WHITE HEADER -->
   <header class="app-header" id="mainHeader" style="display:none;">
     <div class="header-left">
       <button id="globalBackBtn" class="back-btn" onclick="goBack()" title="Back to Home">
@@ -1028,7 +1032,6 @@
       <div style="font-size: 0.82rem; font-weight:800; color:var(--text-main); margin-bottom:4px;">
         <i class="fa-solid fa-plus-circle" style="color:var(--accent-gold);"></i> Tap to Add Available Items:
       </div>
-      <!-- CREATIVELY UPDATED FOOD SELECTION GRID -->
       <div class="food-selection-grid">
         <div class="food-selection-card" onclick="addItemToOrder('Chipsi Mayai', 3000)">
           <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=300&auto=format&fit=cover" alt="Chipsi Mayai">
@@ -1225,7 +1228,6 @@
     let isRegisterMode = false;
     let deferredPrompt = null;
     
-    // Scoped variables per user session
     let activeOrders = [];
     let completedHistory = [];
     let completedOrdersCount = 0;
@@ -1234,6 +1236,7 @@
     let selectedPerfumePrice = 25000;
     let selectedPaymentType = 'cash';
     let selectedFoodItems = [];
+
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('service-worker.js')
@@ -1398,7 +1401,6 @@
     async function handleLogout() {
       await supabaseClient.auth.signOut();
       
-      // Clear in-memory user-specific state to completely isolate data between logins
       currentUser = null;
       currentUsername = "";
       currentUserPhone = "";
@@ -1406,7 +1408,6 @@
       completedHistory = [];
       completedOrdersCount = 0;
       selectedFoodItems = [];
-      // Clear local UI fields
       document.getElementById('authEmail').value = '';
       document.getElementById('authPassword').value = '';
       document.getElementById('authUsername').value = '';
@@ -1514,7 +1515,6 @@
     function recalculateMealTotal() {
       const subtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
       
-      // Every 5th order receives FREE DELIVERY ONLY
       const nextOrderNumber = completedOrdersCount + 1;
       const isFreeDelivery = (nextOrderNumber % 5 === 0);
       const deliveryFee = isFreeDelivery ? 0 : 500;
@@ -1565,7 +1565,7 @@
       
       activeOrders.unshift(newOrder);
       completedHistory.unshift(newOrder);
-      completedOrdersCount += 1; // Continuous unlimited order count
+      completedOrdersCount += 1;
       
       renderBookings();
       renderHistory();
@@ -1630,7 +1630,7 @@
       
       activeOrders.unshift(newOrder);
       completedHistory.unshift(newOrder);
-      completedOrdersCount += 1; // Continuous unlimited order count
+      completedOrdersCount += 1;
       
       renderBookings();
       renderHistory();
@@ -1712,7 +1712,6 @@
         : `Every 5th order receives FREE DELIVERY! Next free delivery is on order #${nextFree}.`;
       const stamps = document.querySelectorAll('.stamp-dot');
       stamps.forEach((stamp, idx) => {
-        // Highlight stamps based on current position towards the next multiple of 5
         const activeIndex = remainder === 0 && completedOrdersCount > 0 ? 5 : remainder;
         if (idx < activeIndex) {
           stamp.classList.add('filled');
