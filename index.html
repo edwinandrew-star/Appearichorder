@@ -63,7 +63,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 75px;
+      padding-top: 70px;
       padding-bottom: 80px;
       overflow-x: hidden;
     }
@@ -127,13 +127,16 @@
       display: none;
       width: 100%;
       max-width: 480px;
-      min-height: calc(100vh - 155px);
+      min-height: calc(100vh - 150px);
       padding: 20px 16px;
       flex-direction: column;
       position: relative;
       animation: fadeIn 0.3s ease-in-out;
     }
     .app-screen.active { display: flex; }
+    #screen-home {
+      padding-top: 0px;
+    }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
@@ -199,9 +202,12 @@
       cursor: pointer;
     }
     .hero-banner {
-      width: 100%;
+      width: calc(100% + 32px);
+      margin-left: -16px;
+      margin-right: -16px;
+      margin-top: 0;
       height: 160px;
-      border-radius: 20px;
+      border-radius: 0 0 20px 20px;
       background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%), 
                   url('images/appearich-hero.jpg') center/cover;
       position: relative;
@@ -211,6 +217,7 @@
       justify-content: flex-end;
       padding: 18px;
       border: 1px solid var(--card-border);
+      border-top: none;
       box-shadow: 0 10px 25px var(--shadow-color);
       margin-bottom: 24px;
     }
@@ -1236,7 +1243,6 @@
     let selectedPerfumePrice = 25000;
     let selectedPaymentType = 'cash';
     let selectedFoodItems = [];
-
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('service-worker.js')
