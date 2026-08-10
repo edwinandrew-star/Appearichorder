@@ -94,25 +94,17 @@
       from { transform: scale(0.95); opacity: 0.85; }
       to { transform: scale(1.05); opacity: 1; }
     }
-    /* AUTH SCREEN - Modified for continuous pure white surface & right-to-left entrance animation */
-    #screen-auth {
-      background: #FFFFFF !important;
-    }
-    @keyframes slideFromRight {
-      from { transform: translateX(50px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
+    /* AUTH SCREEN */
     .auth-container {
       max-width: 400px;
       width: 90%;
-      background: #FFFFFF !important;
-      border: none !important;
-      border-radius: 0 !important;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
       padding: 35px 24px;
-      box-shadow: none !important;
+      box-shadow: 0 10px 30px var(--shadow-color);
       margin: auto;
       text-align: center;
-      animation: slideFromRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     .auth-title { font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; letter-spacing: -0.5px; }
     .auth-sub { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 24px; }
@@ -130,6 +122,19 @@
     }
     .auth-switch { font-size: 0.82rem; color: var(--text-sub); margin-top: 18px; cursor: pointer; }
     .auth-switch span { color: var(--accent-gold); font-weight: 700; }
+    }
+      to { opacity: 1; transform: translateX(0); }
+      from { opacity: 0; transform: translateX(-22px); }
+    @keyframes authSlideInFromLeft {
+    }
+      animation: authSlideInFromLeft 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    .auth-entrance-item.auth-entrance-active {
+    }
+      will-change: transform, opacity;
+      transform: translateX(-22px);
+      opacity: 0;
+    .auth-entrance-item {
+    /* LOGIN ENTRANCE ANIMATION - only affects the Login/Auth content */
     /* Main Application Screens */
     .app-screen {
       display: none;
@@ -839,28 +844,28 @@
   <!-- AUTH SCREEN -->
   <div id="screen-auth" class="app-screen" style="display:none; justify-content:center; align-items:center;">
     <div class="auth-container">
-      <div id="authTitle" class="auth-title">Welcome Back</div>
-      <div id="authSub" class="auth-sub">Sign in to your Appearich account</div>
+      <div id="authTitle" class="auth-title auth-entrance-item">Welcome Back</div>
+      <div id="authSub" class="auth-sub auth-entrance-item">Sign in to your Appearich account</div>
       
-      <div class="form-group" id="usernameGroup" style="display:none;">
+      <div class="form-group auth-entrance-item" id="usernameGroup" style="display:none;">
         <label for="authUsername">Username</label>
         <input type="text" id="authUsername" placeholder="e.g. Edwin or John">
       </div>
-      <div class="form-group">
+      <div class="form-group auth-entrance-item">
         <label for="authEmail">Email Address</label>
         <input type="email" id="authEmail" placeholder="e.g. user@appearich.com">
       </div>
-      <div class="form-group" id="phoneGroup" style="display:none;">
+      <div class="form-group auth-entrance-item" id="phoneGroup" style="display:none;">
         <label for="authPhone">Phone Number</label>
         <input type="tel" id="authPhone" placeholder="e.g. 0764519027">
       </div>
-      <div class="form-group">
+      <div class="form-group auth-entrance-item">
         <label for="authPassword">Password</label>
         <input type="password" id="authPassword" placeholder="••••••••">
       </div>
       
-      <button id="authSubmitBtn" class="auth-btn" onclick="handleAuthSubmit()">Sign In</button>
-      <div class="auth-switch" onclick="toggleAuthMode()">
+      <button id="authSubmitBtn" class="auth-btn auth-entrance-item" onclick="handleAuthSubmit()">Sign In</button>
+      <div class="auth-switch auth-entrance-item" onclick="toggleAuthMode()">
         <span id="authSwitchText">Don't have an account? Register here</span>
       </div>
     </div>
@@ -1342,8 +1347,26 @@
         console.log("Offline or sync error fetching orders.", e);
       }
     }
+    }
+      });
+        item.classList.add('auth-entrance-active');
+        item.style.animationDelay = `${index * 0.16}s`;
+      items.forEach((item, index) => {
+      void auth.offsetWidth;
+      });
+        item.style.animationDelay = '0s';
+        item.classList.remove('auth-entrance-active');
+      items.forEach((item) => {
+      });
+        return style.display !== 'none' && style.visibility !== 'hidden';
+        const style = window.getComputedStyle(el);
+      const items = Array.from(auth.querySelectorAll('.auth-entrance-item')).filter(el => {
+      if (!auth) return;
+      const auth = document.getElementById('screen-auth');
+    function playAuthEntranceAnimation() {
     function showAuthScreen() {
       document.getElementById('screen-auth').style.display = 'flex';
+      requestAnimationFrame(() => playAuthEntranceAnimation());
       document.getElementById('mainHeader').style.display = 'none';
       document.getElementById('mainNavBar').style.display = 'none';
       document.querySelectorAll('.app-screen').forEach(s => {
