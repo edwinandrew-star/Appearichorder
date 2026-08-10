@@ -1,31 +1,38 @@
-const CACHE_NAME = 'appearich-v3'; // Bump version number on every deployment
+const CACHE_NAME = 'appearich-v4'; // Bump version number
 
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  'images/appearich-logo.png',
-  'images/appearich-logo1.png',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
+  './images/appearich-logo.png',
+  './images/appearich-logo1.png'
 ];
 
-// Install Event: Cache static shell assets
+// Install Event: Safely cache static shell assets individually
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then((cache) => {
+      // Use Promise.allSettled or individual caching loops to prevent complete installation failure
+      return Promise.all(
+        ASSETS.map(async (asset) => {
+          try {
+            await cache.add(asset);
+          } catch (err) {
+            console.warn('Failed to cache asset during install:', asset, err);
+          }
+        })
+      );
+    })
   );
-  // Force active status as soon as installation completes
   self.skipWaiting();
 });
 
-// Activate Event: Remove old cache storage without touching LocalStorage or IndexedDB
+// Activate Event: Remove old cache storage
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
         keys.map((key) => {
-          // Safeguard: Only delete caches matching our project prefix that are not current
           if (key.startsWith('appearich-') && key !== CACHE_NAME) {
             return caches.delete(key);
           }
@@ -33,7 +40,6 @@ self.addEventListener('activate', (event) => {
       )
     )
   );
-  // Instantly take control of all open browser tabs/clients
   self.clients.claim();
 });
 
@@ -47,7 +53,6 @@ self.addEventListener('fetch', (event) => {
   if (url.hostname.includes('supabase.co')) return;
 
   // Network-First strategy for page navigations (index.html)
-  // Ensures installed clients receive fresh app updates immediately when online
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
@@ -62,7 +67,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Stale-While-Revalidate strategy for static resources (CSS, JS, Images)
+  // Stale-While-Revalidate strategy for static resources and CDNs
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request)
@@ -70,7 +75,7 @@ self.addEventListener('fetch', (event) => {
           if (
             networkResponse &&
             networkResponse.status === 200 &&
-            (networkResponse.type === 'basic' || networkResponse.type === 'cors')
+            (networkResponse.type === 'basic' || networkResponse.type === 'cors' || networkResponse.type === 'opaque')
           ) {
             const responseToCache = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
