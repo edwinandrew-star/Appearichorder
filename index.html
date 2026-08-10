@@ -110,11 +110,11 @@
     .auth-container {
       max-width: 400px;
       width: 90%;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
+      background: transparent;
+      border: none;
+      border-radius: 0;
       padding: 35px 24px;
-      box-shadow: 0 10px 30px var(--shadow-color);
+      box-shadow: none;
       margin: auto;
       text-align: center;
     }
@@ -1414,6 +1414,15 @@
       document.getElementById('profName').innerText = currentUsername;
       document.getElementById('profAvatar').innerText = currentUsername.charAt(0).toUpperCase();
       document.getElementById('profPhone').innerText = currentUserPhone;
+
+      // Trigger subtle vibration on entering Home page successfully
+      if (navigator.vibrate) {
+        try {
+          navigator.vibrate(40);
+        } catch (err) {
+          console.log("Vibration API failed silently:", err);
+        }
+      }
     }
     function toggleAuthMode() {
       isRegisterMode = !isRegisterMode;
