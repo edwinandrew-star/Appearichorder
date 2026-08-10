@@ -94,44 +94,25 @@
       from { transform: scale(0.95); opacity: 0.85; }
       to { transform: scale(1.05); opacity: 1; }
     }
-    /* AUTH SCREEN - FULL-SCREEN RESPONSIVE LAYOUT & SMOOTH SLIDE-IN ANIMATION */
+    /* AUTH SCREEN - Modified for continuous pure white surface & right-to-left entrance animation */
     #screen-auth {
-      position: fixed;
-      inset: 0;
-      z-index: 20000;
-      background: var(--bg-color);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 24px 16px;
-      overflow-y: auto;
-      width: 100%;
-      height: 100vh;
+      background: #FFFFFF !important;
     }
-    #screen-auth.slide-in-entrance {
-      animation: slideInFromLeft 0.45s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    }
-    @keyframes slideInFromLeft {
-      from {
-        transform: translateX(-100%);
-        opacity: 0.8;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
+    @keyframes slideFromRight {
+      from { transform: translateX(50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
     }
     .auth-container {
-      max-width: 420px;
-      width: 100%;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
+      max-width: 400px;
+      width: 90%;
+      background: #FFFFFF !important;
+      border: none !important;
+      border-radius: 0 !important;
       padding: 35px 24px;
-      box-shadow: 0 10px 30px var(--shadow-color);
+      box-shadow: none !important;
       margin: auto;
       text-align: center;
+      animation: slideFromRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     .auth-title { font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; letter-spacing: -0.5px; }
     .auth-sub { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 24px; }
@@ -856,7 +837,7 @@
     <img src="images/appearich-logo.png" alt="Appearich Splash Logo" class="splash-logo">
   </div>
   <!-- AUTH SCREEN -->
-  <div id="screen-auth" class="app-screen" style="display:none;">
+  <div id="screen-auth" class="app-screen" style="display:none; justify-content:center; align-items:center;">
     <div class="auth-container">
       <div id="authTitle" class="auth-title">Welcome Back</div>
       <div id="authSub" class="auth-sub">Sign in to your Appearich account</div>
@@ -1362,26 +1343,15 @@
       }
     }
     function showAuthScreen() {
-      const authScreen = document.getElementById('screen-auth');
-      authScreen.style.display = 'flex';
-      authScreen.classList.remove('slide-in-entrance');
-      void authScreen.offsetWidth; // Force reflow for animation restart
-      authScreen.classList.add('slide-in-entrance');
-
+      document.getElementById('screen-auth').style.display = 'flex';
       document.getElementById('mainHeader').style.display = 'none';
       document.getElementById('mainNavBar').style.display = 'none';
       document.querySelectorAll('.app-screen').forEach(s => {
         if(s.id !== 'screen-auth') s.classList.remove('active');
       });
     }
-    function triggerLoginHaptic() {
-      if (navigator.vibrate) {
-        navigator.vibrate([40, 60, 40]);
-      }
-    }
     function setupUserInterface() {
       document.getElementById('screen-auth').style.display = 'none';
-      document.getElementById('screen-auth').classList.remove('slide-in-entrance');
       document.getElementById('mainHeader').style.display = 'flex';
       document.getElementById('mainNavBar').style.display = 'flex';
       switchTab('screen-home', document.getElementById('nav-home-btn'));
@@ -1429,7 +1399,6 @@
           }
           alert("Registration successful! Welcome, " + username);
           await syncOrdersFromSupabase();
-          triggerLoginHaptic();
           setupUserInterface();
         }
       } else {
@@ -1440,7 +1409,6 @@
           currentUser = data.user;
           await fetchAndSetupUserData(currentUser.id);
           await syncOrdersFromSupabase();
-          triggerLoginHaptic();
         }
       }
     }
