@@ -63,8 +63,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 0;
-      padding-bottom: 0;
+      padding-top: 70px;
+      padding-bottom: 80px;
       overflow-x: hidden;
     }
     
@@ -94,33 +94,44 @@
       from { transform: scale(0.95); opacity: 0.85; }
       to { transform: scale(1.05); opacity: 1; }
     }
-    /* AUTH SCREEN - Full Device / Full Screen Native Look */
+    /* AUTH SCREEN - FULL-SCREEN RESPONSIVE LAYOUT & SMOOTH SLIDE-IN ANIMATION */
     #screen-auth {
       position: fixed;
       inset: 0;
-      width: 100vw;
-      height: 100vh;
-      max-width: none;
-      min-height: 100vh;
-      background: var(--card-bg);
       z-index: 20000;
-      padding: 0;
-      margin: 0;
-    }
-    .auth-container {
-      width: 100%;
-      height: 100%;
-      max-width: 480px;
-      background: transparent;
-      border: none;
-      border-radius: 0;
-      padding: 40px 24px;
-      box-shadow: none;
-      margin: 0 auto;
-      text-align: center;
+      background: var(--bg-color);
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
+      padding: 24px 16px;
+      overflow-y: auto;
+      width: 100%;
+      height: 100vh;
+    }
+    #screen-auth.slide-in-entrance {
+      animation: slideInFromLeft 0.45s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+    @keyframes slideInFromLeft {
+      from {
+        transform: translateX(-100%);
+        opacity: 0.8;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    .auth-container {
+      max-width: 420px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 35px 24px;
+      box-shadow: 0 10px 30px var(--shadow-color);
+      margin: auto;
+      text-align: center;
     }
     .auth-title { font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; letter-spacing: -0.5px; }
     .auth-sub { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 24px; }
@@ -145,8 +156,6 @@
       max-width: 480px;
       min-height: calc(100vh - 150px);
       padding: 20px 16px;
-      margin-top: 70px;
-      margin-bottom: 80px;
       flex-direction: column;
       position: relative;
       animation: fadeIn 0.3s ease-in-out;
@@ -1353,15 +1362,26 @@
       }
     }
     function showAuthScreen() {
-      document.getElementById('screen-auth').style.display = 'flex';
+      const authScreen = document.getElementById('screen-auth');
+      authScreen.style.display = 'flex';
+      authScreen.classList.remove('slide-in-entrance');
+      void authScreen.offsetWidth; // Force reflow for animation restart
+      authScreen.classList.add('slide-in-entrance');
+
       document.getElementById('mainHeader').style.display = 'none';
       document.getElementById('mainNavBar').style.display = 'none';
       document.querySelectorAll('.app-screen').forEach(s => {
         if(s.id !== 'screen-auth') s.classList.remove('active');
       });
     }
+    function triggerLoginHaptic() {
+      if (navigator.vibrate) {
+        navigator.vibrate([40, 60, 40]);
+      }
+    }
     function setupUserInterface() {
       document.getElementById('screen-auth').style.display = 'none';
+      document.getElementById('screen-auth').classList.remove('slide-in-entrance');
       document.getElementById('mainHeader').style.display = 'flex';
       document.getElementById('mainNavBar').style.display = 'flex';
       switchTab('screen-home', document.getElementById('nav-home-btn'));
@@ -1409,6 +1429,7 @@
           }
           alert("Registration successful! Welcome, " + username);
           await syncOrdersFromSupabase();
+          triggerLoginHaptic();
           setupUserInterface();
         }
       } else {
@@ -1419,6 +1440,7 @@
           currentUser = data.user;
           await fetchAndSetupUserData(currentUser.id);
           await syncOrdersFromSupabase();
+          triggerLoginHaptic();
         }
       }
     }
