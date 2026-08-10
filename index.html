@@ -63,8 +63,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 70px;
-      padding-bottom: 80px;
+      padding-top: 0;
+      padding-bottom: 0;
       overflow-x: hidden;
     }
     
@@ -94,17 +94,33 @@
       from { transform: scale(0.95); opacity: 0.85; }
       to { transform: scale(1.05); opacity: 1; }
     }
-    /* AUTH SCREEN */
-    .auth-container {
-      max-width: 400px;
-      width: 90%;
+    /* AUTH SCREEN - Full Device / Full Screen Native Look */
+    #screen-auth {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      min-height: 100vh;
       background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 35px 24px;
-      box-shadow: 0 10px 30px var(--shadow-color);
-      margin: auto;
+      z-index: 20000;
+      padding: 0;
+      margin: 0;
+    }
+    .auth-container {
+      width: 100%;
+      height: 100%;
+      max-width: 480px;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 40px 24px;
+      box-shadow: none;
+      margin: 0 auto;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     .auth-title { font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; letter-spacing: -0.5px; }
     .auth-sub { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 24px; }
@@ -129,6 +145,8 @@
       max-width: 480px;
       min-height: calc(100vh - 150px);
       padding: 20px 16px;
+      margin-top: 70px;
+      margin-bottom: 80px;
       flex-direction: column;
       position: relative;
       animation: fadeIn 0.3s ease-in-out;
@@ -829,7 +847,7 @@
     <img src="images/appearich-logo.png" alt="Appearich Splash Logo" class="splash-logo">
   </div>
   <!-- AUTH SCREEN -->
-  <div id="screen-auth" class="app-screen" style="display:none; justify-content:center; align-items:center;">
+  <div id="screen-auth" class="app-screen" style="display:none;">
     <div class="auth-container">
       <div id="authTitle" class="auth-title">Welcome Back</div>
       <div id="authSub" class="auth-sub">Sign in to your Appearich account</div>
