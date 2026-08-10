@@ -3,15 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Appearich</title>
+  <title>Appearich - Premium Service & Scent Hub</title>
   <!-- PWA Manifest & Meta Tags -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#ffffff">
   <link rel="apple-touch-icon" href="images/appearich-logo1.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Appearich">
-  <meta name="mobile-web-app-capable" content="yes">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <!-- Supabase CDN Client -->
@@ -72,7 +68,7 @@
       overflow-x: hidden;
     }
     
-    /* SPLASH SCREEN - Pure White Background with Clean Transparent Logo */
+    /* SPLASH SCREEN */
     #splash-screen {
       position: fixed;
       inset: 0;
@@ -206,7 +202,7 @@
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    /* In-App Header - Updated Pure White Background */
+    /* In-App Header */
     .app-header {
       position: fixed;
       top: 0;
@@ -1098,11 +1094,8 @@
   <div id="hotMealsModal" class="modal-overlay">
     <div class="sheet-content full-screen">
       <span class="sheet-close" onclick="closeSheet('hotMealsModal')">&times;</span>
-      <div class="modal-sticky-header" style="display: flex; align-items: center;">
-        <button class="back-btn" onclick="closeSheet('hotMealsModal')" title="Back to Home" style="margin-right: 12px;">
-          <i class="fa-solid fa-arrow-left"></i>
-        </button>
-        <div class="sheet-title" style="flex: 1; text-align: center; margin-right: 38px;">Hot Meals</div>
+      <div class="modal-sticky-header">
+        <div class="sheet-title">Hot Meals</div>
       </div>
       <div style="font-size: 0.82rem; font-weight:800; color:var(--text-main); margin-bottom:4px;">
         <i class="fa-solid fa-plus-circle" style="color:var(--accent-gold);"></i> Tap to Add Available Items:
@@ -1291,6 +1284,7 @@
       <span>Profile</span>
     </button>
   </nav>
+
   <!-- LOGIC SCRIPT -->
   <script>
     const SUPABASE_URL = 'https://zudqubbglwphfxaviqsg.supabase.co';
@@ -1311,6 +1305,8 @@
     let selectedPerfumePrice = 25000;
     let selectedPaymentType = 'cash';
     let selectedFoodItems = [];
+
+    // Service Worker Registration
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('service-worker.js')
@@ -1318,22 +1314,36 @@
           .catch(err => console.log('ServiceWorker failed:', err));
       });
     }
+
+    // Android & Chrome PWA Install Prompt Handling
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      document.getElementById('pwaInstallBtn').style.display = 'flex';
+      const installBtn = document.getElementById('pwaInstallBtn');
+      if (installBtn) {
+        installBtn.style.display = 'flex';
+      }
     });
-    function installPWA() {
+
+    async function installPWA() {
       if (deferredPrompt) {
         deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            document.getElementById('pwaInstallBtn').style.display = 'none';
-          }
-          deferredPrompt = null;
-        });
+        const choiceResult = await deferredPrompt.userChoice;
+        if (choiceResult.outcome === 'accepted') {
+          const installBtn = document.getElementById('pwaInstallBtn');
+          if (installBtn) installBtn.style.display = 'none';
+        }
+        deferredPrompt = null;
       }
     }
+
+    window.addEventListener('appinstalled', () => {
+      deferredPrompt = null;
+      const installBtn = document.getElementById('pwaInstallBtn');
+      if (installBtn) installBtn.style.display = 'none';
+      console.log('Appearich PWA installed successfully.');
+    });
+
     window.addEventListener('DOMContentLoaded', async () => {
       const { data: { session } } = await supabaseClient.auth.getSession();
       
@@ -1353,6 +1363,7 @@
       loadSavedUserLocation();
       renderSelectedItems();
     });
+
     async function fetchAndSetupUserData(userId) {
       const { data, error } = await supabaseClient
         .from('profiles')
@@ -1372,6 +1383,7 @@
       }
       setupUserInterface();
     }
+
     async function syncOrdersFromSupabase() {
       if (!currentUser) return;
       try {
@@ -1402,6 +1414,7 @@
         console.log("Offline or sync error fetching orders.", e);
       }
     }
+
     function showAuthScreen() {
       document.getElementById('screen-auth').style.display = 'flex';
       document.getElementById('mainHeader').style.display = 'none';
@@ -1410,6 +1423,7 @@
         if(s.id !== 'screen-auth') s.classList.remove('active');
       });
     }
+
     function setupUserInterface() {
       document.getElementById('screen-auth').style.display = 'none';
       document.getElementById('mainHeader').style.display = 'flex';
@@ -1419,15 +1433,11 @@
       document.getElementById('profName').innerText = currentUsername;
       document.getElementById('profAvatar').innerText = currentUsername.charAt(0).toUpperCase();
       document.getElementById('profPhone').innerText = currentUserPhone;
-      // Trigger subtle vibration on entering Home page successfully
       if (navigator.vibrate) {
-        try {
-          navigator.vibrate(40);
-        } catch (err) {
-          console.log("Vibration API failed silently:", err);
-        }
+        try { navigator.vibrate(40); } catch (err) {}
       }
     }
+
     function toggleAuthMode() {
       isRegisterMode = !isRegisterMode;
       document.getElementById('authTitle').innerText = isRegisterMode ? "Create Account" : "Welcome Back";
@@ -1437,6 +1447,7 @@
       document.getElementById('usernameGroup').style.display = isRegisterMode ? "block" : "none";
       document.getElementById('phoneGroup').style.display = isRegisterMode ? "block" : "none";
     }
+
     async function handleAuthSubmit() {
       const email = document.getElementById('authEmail').value.trim();
       const password = document.getElementById('authPassword').value.trim();
@@ -1480,6 +1491,7 @@
         }
       }
     }
+
     async function handleLogout() {
       await supabaseClient.auth.signOut();
       
@@ -1500,12 +1512,14 @@
       updateLoyaltyUI();
       showAuthScreen();
     }
+
     function loadSavedUserLocation() {
       const savedBlock = localStorage.getItem('appearich_user_block');
       const savedRoom = localStorage.getItem('appearich_user_room');
       if (savedBlock) document.getElementById('mealBlockLoc').value = savedBlock;
       if (savedRoom) document.getElementById('mealRoomLoc').value = savedRoom;
     }
+
     function toggleTheme() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const icon = document.querySelector('#themeToggleBtn i');
@@ -1517,6 +1531,7 @@
         icon.className = 'fa-solid fa-sun';
       }
     }
+
     function switchTab(screenId, element) {
       document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1524,27 +1539,33 @@
       if (targetScreen) targetScreen.classList.add('active');
       if (element) element.classList.add('active');
     }
+
     function goBack() {
       const homeBtn = document.getElementById('nav-home-btn');
       switchTab('screen-home', homeBtn);
     }
+
     function openHotMealsModal() { 
       loadSavedUserLocation();
       renderSelectedItems();
       document.getElementById('hotMealsModal').classList.add('active'); 
     }
+
     function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
     function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
+    
     function openProductModal(name) {
       document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
       openOrderModal();
     }
+
     function selectPerfumeSize(el, sizeName, price) {
       document.querySelectorAll('#perfumesModal .price-card').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
       selectedPerfumeSizeName = sizeName;
       selectedPerfumePrice = price;
     }
+
     function selectPaymentMethod(type) {
       selectedPaymentType = type;
       const btnCash = document.getElementById('payOptCash');
@@ -1560,22 +1581,26 @@
         unfoldBox.classList.remove('active');
       }
     }
+
     function addItemToOrder(name, unitPrice) {
       const existing = selectedFoodItems.find(item => item.name === name);
       if (existing) { existing.qty += 1; } 
       else { selectedFoodItems.push({ name: name, unitPrice: unitPrice, qty: 1 }); }
       renderSelectedItems();
     }
+
     function updateItemQty(index, newQty) {
       const qty = parseInt(newQty) || 1;
       if (qty <= 0) { selectedFoodItems.splice(index, 1); } 
       else { selectedFoodItems[index].qty = qty; }
       renderSelectedItems();
     }
+
     function removeItem(index) {
       selectedFoodItems.splice(index, 1);
       renderSelectedItems();
     }
+
     function renderSelectedItems() {
       const container = document.getElementById('selectedItemsContainer');
       if (selectedFoodItems.length === 0) {
@@ -1594,16 +1619,15 @@
       }
       recalculateMealTotal();
     }
+
     function recalculateMealTotal() {
       const subtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
-      
       const nextOrderNumber = completedOrdersCount + 1;
       const isFreeDelivery = (nextOrderNumber % 5 === 0);
       const deliveryFee = isFreeDelivery ? 0 : 500;
       const grandTotal = subtotal + deliveryFee;
       
       document.getElementById('displaySubtotal').innerText = subtotal.toLocaleString() + " TZS";
-      
       if (isFreeDelivery) {
         document.getElementById('displaySurcharge').innerText = "0 TZS (FREE DELIVERY!)";
       } else {
@@ -1611,6 +1635,7 @@
       }
       document.getElementById('displayGrandTotal').innerText = grandTotal.toLocaleString() + " TZS";
     }
+
     async function submitFoodOrder() {
       if (selectedFoodItems.length === 0) { alert("Please select at least one item!"); return; }
       const block = document.getElementById('mealBlockLoc').value.trim();
@@ -1683,6 +1708,7 @@
       closeSheet('hotMealsModal');
       window.open(`https://wa.me/255764519027?text=${encodeURIComponent(waMessage)}`, '_blank');
     }
+
     async function submitPerfumeOrder() {
       const desc = document.getElementById('perfumeDesc').value.trim();
       const phone = currentUserPhone;
@@ -1745,6 +1771,7 @@
       closeSheet('perfumesModal');
       window.open(`https://wa.me/255764519027?text=${encodeURIComponent(waMessage)}`, '_blank');
     }
+
     function renderBookings() {
       const container = document.getElementById('bookingsListContainer');
       if (activeOrders.length === 0) {
@@ -1765,6 +1792,7 @@
         </div>
       `).join('');
     }
+
     function renderHistory() {
       const container = document.getElementById('historyListContainer');
       if (completedHistory.length === 0) {
@@ -1784,36 +1812,48 @@
         </div>
       `).join('');
     }
+
     function updateLoyaltyUI() {
       document.getElementById('loyaltyCountBadge').innerText = `Total Orders: ${completedOrdersCount}`;
-      
       const remainder = completedOrdersCount % 5;
       const nextFree = completedOrdersCount + (5 - remainder);
       document.getElementById('loyaltySubText').innerText = remainder === 0 && completedOrdersCount > 0 
         ? `Order #${completedOrdersCount} had FREE DELIVERY! Next free delivery is on order #${completedOrdersCount + 5}.`
         : `Every 5th order receives FREE DELIVERY! Next free delivery is on order #${nextFree}.`;
+
       const stamps = document.querySelectorAll('.stamp-dot');
       stamps.forEach((stamp, idx) => {
-        const activeIndex = remainder === 0 && completedOrdersCount > 0 ? 5 : remainder;
-        if (idx < activeIndex) {
+        if (idx < remainder || (remainder === 0 && completedOrdersCount > 0)) {
           stamp.classList.add('filled');
         } else {
           stamp.classList.remove('filled');
         }
       });
     }
-    function sendCustomInquiry() {
-      const val = document.getElementById('customInquiryInput').value.trim();
-      if (!val) return;
-      window.open(`https://wa.me/255764519027?text=${encodeURIComponent("Custom Inquiry from " + currentUsername + ": " + val)}`, '_blank');
-      document.getElementById('customInquiryInput').value = '';
-    }
-    function triggerQuickReorder() { openHotMealsModal(); }
-    
+
     function igniteTeaserToast() {
-      const toast = document.getElementById("soonToast");
-      toast.classList.add("trigger-fly");
-      setTimeout(() => toast.classList.remove("trigger-fly"), 3500);
+      const toast = document.getElementById('soonToast');
+      toast.classList.add('trigger-fly');
+      setTimeout(() => { toast.classList.remove('trigger-fly'); }, 3000);
+    }
+
+    function sendCustomInquiry() {
+      const input = document.getElementById('customInquiryInput');
+      const val = input.value.trim();
+      if (!val) { alert("Please write a custom request first."); return; }
+      const waMsg = `*CUSTOM INQUIRY / REQUEST*\n\n👤 *User:* ${currentUsername}\n📞 *Phone:* ${currentUserPhone}\n💬 *Message:* ${val}`;
+      input.value = '';
+      window.open(`https://wa.me/255764519027?text=${encodeURIComponent(waMsg)}`, '_blank');
+    }
+
+    function triggerQuickReorder() {
+      if (completedHistory.length === 0) {
+        alert("No previous order found to reorder.");
+        return;
+      }
+      const lastOrder = completedHistory[0];
+      alert(`Reordering last request (${lastOrder.id})`);
+      openHotMealsModal();
     }
   </script>
 </body>
