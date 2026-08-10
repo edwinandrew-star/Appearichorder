@@ -1,10 +1,12 @@
-const CACHE_NAME = 'appearich-v1';
+const CACHE_NAME = 'appearich-v2';
+
+// Cache ONLY real files present in your root directory
 const ASSETS = [
   '/',
-  '/index.html',
-  '/login.html',
-  '/home.html',
-  '/images/appearich-logo.png'
+  './index.html',
+  './manifest.json',
+  './images/appearich-logo1.png',
+  './images/appearich-logo.png'
 ];
 
 // Install Event - Pre-cache core shell assets
@@ -46,13 +48,12 @@ self.addEventListener('fetch', (e) => {
   // Only intercept GET requests
   if (e.request.method !== 'GET') return;
 
-  // Skip cross-origin requests (e.g., external APIs or Supabase calls)
+  // Skip cross-origin requests (e.g., Supabase API calls or external CDN fonts)
   if (!e.request.url.startsWith(self.location.origin)) return;
 
   e.respondWith(
     fetch(e.request)
       .then((networkResponse) => {
-        // Cache a fresh copy of local responses
         if (networkResponse && networkResponse.status === 200) {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
@@ -62,14 +63,13 @@ self.addEventListener('fetch', (e) => {
         return networkResponse;
       })
       .catch(() => {
-        // If network fails (offline), serve from cache
         return caches.match(e.request).then((cachedResponse) => {
           if (cachedResponse) {
             return cachedResponse;
           }
           // Offline fallback for HTML page navigation
           if (e.request.mode === 'navigate') {
-            return caches.match('/index.html');
+            return caches.match('./index.html');
           }
         });
       })
