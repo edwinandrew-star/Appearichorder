@@ -106,16 +106,15 @@
         transform: translateX(0);
       }
     }
-
     .auth-container {
       max-width: 400px;
       width: 90%;
       background: transparent;
       border: none;
       border-radius: 0;
-      padding: 35px 24px;
+      padding: 24px 24px;
       box-shadow: none;
-      margin: auto;
+      margin: 20px auto 0 auto;
       text-align: center;
     }
     
@@ -158,7 +157,6 @@
       animation: slideInFromLeft 0.4s ease forwards;
       animation-delay: 0.40s;
     }
-
     .auth-btn {
       width: 100%;
       background: var(--accent-gold);
@@ -892,7 +890,7 @@
     <img src="images/appearich-logo.png" alt="Appearich Splash Logo" class="splash-logo">
   </div>
   <!-- AUTH SCREEN -->
-  <div id="screen-auth" class="app-screen" style="display:none; justify-content:center; align-items:center;">
+  <div id="screen-auth" class="app-screen" style="display:none; justify-content:flex-start; align-items:center;">
     <div class="auth-container">
       <div id="authTitle" class="auth-title">Welcome Back</div>
       <div id="authSub" class="auth-sub">Sign in to your Appearich account</div>
@@ -1414,7 +1412,6 @@
       document.getElementById('profName').innerText = currentUsername;
       document.getElementById('profAvatar').innerText = currentUsername.charAt(0).toUpperCase();
       document.getElementById('profPhone').innerText = currentUserPhone;
-
       // Trigger subtle vibration on entering Home page successfully
       if (navigator.vibrate) {
         try {
