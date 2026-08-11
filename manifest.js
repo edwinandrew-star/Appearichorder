@@ -19,7 +19,7 @@
       "src": "/Appearichorder/images/appearich-logo.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }
