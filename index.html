@@ -4,18 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Appearich - Premium Service & Scent Hub</title>
-  
   <!-- PWA Manifest & Meta Tags -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#ffffff">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Appearich">
-  <link rel="apple-touch-icon" href="images/appearich-logo1.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="images/appearich-logo1.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="images/appearich-logo.png">
-
+  <link rel="apple-touch-icon" href="images/icon-192.png">
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <!-- Supabase CDN Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -73,6 +66,69 @@
       padding-top: 70px;
       padding-bottom: 80px;
       overflow-x: hidden;
+    }
+    
+    /* CUSTOM PWA INSTALLATION PROMPT BANNER */
+    .pwa-prompt-banner {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 32px);
+      max-width: 440px;
+      z-index: 9999;
+      animation: slideUpPrompt 0.3s ease-out forwards;
+    }
+    @keyframes slideUpPrompt {
+      from { opacity: 0; transform: translate(-50%, 20px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+    .pwa-prompt-card {
+      background: #ffffff !important;
+      border-radius: 18px;
+      padding: 18px 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      border: 1.5px solid #FFD700;
+      color: #111111 !important;
+    }
+    .pwa-prompt-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: #111111 !important;
+    }
+    .pwa-prompt-text {
+      font-size: 0.85rem;
+      color: #555555 !important;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    .pwa-prompt-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+    }
+    .pwa-btn-dismiss {
+      background: transparent;
+      border: 1px solid #dddddd;
+      color: #666666 !important;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .pwa-btn-install {
+      background: #FFD700;
+      border: none;
+      color: #000000 !important;
+      padding: 8px 20px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
     }
     
     /* SPLASH SCREEN - Pure White Background with Clean Transparent Logo */
@@ -892,6 +948,18 @@
   </style>
 </head>
 <body>
+  <!-- PWA CUSTOM INSTALLATION PROMPT -->
+  <div id="pwaInstallBanner" class="pwa-prompt-banner" style="display: none;">
+    <div class="pwa-prompt-card">
+      <div class="pwa-prompt-title">Install Appearich</div>
+      <div class="pwa-prompt-text">Install Appearich on your device for faster access and an app-like experience.</div>
+      <div class="pwa-prompt-actions">
+        <button class="pwa-btn-dismiss" onclick="dismissPwaPrompt()">Not now</button>
+        <button class="pwa-btn-install" onclick="triggerPwaInstall()">Install</button>
+      </div>
+    </div>
+  </div>
+
   <!-- PURE WHITE SPLASH SCREEN -->
   <div id="splash-screen">
     <img src="images/appearich-logo.png" alt="Appearich Splash Logo" class="splash-logo">
@@ -937,7 +1005,7 @@
       </div>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
-      <button id="pwaInstallBtn" class="pwa-install-btn" onclick="installPWA()">
+      <button id="pwaInstallBtn" class="pwa-install-btn" onclick="triggerPwaInstall()">
         <i class="fa-solid fa-download"></i> Install
       </button>
       <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Switch Light/Dark Mode">
@@ -1290,6 +1358,15 @@
     let selectedPerfumePrice = 25000;
     let selectedPaymentType = 'cash';
     let selectedFoodItems = [];
+
+    // Check if running in Standalone/PWA mode
+    function isRunningStandalone() {
+      return (window.matchMedia('(display-mode: standalone)').matches) || 
+             (window.navigator.standalone === true) || 
+             document.referrer.includes('android-app://');
+    }
+
+    // Register Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('service-worker.js')
@@ -1297,23 +1374,54 @@
           .catch(err => console.log('ServiceWorker failed:', err));
       });
     }
+
+    // Handle beforeinstallprompt
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      document.getElementById('pwaInstallBtn').style.display = 'flex';
+      
+      // Show top header button if supported
+      const topBtn = document.getElementById('pwaInstallBtn');
+      if (topBtn) topBtn.style.display = 'flex';
+
+      // Show custom overlay installation prompt if not running standalone
+      if (!isRunningStandalone()) {
+        const banner = document.getElementById('pwaInstallBanner');
+        if (banner) banner.style.display = 'block';
+      }
     });
-    function installPWA() {
+
+    // Trigger Native Browser PWA Install Prompt
+    function triggerPwaInstall() {
       if (deferredPrompt) {
         deferredPrompt.prompt();
         deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            document.getElementById('pwaInstallBtn').style.display = 'none';
-          }
+          dismissPwaPrompt();
           deferredPrompt = null;
         });
       }
     }
+
+    // Dismiss Prompt Banner
+    function dismissPwaPrompt() {
+      const banner = document.getElementById('pwaInstallBanner');
+      if (banner) banner.style.display = 'none';
+      const topBtn = document.getElementById('pwaInstallBtn');
+      if (topBtn) topBtn.style.display = 'none';
+    }
+
+    // Hide Prompt on Successful Installation
+    window.addEventListener('appinstalled', () => {
+      dismissPwaPrompt();
+      deferredPrompt = null;
+    });
+
     window.addEventListener('DOMContentLoaded', async () => {
+      // Hide install banner immediately if app is already running in standalone mode
+      if (isRunningStandalone()) {
+        dismissPwaPrompt();
+      }
+
       const { data: { session } } = await supabaseClient.auth.getSession();
       
       setTimeout(async () => {
@@ -1332,6 +1440,7 @@
       loadSavedUserLocation();
       renderSelectedItems();
     });
+
     async function fetchAndSetupUserData(userId) {
       const { data, error } = await supabaseClient
         .from('profiles')
@@ -1351,6 +1460,7 @@
       }
       setupUserInterface();
     }
+
     async function syncOrdersFromSupabase() {
       if (!currentUser) return;
       try {
@@ -1381,6 +1491,7 @@
         console.log("Offline or sync error fetching orders.", e);
       }
     }
+
     function showAuthScreen() {
       document.getElementById('screen-auth').style.display = 'flex';
       document.getElementById('mainHeader').style.display = 'none';
@@ -1389,6 +1500,7 @@
         if(s.id !== 'screen-auth') s.classList.remove('active');
       });
     }
+
     function setupUserInterface() {
       document.getElementById('screen-auth').style.display = 'none';
       document.getElementById('mainHeader').style.display = 'flex';
@@ -1398,7 +1510,7 @@
       document.getElementById('profName').innerText = currentUsername;
       document.getElementById('profAvatar').innerText = currentUsername.charAt(0).toUpperCase();
       document.getElementById('profPhone').innerText = currentUserPhone;
-      // Trigger subtle vibration on entering Home page successfully
+      
       if (navigator.vibrate) {
         try {
           navigator.vibrate(40);
@@ -1407,6 +1519,7 @@
         }
       }
     }
+
     function toggleAuthMode() {
       isRegisterMode = !isRegisterMode;
       document.getElementById('authTitle').innerText = isRegisterMode ? "Create Account" : "Welcome Back";
@@ -1416,6 +1529,7 @@
       document.getElementById('usernameGroup').style.display = isRegisterMode ? "block" : "none";
       document.getElementById('phoneGroup').style.display = isRegisterMode ? "block" : "none";
     }
+
     async function handleAuthSubmit() {
       const email = document.getElementById('authEmail').value.trim();
       const password = document.getElementById('authPassword').value.trim();
@@ -1459,6 +1573,7 @@
         }
       }
     }
+
     async function handleLogout() {
       await supabaseClient.auth.signOut();
       
@@ -1479,12 +1594,14 @@
       updateLoyaltyUI();
       showAuthScreen();
     }
+
     function loadSavedUserLocation() {
       const savedBlock = localStorage.getItem('appearich_user_block');
       const savedRoom = localStorage.getItem('appearich_user_room');
       if (savedBlock) document.getElementById('mealBlockLoc').value = savedBlock;
       if (savedRoom) document.getElementById('mealRoomLoc').value = savedRoom;
     }
+
     function toggleTheme() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const icon = document.querySelector('#themeToggleBtn i');
@@ -1496,6 +1613,7 @@
         icon.className = 'fa-solid fa-sun';
       }
     }
+
     function switchTab(screenId, element) {
       document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1503,27 +1621,33 @@
       if (targetScreen) targetScreen.classList.add('active');
       if (element) element.classList.add('active');
     }
+
     function goBack() {
       const homeBtn = document.getElementById('nav-home-btn');
       switchTab('screen-home', homeBtn);
     }
+
     function openHotMealsModal() { 
       loadSavedUserLocation();
       renderSelectedItems();
       document.getElementById('hotMealsModal').classList.add('active'); 
     }
+
     function openOrderModal() { document.getElementById('perfumesModal').classList.add('active'); }
     function closeSheet(modalId) { document.getElementById(modalId).classList.remove('active'); }
+    
     function openProductModal(name) {
       document.getElementById('perfumeDesc').value = `Perfume: ${name}`;
       openOrderModal();
     }
+
     function selectPerfumeSize(el, sizeName, price) {
       document.querySelectorAll('#perfumesModal .price-card').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
       selectedPerfumeSizeName = sizeName;
       selectedPerfumePrice = price;
     }
+
     function selectPaymentMethod(type) {
       selectedPaymentType = type;
       const btnCash = document.getElementById('payOptCash');
@@ -1539,22 +1663,26 @@
         unfoldBox.classList.remove('active');
       }
     }
+
     function addItemToOrder(name, unitPrice) {
       const existing = selectedFoodItems.find(item => item.name === name);
       if (existing) { existing.qty += 1; } 
       else { selectedFoodItems.push({ name: name, unitPrice: unitPrice, qty: 1 }); }
       renderSelectedItems();
     }
+
     function updateItemQty(index, newQty) {
       const qty = parseInt(newQty) || 1;
       if (qty <= 0) { selectedFoodItems.splice(index, 1); } 
       else { selectedFoodItems[index].qty = qty; }
       renderSelectedItems();
     }
+
     function removeItem(index) {
       selectedFoodItems.splice(index, 1);
       renderSelectedItems();
     }
+
     function renderSelectedItems() {
       const container = document.getElementById('selectedItemsContainer');
       if (selectedFoodItems.length === 0) {
@@ -1573,6 +1701,7 @@
       }
       recalculateMealTotal();
     }
+
     function recalculateMealTotal() {
       const subtotal = selectedFoodItems.reduce((acc, item) => acc + (item.unitPrice * item.qty), 0);
       
@@ -1590,6 +1719,7 @@
       }
       document.getElementById('displayGrandTotal').innerText = grandTotal.toLocaleString() + " TZS";
     }
+
     async function submitFoodOrder() {
       if (selectedFoodItems.length === 0) { alert("Please select at least one item!"); return; }
       const block = document.getElementById('mealBlockLoc').value.trim();
@@ -1662,6 +1792,7 @@
       closeSheet('hotMealsModal');
       window.open(`https://wa.me/255764519027?text=${encodeURIComponent(waMessage)}`, '_blank');
     }
+
     async function submitPerfumeOrder() {
       const desc = document.getElementById('perfumeDesc').value.trim();
       const phone = currentUserPhone;
@@ -1724,6 +1855,7 @@
       closeSheet('perfumesModal');
       window.open(`https://wa.me/255764519027?text=${encodeURIComponent(waMessage)}`, '_blank');
     }
+
     function renderBookings() {
       const container = document.getElementById('bookingsListContainer');
       if (activeOrders.length === 0) {
@@ -1744,6 +1876,7 @@
         </div>
       `).join('');
     }
+
     function renderHistory() {
       const container = document.getElementById('historyListContainer');
       if (completedHistory.length === 0) {
@@ -1763,6 +1896,7 @@
         </div>
       `).join('');
     }
+
     function updateLoyaltyUI() {
       document.getElementById('loyaltyCountBadge').innerText = `Total Orders: ${completedOrdersCount}`;
       
@@ -1781,12 +1915,14 @@
         }
       });
     }
+
     function sendCustomInquiry() {
       const val = document.getElementById('customInquiryInput').value.trim();
       if (!val) return;
       window.open(`https://wa.me/255764519027?text=${encodeURIComponent("Custom Inquiry from " + currentUsername + ": " + val)}`, '_blank');
       document.getElementById('customInquiryInput').value = '';
     }
+
     function triggerQuickReorder() { openHotMealsModal(); }
     
     function igniteTeaserToast() {
