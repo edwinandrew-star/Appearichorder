@@ -1,46 +1,50 @@
-const CACHE_NAME = 'appearich-cache-v1';
+const CACHE_NAME = 'appearich-cache-v2';
+
+const BASE_PATH = '/Appearichorder/';
+
 const URLS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/images/appearich-logo.png',
-  '/images/appearich-logo1.png',
-  '/images/appearich-hero.jpg',
-  '/images/appearich-perfume1.jpg',
-  '/images/appearich-perfume2.jpg',
-  '/images/appearich-perfume3.jpg',
-  '/images/appearich-perfume4.jpg',
-  '/images/heroo-ai.jpg'
+  BASE_PATH,
+  BASE_PATH + 'index.html',
+  BASE_PATH + 'manifest.json',
+
+  BASE_PATH + 'images/appearich-logo.png',
+  BASE_PATH + 'images/appearich-logo1.png',
+  BASE_PATH + 'images/appearich-hero.jpg',
+  BASE_PATH + 'images/appearich-perfume1.jpg',
+  BASE_PATH + 'images/appearich-perfume2.jpg',
+  BASE_PATH + 'images/appearich-perfume3.jpg',
+  BASE_PATH + 'images/appearich-perfume4.jpg',
+  BASE_PATH + 'images/heroo-ai.jpg'
 ];
 
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(URLS_TO_CACHE);
-    })
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(URLS_TO_CACHE))
+      .then(() => self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cache) => {
-          if (cache !== CACHE_NAME) {
-            return caches.delete(cache);
+    caches.keys().then(cacheNames =>
+      Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
           }
         })
-      );
-    })
+      )
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+    caches.match(event.request).then(cachedResponse => {
+      return cachedResponse || fetch(event.request);
     })
   );
 });
