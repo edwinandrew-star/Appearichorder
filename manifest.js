@@ -1,22 +1,21 @@
 {
-  "name": "Appearich",
+  "name": "Appearich - Premium Service & Scent Hub",
   "short_name": "Appearich",
-  "start_url": "/Appearichorder/",
-  "scope": "/Appearichorder/",
-  "id": "/Appearichorder/",
+  "description": "Appearich - Premium Delivery & Scent Hub",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
-  "orientation": "portrait",
   "icons": [
     {
-      "src": "/Appearichorder/images/appearich-logo1.png",
+      "src": "images/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "/Appearichorder/images/appearich-logo.png",
+      "src": "images/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
