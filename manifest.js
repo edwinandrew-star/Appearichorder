@@ -1,21 +1,22 @@
 {
   "name": "Appearich",
   "short_name": "Appearich",
-  "start_url": "/",
-  "id": "/",
+  "start_url": "/Appearichorder/",
+  "scope": "/Appearichorder/",
+  "id": "/Appearichorder/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/images/appearich-logo1.png",
+      "src": "/Appearichorder/images/appearich-logo1.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/images/appearich-logo.png",
+      "src": "/Appearichorder/images/appearich-logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
