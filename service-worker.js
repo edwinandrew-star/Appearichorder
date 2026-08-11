@@ -1,55 +1,48 @@
-const CACHE_NAME = 'appearich-cache-v3';
-const BASE_PATH = '/Appearichorder/';
-const URLS_TO_CACHE = [
-  BASE_PATH,
-  BASE_PATH + 'index.html',
-  BASE_PATH + 'manifest.json',
-  BASE_PATH + 'images/appearich-logo.png',
-  BASE_PATH + 'images/appearich-logo1.png',
-  BASE_PATH + 'images/appearich-hero.jpg',
-  BASE_PATH + 'images/appearich-perfume1.jpg',
-  BASE_PATH + 'images/appearich-perfume2.jpg',
-  BASE_PATH + 'images/appearich-perfume3.jpg',
-  BASE_PATH + 'images/appearich-perfume4.jpg',
-  BASE_PATH + 'images/heroo-ai.jpg'
+const CACHE_NAME = 'appearich-v1';
+const ASSETS_TO_CACHE = [
+  './',
+  './index.html',
+  './manifest.json',
+  './images/icon-192.png',
+  './images/icon-512.png',
+  './images/appearich-logo.png',
+  './images/appearich-logo1.png',
+  './images/appearich-hero.jpg',
+  './images/appearich-perfume1.jpg',
+  './images/appearich-perfume2.jpg',
+  './images/appearich-perfume3.jpg',
+  './images/appearich-perfume4.jpg',
+  './images/heroo-ai.jpg'
 ];
 
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      // Cache each file individually so ONE missing/404 file
-      // can't fail the whole install step (which was silently
-      // blocking the service worker from ever activating).
-      return Promise.all(
-        URLS_TO_CACHE.map(url =>
-          cache.add(url).catch(err => {
-            console.warn('Skipped caching (not found or failed):', url, err);
-          })
-        )
-      );
-    }).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS_TO_CACHE);
+    })
   );
+  self.skipWaiting();
 });
 
-self.addEventListener('activate', event => {
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(cacheNames =>
-      Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
           }
         })
-      )
-    ).then(() => self.clients.claim())
+      );
+    })
   );
+  self.clients.claim();
 });
 
-self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return;
+self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      return cachedResponse || fetch(event.request);
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
     })
   );
 });
