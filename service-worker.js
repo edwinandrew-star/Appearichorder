@@ -1,40 +1,34 @@
-const CACHE_NAME = 'appearich-v2';
-
-// Cache ONLY real files present in your root directory
-const ASSETS = [
+const CACHE_NAME = 'appearich-cache-v1';
+const URLS_TO_CACHE = [
   '/',
-  './index.html',
-  './manifest.json',
-  './images/appearich-logo1.png',
-  './images/appearich-logo.png'
+  '/index.html',
+  '/manifest.json',
+  '/images/appearich-logo.png',
+  '/images/appearich-logo1.png',
+  '/images/appearich-hero.jpg',
+  '/images/appearich-perfume1.jpg',
+  '/images/appearich-perfume2.jpg',
+  '/images/appearich-perfume3.jpg',
+  '/images/appearich-perfume4.jpg',
+  '/images/heroo-ai.jpg'
 ];
 
-// Install Event - Pre-cache core shell assets
-self.addEventListener('install', (e) => {
-  e.waitUntil(
+self.addEventListener('install', (event) => {
+  event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return Promise.all(
-        ASSETS.map(async (asset) => {
-          try {
-            await cache.add(asset);
-          } catch (err) {
-            console.warn('Failed to cache asset:', asset, err);
-          }
-        })
-      );
+      return cache.addAll(URLS_TO_CACHE);
     })
   );
   self.skipWaiting();
 });
 
-// Activate Event - Clean up old caches
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) => {
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
           }
         })
       );
@@ -43,35 +37,10 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
-// Fetch Event - Dynamic Network First with Cache Fallback
-self.addEventListener('fetch', (e) => {
-  // Only intercept GET requests
-  if (e.request.method !== 'GET') return;
-
-  // Skip cross-origin requests (e.g., Supabase API calls or external CDN fonts)
-  if (!e.request.url.startsWith(self.location.origin)) return;
-
-  e.respondWith(
-    fetch(e.request)
-      .then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(e.request, responseToCache);
-          });
-        }
-        return networkResponse;
-      })
-      .catch(() => {
-        return caches.match(e.request).then((cachedResponse) => {
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          // Offline fallback for HTML page navigation
-          if (e.request.mode === 'navigate') {
-            return caches.match('./index.html');
-          }
-        });
-      })
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    })
   );
 });
